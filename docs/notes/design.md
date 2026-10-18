@@ -1,0 +1,146 @@
+# design.md · Titan117 design system
+
+Version 0.1 · 16 Oct 2026
+
+Built on the measured OpenAI design settings (system fonts, 8px grid, one small radius, no shadows, 400ms ease), in the style of style tile **A · Quiet** on the mockups canvas, with Titan117's **neon green** added as the one accent. Mockups: https://claude.ai/artifact/J2J8dUtQuemvBG931BNJs3 (page "Final · A").
+
+**Borrow the settings, not the brand.** We use OpenAI's general decisions (system font stack, spacing, radius, motion, restraint). We don't copy its logo, wordmark, illustrations, copy or page compositions.
+
+---
+
+## 1. Principles
+
+1. **Quiet confidence.** White, black and gray do the work. The interface doesn't shout.
+2. **One accent, used sparingly.** Neon green `#c4f012` marks what's alive or important: Titan's eyes, a live status, one key highlight. Never large areas, never text on white.
+3. **Flat.** No decorative shadows or gradients. Surfaces separate by hairlines, spacing and a light gray fill. The one exception is media: product windows and photos may sit on one soft shadow.
+4. **Everything on the 8px grid.**
+5. **Readable first.** Body text is near-black, not the gray-purple (see Accessibility).
+
+---
+
+## 2. Color
+
+### 2.1 From the OpenAI base
+
+| Token | Value | Use |
+|---|---|---|
+| `--primary` | `#8e8ea0` | Gray-purple: icons, borders of controls, disabled states, large decorative text. **Not** body text (3.3:1 on white) |
+| `--on-primary` | `#ffffff` | Text on a `--primary` fill |
+| `--text` | `#0d0d0d` | All body and UI text. The base's `#8e8ea0` text fails contrast, so we remap it here |
+| `--text-strong` | `#000000` | Headlines, key numbers |
+
+### 2.2 Neutrals (added to complete the system)
+
+| Token | Value | Use |
+|---|---|---|
+| `--bg` | `#ffffff` | Page |
+| `--surface` | `#f7f7f8` | Cards, tiles, sidebars, inputs |
+| `--surface-2` | `#ececf1` | Pressed, selected, progress tracks |
+| `--border` | `#e5e5ea` | Hairlines, card outlines |
+| `--text-secondary` | `#6e6e80` | Secondary text, captions (4.8:1 on white, passes AA) |
+| `--ink` | `#0d0d0d` | Primary buttons, dark panels |
+
+### 2.3 Brand accent: neon green
+
+| Token | Value | Use |
+|---|---|---|
+| `--neon` | `#c4f012` | Titan's eyes, live dots, the one highlight per view, chart accent, focus ring on dark |
+| `--on-neon` | `#0d0d0d` | Text and icons on a neon fill (15:1) |
+| `--neon-text` | `#4d6400` | Neon-family text on white (6.4:1), for links or labels that must read "brand" |
+
+**Rules:** neon on white is never text, a thin line or an icon (1.3:1). Neon fills always carry `--on-neon` text. At most one neon-filled element per view.
+
+### 2.4 Status (Titan's states)
+
+| Token | Value | Use |
+|---|---|---|
+| `--state-live` | `#c4f012` | Idle, working, success live |
+| `--state-approval` | `#ef9f27` | Needs approval (text on it: `#0d0d0d`; as text on white use `#b45309`) |
+| `--state-error` | `#e24b4a` | Error (as text on white use `#b42318`) |
+| `--state-offline` | `#8e8ea0` | Offline |
+
+---
+
+## 3. Typography
+
+**Font stack:** `system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif` for everything. Code and data: `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`.
+
+| Role | Size / line height | Weight | Tracking |
+|---|---|---|---|
+| Display XL (hero only, our addition) | 72–80px / 1.05 | 600 | -0.03em |
+| Display (base) | 48px / 1.15 | 700 | -0.02em |
+| Heading (base) | 32px / 1.25 | 600 | -0.01em |
+| Title | 20px / 1.4 | 600 | 0 |
+| Body (base) | 16px / 1.5 | 400 | 0 |
+| Small | 14px / 1.5 | 400 | 0 |
+| Caption | 12px / 1.5 | 500 | 0.02em |
+
+The base sets headings at line height 1.5; large headlines get tighter leading (1.05–1.25) so they don't fall apart. Body stays at 1.5.
+
+---
+
+## 4. Spacing, radius, elevation
+
+- **Spacing:** 8px base. Use 8, 16, 24, 32, 40, 48, 64, 80, 96, 128.
+- **Radius:** `--radius: 5px` for buttons, inputs, chips, small cards (the base's single radius). Media frames (product windows, photos, video) use `12px` so large images don't look sharp-cornered; that's our only addition.
+- **Elevation:** none for UI. Media frames may use one shadow: `0 24px 64px -32px rgba(13,13,13,.25)`.
+- **Borders:** 1px `--border`.
+
+---
+
+## 5. Layout
+
+- **Container:** max 1280px, side padding 24px (16px on phones).
+- **Breakpoint:** 768px. Below it, columns stack, the nav collapses, hero media moves under the text.
+- **Hero:** text left (about 46%), media right (video or product window), on the 8px grid.
+- **Sections** (Redox and Anduril ideas): a 1px top hairline, a small caption label on the left (`01 · Agents`), the headline on the right; image tiles with the label in the bottom-left corner and `↗` in the bottom-right.
+
+---
+
+## 6. Components
+
+**Buttons** (44px tall minimum, 5px radius, 16px horizontal padding)
+- Primary: `--ink` fill, white text.
+- Secondary: `--surface` fill, `--text` text.
+- Outline: 1px `--border`, white fill.
+- Accent (one per view at most): `--neon` fill, `--on-neon` text.
+
+**Desktop app: no black buttons or selections** (decided 16 Oct 2026). Black stays for text, data and the logo only.
+- Primary action (New task, Approve, Send, Publish, Download and continue): `--neon` fill, `--on-neon` text. Several may appear on one screen in the app; the website keeps the one-per-view rule.
+- Secondary: white with a 1px `--border`.
+- Selected item (sidebar, list): white fill, 1px `--border`, a 3px `--neon` bar on the left, text weight 600.
+- Selected choice tile: light neon tint `#f4fbd9` with a 1.5px `--neon` outline.
+- Current step: `--neon` fill.
+- Panels that used to be dark (approvals, "you need this first", tips) are light: amber tint `#fffbeb` for approvals, neon tint `#f4fbd9` for setup, `--surface` for tips.
+
+**Inputs:** 44px, 5px radius, `--surface` fill, 1px transparent border that turns `--ink` on focus.
+
+**Cards:** `--surface` fill or white with a 1px `--border`, 5px radius, 24px padding, no shadow.
+
+**Chips and status:** 5px radius, 12px caption text; status uses a 8px dot in the state color plus a text label (never color alone).
+
+**Tables:** hairline rows, 14px text, caption headers in `--text-secondary`.
+
+**The helmet:** outline variant 03 at 1.0 line weight for the logo; eyes in the state color. At 32px and below, use the solid variant (04).
+
+---
+
+## 7. Motion
+
+All transitions 400ms `ease` (the base). Hover: color and background only. Reduced motion: no movement, color changes only.
+
+---
+
+## 8. Accessibility
+
+- Body text `#0d0d0d` (19:1). Secondary text `#6e6e80` (4.8:1). `#8e8ea0` only for large text, icons and borders.
+- Neon is never text on white; brand-colored text uses `--neon-text`.
+- Focus ring: 2px `--ink`, 2px offset (on dark: 2px `--neon`).
+- Touch targets 44×44px minimum.
+- State is shown by color **and** a label or icon.
+
+---
+
+## 9. Media
+
+Images and video in the mockups come from `docs/brand/media/` (copied from verdictu-web): `hero-image.webp`, `hall-image.webp`, `hero-video.mp4`. They're stand-ins until Titan117's own media exists.

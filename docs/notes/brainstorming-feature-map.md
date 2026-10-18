@@ -1,0 +1,554 @@
+# Feature map
+
+Draft, 15 Oct 2026. Every feature discussed so far, grouped by area. The build order is in the [roadmap](../01-launch-roadmap-v1.md); decisions in [decisions.md](decisions.md). How it all fits together is in [the architecture](../03-architecture.md). **Decided 16 Oct 2026: everything here is V1.** Titan117 launches only as a complete product; the work is split into implementation phases instead (see [v1-scope.md](v1-scope.md)). The Stage column is kept for reference.
+
+## The product in one line
+
+An AI team for small companies that runs on your own laptop: a general assistant that can do almost any computer task, plus specialist agents that make videos, test your website, build your web, mobile and desktop apps, read your documents and watch the web for you. They share one memory, and you pick the model, local or from OpenRouter. It does what general agents like OpenClaw do, with safe defaults a company can trust.
+
+## Ground rules (decided)
+
+- **Agents run on the user's laptop.** No rented servers running agents around the clock. When the laptop is off, agents stop; scheduled work runs while the app is open or catches up on the next launch.
+- **Two model sources:** local models (free, private, offline) and OpenRouter (the strongest models). The user picks per agent, and can override per step.
+- **Two ways to pay for OpenRouter:** our credits (through our proxy, with a margin) or the user's own OpenRouter key (BYOK). Both need a subscription.
+- **Subscription first, then credits** to top up, following Lovable's model.
+- **Convex and Clerk** for accounts, subscriptions, credits and sync. Our cloud stays small.
+- **Plug and play.** Download, install, sign in, and it works: nothing to install first, heavy parts download when a feature needs them (1.11 to 1.15).
+- **Open-source projects are our inspiration and our starting code, adapted to our needs.** We study them, and copy and change their code where the licence allows:
+  - **MIT, Apache 2.0, BSD:** copy and adapt freely; keep their copyright notices and list them in a third-party licences file.
+  - **GPL, AGPL:** don't copy their code into Titan117, or the whole app would fall under their licence. Use them for ideas and rewrite the feature ourselves, or run them unchanged as a separate program the user installs.
+  - **No licence or non-commercial:** ideas only.
+  - Every project we take code from gets a row in a sources list (project, licence, what we took, commit).
+
+---
+
+## 1. Desktop app (the local runtime)
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 1.1 | Desktop shell for Windows and macOS | V1 | Tauri or Electron, open |
+| 1.2 | Sign in with the Titan117 account | V1 | Clerk |
+| 1.3 | Sidebar: agents, apps, chats, marketplace | V1 | Built apps live here too (§6) |
+| 1.4 | Hardware check at first launch | V1 | RAM and GPU decide which local models to suggest |
+| 1.5 | Keep awake while a task runs | V1 | Asks the OS to block sleep, only during work |
+| 1.6 | Checkpoints and resume | V1 | A task picks up after sleep or a crash, not from the start |
+| 1.7 | Local data store | V1 | SQLite for app data, memory and settings |
+| 1.8 | Activity timeline | V1 | What each agent did, why, which model, what it cost |
+| 1.9 | Notifications | V1 | Done, failed, needs approval |
+| 1.10 | Auto-update | V1 | |
+| 1.11 | **Plug and play install** | V1 | One signed installer for Windows and macOS (no "unknown publisher" warnings); everything the core needs is inside: the app, its runtimes (Node or Bun), the coding engine, the browser tool, SQLite and a small local model for search and embeddings. No Python, Node, Docker or Ollama for the user to install first |
+| 1.12 | Setup wizard on first launch | V1 | Sign in, hardware check (1.4), then "what do you want to do?" (chat, build web or mobile apps, documents, marketing...); downloads only what those need |
+| 1.13 | Components manager | V1 | Heavy parts download on demand with progress, and can be removed: local models, extra browsers, Android emulator, VM images, container runtime. Shows disk space used |
+| 1.14 | Steps the user must do themselves, guided | V1 | Some things the OS or a vendor makes the user do: accept the Android SDK licence, install Xcode from the App Store (Mac), turn on virtualization (sometimes in the BIOS), restart after enabling WSL2 or Hyper-V. The wizard explains each with screenshots and checks it worked |
+| 1.15 | Bundled tools over separate installs | V1 | Prefer tools we can ship inside the app: llama.cpp (MIT) instead of asking for Ollama, Podman instead of Docker Desktop (paid for larger companies), TypeScript or Rust tools over Python ones; where Python is needed, a private copy inside the app |
+| 1.16 | **Always points the way: requirements per feature** | V1 | Every feature and agent lists what it needs: components (1.13), OS permissions, accounts (Apple or Google developer, GitHub), API keys, hardware. Checked before it starts, never failing halfway |
+| 1.17 | "You need this first" cards | V1 | When something is missing, a card says what, why, how big and how long: "To test on Android you need the Android emulator (about 4 GB, 5 minutes). Install now?" One click for what we can install, a guided step (1.14) for what only the user can do; the task continues on its own once it's ready |
+| 1.18 | Alternatives when it can't be done here | V1 | If the laptop can't do it, say so and offer another way: no iOS Simulator on Windows, so test on your iPhone with Expo Go; too weak for a local model, so use an OpenRouter model for about N credits |
+| 1.19 | Agents ask too | V1 | Mid-task, an agent that hits a missing piece pauses and shows the same card instead of failing; the request also reaches the web app and chat channels (§9) |
+| 1.20 | Setup checklist | V1 | One page with what is ready, what is missing for the features you use, and what is suggested next ("connect Google Search Console to see your search traffic"), each with its button |
+| 1.21 | Health check | V1 | Finds what broke (an expired API key, a removed emulator, low disk space, an outdated component) and offers the fix |
+| 1.22 | Offline mode | V1 | Local models, tools and data work without internet; online-only features show "Needs internet" cards; a cloud task can switch to a local model (decisions §17) |
+| 1.23 | Licence lease and lock screen | V1 | Signed offline licence (14 days); warnings before expiry; the app locks to a sign-in and renew screen when it expires or the subscription ends; tasks pause at a checkpoint; "Export my data" stays available |
+| 1.24 | Offline queue | V1 | Usage reports, sync, remote results and notifications wait and send when the connection is back |
+
+## 2. Models
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 2.1 | Local models with one-click download | V1 | Ollama or llama.cpp; suggestions from 1.4 |
+| 2.2 | OpenRouter models | V1 | Through our credit proxy or BYOK |
+| 2.3 | Model per agent, override per step | V1 | Sensible defaults for beginners |
+| 2.4 | Smart routing | V1 | Strong model plans, cheaper model does bulk edits |
+| 2.5 | Cost shown before a task runs | V1 | Estimated credits; local runs cost nothing |
+| 2.6 | "Too heavy for this laptop" fallback | V1 | Suggests the OpenRouter model and its cost |
+| 2.7 | Image, voice and video providers | V1 | OpenRouter covers text and some images; video needs a second provider (fal.ai or Replicate, to check) |
+| 2.8 | Compare models side by side | V1 | Same prompt, several models |
+| 2.9 | Your own key from a model provider | V1 | Anthropic, OpenAI or Google API keys, used directly next to OpenRouter; kept in the OS keychain |
+| 2.10 | No sign-in with chat subscriptions | Decided | Claude Pro or Max, ChatGPT Plus or Pro and similar plans are not used to run our agents (see Not doing) |
+
+## 3. Chat and the memory agent
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 3.1 | Chat with any model | V1 | |
+| 3.2 | Persistent memory | V1 | Facts, preferences, company profile; like Hermes Agent |
+| 3.3 | Memory you can see, edit and delete | V1 | "Forget this"; needed for trust and GDPR |
+| 3.4 | Memory scopes | V1 | Per company, per agent; the QA agent can't read finance notes |
+| 3.5 | Learns how you work: writes its own skills | V1 | After doing a task once, saves how as a skill and reuses it; skills are files you can read, edit and delete |
+| 3.6 | Tools through MCP | V1 | Gmail, Calendar, Slack, Notion, Stripe, GitHub, CRMs and so on |
+| 3.7 | **General assistant (Titan)** | V1 | The default agent: has every tool below plus shared memory, does one-off tasks without a dedicated agent, and hands big jobs to the specialists (4.6) |
+| 3.8 | Shell and terminal | V1 | Run commands and scripts, install tools, convert files, git; sandboxed, risky commands need your OK |
+| 3.9 | File system | V1 | Read, write, organize, rename and search files, inside the folders you allow |
+| 3.10 | Browser control | V1 | Research, forms, downloads, checking sites; the same tool the QA agent, watcher and recorder use |
+| 3.11 | Code execution | V1 | Writes and runs small scripts for one-off jobs (clean data, build an Excel report, edit PDFs) |
+| 3.12 | Strong model for long tasks | V1 | Multi-step work with many tools suggests an OpenRouter model; local models are fine for simple tasks |
+
+Example tasks for Titan: sort the downloads folder; build an Excel report from a folder of invoices; reply to supplier emails about delays; find 20 local restaurants without a website and add them to the CRM; convert a folder of videos to MP4.
+
+## 4. Agents and the agent builder
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 4.1 | Agent definition file | V1 | Role, models, tools, memory scopes, triggers, approvals |
+| 4.2 | Built-in agents (the flagship ones, §5) | V1 | |
+| 4.3 | Clone and edit an agent | V1 | |
+| 4.4 | Agent builder screen | V1 | A form over the definition file |
+| 4.5 | Approvals before anything external | V1 | Publish, send, post, delete always ask |
+| 4.6 | Agents working together | V1 | A manager agent hands parts of a task to others |
+| 4.7 | Shared memory and a message bus between agents | V1 | |
+| 4.8 | Budgets and limits | V1 | Credit cap per task, step limits, loop detection |
+| 4.9 | Web content treated as data, never instructions | V1 | Against prompt injection and memory poisoning |
+
+## 5. Flagship agents
+
+| # | Agent | Stage | How it works |
+|---|---|---|---|
+| 5.1 | **Website → promo video** | V1 | Reads the site (text, logo, colours, screenshots, a screen recording), writes a script, adds a voiceover (local or cloud TTS), assembles with an open-source video engine (Revideo or Motion Canvas, plus FFmpeg); AI video clips optional (local GPU or cloud, credits) |
+| 5.2 | **Website or app → QA report and tests** | V1 | Explores with Playwright, writes Playwright tests that then run without AI; accessibility (axe-core) and performance (Lighthouse); fixes broken tests with your OK |
+| 5.3 | **Prompt → app** | V1 | A web, mobile or desktop app, optionally added to the sidebar; see §6 |
+| 5.4 | **Folder agent** | V1 | Questions about your documents, with sources (§7) |
+| 5.5 | **Web watcher** | V1 | Checks sources on a schedule, finds what changed, tells you what matters to your company (example: Romanian environmental law) |
+| 5.6 | **Recorder** | V1 | Record browser steps, replay them on a schedule (§8) |
+| 5.7 | **Code builder** | V1 | A coding agent like OpenCode or Cline, for developers: works in any repo on the laptop, plans, edits, runs tests, commits; see §13 |
+| 5.8 | **SEO agent** | V1 | Audits a site, fixes what it can, tracks rankings and writes content; see §14 |
+| 5.9 | **Marketing agent** | V1 | Social posts, newsletters, campaigns and a content calendar from the brand kit; see §15 |
+
+## 6. App builder
+
+**One builder, three targets; the user picks one.** Web, desktop and mobile apps share about 80% of the work (understanding the request, planning, writing React and TypeScript, the backend, fixing errors), so there is one App builder agent on the shared coding engine (§13), not three separate agents. When starting a project the user picks **what** to build: a web app, a mobile app or a desktop app, and only that is built. Each target brings a **target kit**: its starter template, preview, checks, rules and publishing steps, plus specialist sub-agents for the parts only that target has. Adding a second target later is optional (6.6).
+
+### How a build runs (Lovable's loop, done locally)
+
+1. **Plan:** a strong model turns the prompt into a plan, pages, data model and tasks; you see and can change the plan.
+2. **Build:** sub-agents write the code, each with its own context; cheaper models take the simple work.
+3. **Run:** the preview runs on the laptop, so previews cost us nothing (Lovable and Bolt pay for cloud sandboxes).
+4. **Check:** typecheck, build, the app's tests, and the QA agent (5.2) clicking through the app in local browsers, emulators or a virtual machine (see "Testing on the laptop").
+5. **Fix:** errors and logs go back to the agents until the checks pass or the budget (4.8) runs out.
+6. **Hand over:** a summary of what changed, a new version (6.13), and the preview.
+
+### Target kits
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 6.1 | **Web**: websites and web apps | V1 | React, TypeScript, Tailwind, shadcn/ui, Convex as the default backend; local dev server for the preview |
+| 6.2 | **Option: add to the Titan117 sidebar** (internal apps: CRM, inventory, invoices) | V1 | Off by default; a choice when creating a web app, or later. Adds the `titan` SDK (db, ai, auth, agent), runs sandboxed, and joins the shared data layer (6.11); otherwise the app is a normal standalone project |
+| 6.3 | **Mobile**: iOS and Android | V1 | React Native and Expo; preview in the browser (react-native-web), on a phone by QR code in Expo Go, or in a simulator (iOS only on a Mac) |
+| 6.4 | **Desktop**: Windows and macOS apps | V1 | Tauri template; runs locally as its preview; builds installers |
+| 6.5 | Target specialists | V1 | Sub-agents per target: mobile (native modules, permissions, store rules), desktop (packaging, auto-update, signing), web (SEO §14, deploy) |
+| 6.6 | Option: add another target later | V1 | Only if the user asks, for example a mobile app next to an existing web admin panel; both share one backend and their logic, each has its own UI |
+
+### Builder features
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 6.7 | Plan you approve before building | V1 | |
+| 6.8 | Templates and a design system per project | V1 | Starting points per target and per business type; the brand kit (15.1) applied |
+| 6.9 | Visual edit | V1 | Click an element in the preview and describe the change |
+| 6.10 | Model roles and escalation | V1 | See "Models in the builder" below |
+| 6.11 | One shared data layer for sidebar apps | V1 | Only for apps added to the sidebar (6.2); lets the agent answer across them |
+| 6.12 | Local database per app, optional sync | V1 | |
+| 6.13 | Versions and one-click rollback | V1 | |
+| 6.14 | Agents maintain and fix apps | V1 | |
+| 6.15 | Publish web | V1 | One-click deploy, custom domain; hosting costs credits |
+| 6.16 | Publish mobile | V1 | Expo EAS builds and store submission; the user needs their own Apple and Google developer accounts; Android builds can also run locally, iOS builds need a Mac or EAS |
+| 6.17 | Publish desktop | V1 | Signed installers and auto-update; signing needs the user's Apple developer account and a Windows certificate |
+| 6.18 | Export code to GitHub | V1 | No lock-in |
+| 6.19 | Built on open-source builders | V1 | Code work by the shared engine (§13); bolt.diy, Dyad, open-lovable and Convex Chef to study for the builder screens, templates and loop; check each licence |
+
+### Testing on the laptop
+
+Apps are tested on the user's own machine, in real browsers, emulators and virtual machines. Cloud device farms (BrowserStack, Sauce Labs) charge per minute; here testing is free and the app's data never leaves the laptop. The QA agent (5.2) drives all of it.
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 6.20 | Web: three browser engines | V1 | Chromium, Firefox and WebKit (close to Safari, also on Windows) through Playwright |
+| 6.21 | Web: screen sizes and conditions | V1 | Phone, tablet and desktop sizes; slow network, offline, dark mode, another language |
+| 6.22 | Mobile: Android emulator | V1 | On Windows, macOS and Linux; needs hardware virtualization and several GB of disk |
+| 6.23 | Mobile: iOS Simulator | V1 | macOS only (Xcode); on Windows, iOS is tested on a real iPhone through Expo Go |
+| 6.24 | Mobile: real phone | V1 | Expo Go by QR code, on the same Wi-Fi |
+| 6.25 | Mobile: automated taps and checks | V1 | Tests that tap through the app in the emulator (for example with Maestro or Appium, licences to check) |
+| 6.26 | Desktop: a clean virtual machine | V1 | Install and run the app on a fresh Windows or macOS (Windows Sandbox or Hyper-V on Windows; UTM or Tart on Mac) to catch "works only on my machine" problems |
+| 6.27 | Backend in containers | V1 | Databases and services the app needs, started locally (Docker or Podman) and thrown away after the test |
+| 6.28 | One-click setup | V1 | Titan117 downloads and sets up emulators and tools on first use, after the hardware check (1.4) says the laptop can run them |
+| 6.29 | Test report | V1 | Screenshots per device, failures with steps to repeat them, fixed automatically when you agree |
+| 6.30 | Cloud devices as a fallback | V1 | Real iPhones and other devices through a device farm, through credits, for users whose laptop can't run emulators |
+
+### Models in the builder
+
+Like Lovable, the builder uses several models, each for the job it does best; lighter work goes to faster, cheaper models.
+
+| Role | What it does | Default kind of model |
+|---|---|---|
+| Planner | Plan, data model, architecture | Strongest available |
+| Coder | Writes most of the code | Strong and cheap: Qwen Coder, DeepSeek, GLM, Kimi, MiniMax |
+| Quick edits | Small changes, applying diffs | Small and fast, or local |
+| Fixer | Debugs when checks fail | Strong; called only on failure |
+| Checker | Looks at screenshots of the preview | A vision model |
+| Chat and summaries | Talks to you, names things, summarizes | Cheap or local |
+
+- **Escalation:** start with the cheap model; after repeated failures on a task, move up to a stronger one.
+- **Chosen by our own tests:** a fixed set of app prompts per target, run against candidate models, decides the defaults (public benchmarks aren't enough). Rerun when new models come out.
+- **Users can override** any role (2.3).
+- **Chinese open models** (Qwen, DeepSeek, GLM, Kimi, MiniMax) cost a fraction of the top Western models per token, which lets us charge less than Lovable or keep a better margin. Rules: pick OpenRouter providers by data policy (US or EU hosts, no training on data) where company data is involved; let companies turn these models off; check their tool use on long tasks in our tests before making them a default.
+
+## 7. Documents (folder agent)
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 7.1 | Watched folders, one or more per company | V1 | New and changed files picked up automatically |
+| 7.2 | Reads PDF, Word, Excel, PowerPoint, email | V1 | Docling or MarkItDown |
+| 7.3 | OCR for scans | V1 | |
+| 7.4 | Local search: vectors plus keywords | V1 | Multilingual embeddings (Romanian and English), sqlite-vec or LanceDB |
+| 7.5 | Answers with file, page and passage | V1 | |
+| 7.6 | Real calculations on spreadsheets | V1 | Computed, not guessed |
+| 7.7 | "Local models only" folders | V1 | For confidential files |
+| 7.8 | Read-only by default | V1 | |
+
+## 8. Automation
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 8.1 | Scheduler | V1 | Runs while the app is open, catches up on launch |
+| 8.2 | Record browser actions | V1 | Built on Playwright's recorder |
+| 8.3 | Edit steps and add variables | V1 | |
+| 8.4 | AI fixes a broken step, with your OK | V1 | |
+| 8.5 | Logins from the OS keychain, pause for 2FA | V1 | Never stored in the recording |
+| 8.6 | Recording in other desktop apps | V1 | Much harder than the browser |
+| 8.7 | Computer use inside a virtual machine | V1 | The agent sees the screen and uses mouse and keyboard, but in a VM or emulator, not on your desktop: it works in the background, you keep using your computer, and a mistake can't touch your files. First use: testing desktop apps we build (6.26) and apps without an API. Reads the accessibility tree first (Windows UI Automation, macOS Accessibility), screenshots when that isn't enough |
+| 8.8 | Computer use on your own desktop | V1 | Any desktop app (Excel, accounting software). Only when you start it, for one task at a time, limited to the apps you allow; a visible "agent is in control" bar, a hotkey that stops it at once, approvals for anything risky; needs the OS permissions (Accessibility and Screen Recording on macOS). Your mouse and keyboard are taken while it works |
+| 8.9 | Building blocks for computer use | V1 | Vision models through OpenRouter or local; UI-TARS (ByteDance, open model and desktop agent, licence to check) and nut.js (Apache 2.0) to study; Open Interpreter is AGPL, so ideas only |
+
+## 9. Web app and remote control
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 9.1 | Account, subscription and credits pages | V1 | |
+| 9.2 | Device list, paired by code or QR | V1 | Online or offline status |
+| 9.3 | Start and watch agents from the browser | V1 | Commands through Convex; the desktop only connects out |
+| 9.4 | Approvals from the web | V1 | |
+| 9.5 | End-to-end encryption of commands and results | V1 | Our servers pass along what they can't read |
+| 9.6 | Mobile app on the same mechanism | V1 | |
+| 9.7 | Chat channels: Telegram, WhatsApp, Discord, Slack | V1 | Message Titan from your phone and the laptop does the work while it's on; channels linked to an account, approvals work there too. Telegram first (decisions §14); WhatsApp is bring-your-own through the official Cloud API (decisions §15) |
+
+## 10. Marketplace (free, built on GitHub)
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 10.1 | `titan.json` manifest in a repo | V1 | Type, entry point, permissions |
+| 10.2 | Item types | V1 | Agents, workflows, app templates, MCP tools, prompts and skills |
+| 10.3 | Index found through a GitHub topic | V1 | Stars, licence, last update, installs, ratings; code stays on GitHub |
+| 10.4 | Install pinned to a commit, updates with a changelog | V1 | |
+| 10.5 | Install any open-source project | V1 | The agent reads the repo and proposes setup steps for your OK |
+| 10.6 | Fork and publish back to your GitHub | V1 | GitHub App with limited permissions |
+| 10.7 | Permissions screen before install | V1 | |
+| 10.8 | Sandbox, dependency scan, agent code summary | V1 | |
+| 10.9 | Licence shown and warned about | V1 | MIT and Apache fine; GPL and AGPL warn; none or non-commercial warn strongly |
+| 10.10 | Verified badge, reports, takedown | V1 | |
+| 10.11 | GitLab, Codeberg, Gitea; Hugging Face for models | V1 | |
+
+## 11. Accounts, plans and credits (our cloud)
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 11.1 | Sign-in | V1 | Clerk |
+| 11.2 | Subscription plans | V1 | Lovable-style tiers, prices open |
+| 11.3 | Credit ledger and top-ups | V1 | In Convex, atomic deductions |
+| 11.4 | OpenRouter proxy with metering | V1 | A Convex HTTP action holds our key |
+| 11.5 | BYOK | V1 | Key kept on the device, in the OS keychain |
+| 11.6 | Teams, roles, audit log | V1 | |
+| 11.7 | Agency and white-label plan | V1 | |
+
+## 12. Trust and security (across everything)
+
+- Safe defaults where general agents like OpenClaw are risky: a sandboxed shell with approval for risky commands (3.8), file access only to allowed folders (3.9), and checked skills and marketplace items (10.7, 10.8) instead of installing strangers' skills blindly.
+- Approvals before external actions (4.5), budgets (4.8), web content as data (4.9).
+- Messages from chat channels count as the user only from linked accounts (9.7).
+- Permissions for apps and marketplace items (6.2, 10.7), sandboxing (10.8).
+- Memory you control (3.3), memory scopes (3.4), "local models only" folders (7.7).
+- Secrets in the OS keychain, never in files, recordings or memory (8.5, 11.5).
+- Account deletion and GDPR: to write up, like Ninjathons' decisions §4.
+
+## 13. Code builder and the shared coding engine
+
+One coding engine runs inside the desktop app and powers every agent that writes code: the code builder (5.7), the app builder (§6), web, mobile and desktop apps (6.1, 6.3, 6.4), and Titan's one-off scripts (3.11). Leaning towards **OpenCode** as that engine (to confirm, open decision 11).
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 13.1 | Open any local repo or folder | V1 | |
+| 13.2 | Plan mode, then act mode | V1 | Shows the plan and the files it will touch before editing |
+| 13.3 | Edits as diffs you can review, accept or reject | V1 | |
+| 13.4 | Runs commands, tests and the dev server | V1 | Through the sandboxed shell (3.8) |
+| 13.5 | Approvals routed to Titan117's approval screen | V1 | The engine's permission prompts become our approvals (4.5), also from the web and chat channels |
+| 13.6 | Any model: local or OpenRouter | V1 | Same model choice as everywhere else (§2) |
+| 13.7 | Git: branches, commits, pull requests | V1 | GitHub through the GitHub App (10.6) |
+| 13.8 | Project memory | V1 | Conventions and decisions per repo, in the shared memory (3.4) |
+| 13.9 | Sub-agents for big tasks | V1 | Orchestrator splits work: plan, code, test, review |
+| 13.10 | Code review agent | V1 | Reviews a diff or pull request for bugs |
+| 13.11 | Live preview next to the code | V1 | For web apps; shared with the app builder |
+| 13.12 | Open in the user's editor | V1 | VS Code, Cursor, JetBrains |
+| 13.13 | Start and watch coding tasks remotely | V1 | Web app (§9) and chat channels (9.7) |
+
+## 14. SEO
+
+Our advantage: we build the sites (§6), so they come with SEO built in, and the SEO agent can fix issues itself instead of only listing them. For any other site it audits and suggests.
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 14.1 | Built into every site we generate | V1 | Titles, meta descriptions, headings, sitemap, robots.txt, canonical links, Open Graph images, structured data (schema.org), alt text, fast pages |
+| 14.2 | Site audit | V1 | Crawl: broken links, redirects and loops, missing or duplicate meta tags, heading order, thin pages, missing alt text; issues by severity. Ideas from SEOnaut, SiteOne Crawler, LibreCrawl (all MIT) |
+| 14.3 | Speed and Core Web Vitals across the whole site | V1 | Lighthouse on every page, like Unlighthouse (MIT); shared with the QA agent (5.2) |
+| 14.4 | Fix it for me | V1 | On our sites the agent makes the fix through the coding engine (§13); on other repos it opens a pull request |
+| 14.5 | Google Search Console | V1 | Free, official data: queries, clicks, impressions, indexing problems |
+| 14.6 | Rank tracking | V1 | Ideas from SerpBear (MIT); positions from Search Console for free, or a SERP API through credits |
+| 14.7 | Keyword research | V1 | Needs paid data (no open keyword database exists): a provider like DataForSEO through credits |
+| 14.8 | SEO content writing | V1 | Pages and blog posts from keywords and the brand kit, with internal links; you approve before publishing |
+| 14.9 | Competitor check | V1 | Crawls competitors' public pages: topics, structure, gaps |
+| 14.10 | Several languages | V1 | Romanian and English versions with hreflang |
+| 14.11 | Local SEO | V1 | Google Business Profile, local listings, reviews |
+| 14.12 | AI search visibility | V1 | Whether ChatGPT, Perplexity and Google's AI answers mention the company; llms.txt |
+| 14.13 | Scheduled re-audits with a report | V1 | Weekly, through the scheduler (8.1) |
+
+Out of reach with open source: backlink databases, competitors' traffic estimates and ranking history (Ahrefs, Semrush). If needed, they come from a paid API through credits.
+
+## 15. Marketing
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 15.1 | Brand kit in memory | V1 | Logo, colours, fonts, tone of voice, products, audience; read from the website and edited by you; every marketing agent uses it |
+| 15.2 | Social posts | V1 | Text and images for LinkedIn, Facebook, Instagram, X, TikTok; ideas from Postiz (AGPL, so ideas only). All five in V1 (decisions §14); X is bring-your-own (decisions §15) |
+| 15.3 | Content calendar | V1 | A month of posts planned from goals, launches and holidays |
+| 15.4 | Scheduled publishing that works with the laptop closed | V1 | Where a platform's API supports scheduled posts, the post is handed over in advance so it goes out on time; otherwise it publishes when the app is open |
+| 15.5 | Newsletters | V1 | Ideas from Listmonk (AGPL, ideas only); sent through the user's email provider (Brevo, Amazon SES, Mailgun, Postmark), which also handles scheduled sends |
+| 15.6 | Email sequences and lead scoring | V1 | Ideas from Mautic (GPL, ideas only) |
+| 15.7 | Landing pages | V1 | Built by the app builder (§6), with SEO (§14) and a form that feeds the CRM |
+| 15.8 | Images for posts and ads | V1 | Image models through OpenRouter or local, on the brand kit |
+| 15.9 | Videos | V1 | The promo video agent (5.1), cut to each platform's format |
+| 15.10 | Website analytics | V1 | Privacy-friendly analytics built into sites we generate (ideas from Umami, MIT; Plausible is AGPL); reads Google Analytics for other sites |
+| 15.11 | Campaign reports | V1 | What was posted and sent, and what it brought: clicks, sign-ups, leads |
+| 15.12 | Lead finding | V1 | Web research into a list in the CRM, for example local businesses without a website; respects site terms and privacy law (GDPR) |
+| 15.13 | Ad drafts | V1 | Google and Meta ads written and set up as drafts; you launch them and set the budget |
+| 15.14 | Review and mention monitoring | V1 | Through the web watcher (5.5) |
+
+Everything that publishes, sends or spends money needs your approval (4.5). Each social platform needs its own app review before it lets us post through its API, which takes time; X and WhatsApp are bring-your-own: the user sets up and pays for their own access, with our guided setup (decisions §15).
+
+## 16. Web search
+
+One web search tool that every agent can call during a task. Searching finds links; a second step reads the pages. The user picks where search comes from, like with models.
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 16.1 | Search tool for all agents | V1 | The model decides when to search, how often, and what to read next |
+| 16.2 | **Default** search source: a paid search API through our credits | V1 | OpenRouter's web search server tool (native search for some models, Exa for the rest, about 2 cents a search), or Brave Search's API. Its old `:online` suffix and web plugin are deprecated |
+| 16.3 | Search source: the user's own key | V1 | Brave Search, Tavily, Exa, Serper |
+| 16.4 | Search source: free mode, opt-in only | V1 | Built on ddgs (MIT) or open-webSearch (Apache 2.0, to check in its repo), with their code adapted. Labelled "free, may be blocked, uses other engines' results"; never the default. SearXNG (AGPL) is not used |
+| 16.5 | Read a page | V1 | Fetch it and turn it into clean text: Mozilla Readability and Trafilatura (both Apache 2.0) for most pages; our browser tool (3.10) for pages that need JavaScript |
+| 16.6 | Read a whole site | V1 | Crawl a site into clean text; ideas and maybe code from Crawl4AI (to check: Apache 2.0); Firecrawl is AGPL, so ideas only |
+| 16.7 | Answers with sources | V1 | Every fact from the web shows its link |
+| 16.8 | Deep research mode | V1 | Many searches, reading, cross-checking, then a report with sources; ideas from Perplexica (licence to check) |
+| 16.9 | Trusted source lists | V1 | Pin or block sites per agent, for example only official legal sources for the law watcher (5.5) |
+| 16.10 | Search in the user's language and country | V1 | Romanian results for Romanian questions |
+| 16.11 | Cache | V1 | The same search or page within a short time isn't fetched or paid for twice |
+| 16.12 | Cost shown, budget respected | V1 | Searches through credits count towards the task budget (4.8) |
+
+Rules: web pages are data, never instructions (4.9); respect robots.txt and site terms; no CAPTCHA bypassing; no scraping Google's results pages directly.
+
+## 17. Artifacts: what agents make for you to see and share
+
+Like Claude's artifacts: when an agent produces something to look at, use or share, it opens as a live page next to the chat instead of a wall of text. Reports from other agents (QA 6.29, SEO 14.13, deep research 16.8, campaign reports 15.11, folder answers §7) are artifacts too. One consistent way to show results across the whole app. Typical asks: "make an offer for this client", "a report on last month's sales", "a presentation for Monday": ready in your brand, exportable or shareable in one click.
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 17.1 | Artifact panel next to the chat | V1 | Opens beside the conversation; full screen; a gallery of all artifacts per company and project |
+| 17.2 | Documents | V1 | Reports, proposals, offers, contract drafts, SOPs, one-pagers; rich text with headings, tables and images |
+| 17.3 | Web pages and small interactive tools | V1 | HTML, CSS and JavaScript: calculators, forms, checklists, dashboards, prototypes; run sandboxed |
+| 17.4 | Charts and dashboards from data | V1 | From a spreadsheet, a sidebar app's data or an agent's results; live, not pictures |
+| 17.5 | Diagrams | V1 | Flowcharts, org charts, timelines, architecture; Mermaid (MIT) |
+| 17.6 | Slides | V1 | Decks for clients or the team; reveal.js or Marp (both MIT) to study |
+| 17.7 | Spreadsheets | V1 | Tables you can sort, filter and edit; download as Excel |
+| 17.8 | **Download in any format** | V1 | A Download button on every artifact with every format that makes sense for its type (table below); see "Downloads" |
+| 17.9 | Edit by asking or by hand | V1 | "Make the intro shorter" or type into it yourself; the agent sees your edits |
+| 17.10 | Versions | V1 | Every change is a version; compare and restore |
+| 17.11 | Brand kit applied | V1 | Logo, colours and fonts from 15.1 on documents, slides and pages |
+| 17.12 | Templates | V1 | Offer, invoice, monthly report, meeting notes, project plan; shareable in the marketplace (§10) |
+| 17.13 | Share with a link | V1 | Optional: publish to our cloud as a private link, then share with chosen people or anyone with the link; storage counts towards the plan; off by default, everything stays local until you share |
+| 17.14 | Comments | V1 | People you share with can comment; an agent can answer or apply a comment |
+| 17.15 | Live data | V1 | An artifact can read from a sidebar app or the documents index (with your permission), so a dashboard stays up to date |
+| 17.16 | Turn an artifact into an app | V1 | A useful tool or dashboard becomes a real project in the app builder (§6), optionally in the sidebar |
+| 17.17 | Scheduled artifacts | V1 | "Every Monday, update the sales report" through the scheduler (8.1) |
+| 17.18 | Safety | V1 | Runs in a sandbox with no access to files, memory or the network unless allowed; scripts only from approved sources; shared pages never contain secrets |
+
+### Downloads
+
+Every artifact can be downloaded in the formats that fit it, from a Download button that's always there, unlike Claude Code today.
+
+| Artifact type | Formats |
+|---|---|
+| Document | PDF, Word (.docx), Google Docs, Markdown, HTML, plain text |
+| Web page or small tool | A single self-contained HTML file that works offline, PDF (a snapshot), PNG, a ZIP of the source code |
+| Chart or dashboard | PNG, SVG, PDF, the data as Excel or CSV |
+| Diagram | SVG, PNG, PDF, the Mermaid source |
+| Slides | PowerPoint (.pptx), PDF, Google Slides, images per slide |
+| Spreadsheet | Excel (.xlsx), CSV, Google Sheets, PDF |
+| Any | Copy to clipboard; save straight into a folder (for example the company's folder in §7) |
+
+| # | Feature | Stage | Notes |
+|---|---|---|---|
+| 17.19 | Real, editable files | V1 | Word files with real headings, styles and tables; PowerPoint with editable text boxes, not pictures of slides; Excel with real cells and formulas |
+| 17.20 | Download options | V1 | Page size (A4 or Letter), margins, light or dark, include comments or not, file name from the title |
+| 17.21 | Several at once | V1 | Pick artifacts in the gallery and download them as one ZIP |
+| 17.22 | Batch versions | V1 | Download an older version, or the same artifact in several formats in one go |
+| 17.23 | Conversion runs locally | V1 | No upload needed: PDF through the built-in browser's print (Playwright), Word through docx (MIT), PowerPoint through pptxgenjs (MIT), Excel through ExcelJS (MIT), diagrams through Mermaid (MIT). Pandoc is GPL, so not built in |
+| 17.24 | Agents can save files too | V1 | "Save the offer as PDF in the Client X folder" works as a task, with no clicks |
+| 17.25 | Google Docs, Sheets and Slides | V1 | Through the user's Google account (MCP, 3.6) |
+
+## Not doing
+
+- Hosted agents that keep running when the laptop is closed. A paid cloud runner could come much later, but it isn't the product.
+- Bypassing CAPTCHAs, paywalls or site terms in the web watcher and the recorder.
+- Signing in with chat subscriptions (Claude Pro or Max, ChatGPT Plus or Pro, Gemini plans) to run our agents. Anthropic's terms have banned this outside its own apps since February 2026 and it blocks such tools, and users' accounts can be banned. OpenAI's position is unclear. Users bring an API key instead (2.9). Revisit only if a provider officially allows it for third-party apps.
+
+## Open decisions
+
+1. Tauri or Electron for the desktop app.
+2. Clerk Billing or Stripe directly. Ninjathons picked Stripe directly for regional prices, one-time payments and VAT; the same reasons may apply here.
+3. Plan names, prices and what each plan includes (credits per month, BYOK on which plans).
+4. First customer: small businesses with no developers, developers, or agencies.
+5. Target hardware: mostly Macs or mostly Windows laptops. Decides how much local models can carry.
+6. Video provider for AI clips (fal.ai, Replicate, other).
+7. Which open-source code to build on for the app builder, the QA agent and browser control, after a licence check.
+8. What V1 is: the smallest set of the features above that we launch with.
+9. How the shell is sandboxed on Windows and macOS, and which commands count as risky.
+10. Which chat channel comes first (9.7); WhatsApp has the strictest rules for bots.
+11. The coding engine (§13). Leaning: OpenCode (MIT, a headless server with a TypeScript SDK, 75+ providers including Ollama and OpenRouter). Alternatives: Cline (Apache 2.0, strong approval flow), Kilo Code (orchestrator mode), Aider (Python, git-first). Roo Code is reported archived. If OpenCode wins, it may replace a separate bolt.diy or Dyad fork for the app builder (6.19).
+12. Paid data providers for SEO (keywords, SERP positions, backlinks) and their price in credits.
+13. Which social platforms come first (15.2), given each one's API review and costs.
+14. Decided 15 Oct 2026 (§16): search is a paid API through credits by default (OpenRouter or Brave), the user's own key as an option, and free mode (ddgs or open-webSearch) as an opt-in only. Left to pick: OpenRouter or Brave as the default.
+15. Decided 15 Oct 2026 (2.10): no sign-in with chat subscriptions; provider API keys instead.
+16. Decided 15 Oct 2026: two repositories, `titan117-web` and `titan117-desktop`. The web repo owns the Convex backend and the shared protocol and publishes them as a private, versioned package (`@titan117/shared`); the desktop repo installs a fixed version. Protocol messages carry a version number, and a test in the desktop repo checks it against the latest backend.
+17. Decided 15 Oct 2026: docs in both repositories. Shared product docs (feature map, roadmap, architecture, cross-repo decisions) are the same in both: edited in `titan117-web`, copied to `titan117-desktop` by a script, and a CI check in the desktop repo fails if its copy is out of date. Each repo also keeps its own `progress.md`, decisions and test plan for its side.
+18. Decided 16 Oct 2026: V1 is everything in this map. Titan117 is not launched until the whole product works well; the work is split into implementation phases (draft in v1-scope.md). Still out: everything under "Not doing".
+
+---
+
+## All features in short
+
+**1. Desktop app**
+- Plug and play: one signed installer with everything the core needs; a setup wizard; heavy parts (models, emulators, VMs) download on demand
+- Always points the way: before anything runs it checks what is needed and shows "you need this first" cards with one-click installs, guided steps or another way; a setup checklist and a health check
+- Windows and macOS app, signed in with the Titan117 account
+- Sidebar with agents, apps, chats and the marketplace
+- Hardware check that suggests which local models fit
+- Stays awake while a task runs; resumes after sleep or a crash
+- Local database, activity timeline, notifications, auto-update
+
+**2. Models**
+- Local models with one-click download, or OpenRouter models
+- Pay with our credits, your own OpenRouter key, or your own Anthropic, OpenAI or Google API key
+- No sign-in with Claude or ChatGPT subscriptions (banned by Anthropic, unclear at OpenAI)
+- Model per agent, override per step; smart routing between strong and cheap models
+- Cost shown before a task; a cloud model suggested when the laptop is too weak
+- Image, voice and video providers; side-by-side model comparison
+
+**3. Chat, memory and the general assistant**
+- Chat with any model
+- Persistent memory you can see, edit and delete, scoped per company and agent
+- Learns how you work and writes its own reusable skills
+- Titan, the general assistant: shell, files, browser, code and MCP tools for almost any computer task
+- Sandboxed shell where risky commands need your OK
+
+**4. Agents and the agent builder**
+- Agents defined as files: role, models, tools, memory, triggers, approvals
+- Built-in agents you can clone and edit; an agent builder screen
+- Approvals before anything external; budgets, step limits and loop detection
+- Agents working together through shared memory and a manager agent
+- Web content treated as data, never instructions
+
+**5. Flagship agents**
+- Promo video from a website
+- QA report and Playwright tests for a website or app
+- Web, mobile or desktop app from a prompt
+- Folder agent for questions about your documents
+- Web watcher, for example for changes in Romanian environmental law
+- Recorder that replays browser steps on a schedule
+- Code builder, like OpenCode or Cline
+- SEO agent
+- Marketing agent
+
+**6. App builder**
+- One builder; the user picks what to build: a web, mobile (React Native and Expo) or desktop (Tauri) app, each with its own kit and specialist sub-agents; another target only if asked
+- Option, off by default: add an app to the Titan117 sidebar as an internal app (CRM, inventory, invoices)
+- Lovable's loop done locally: plan, build, run, check, fix; free previews on the laptop
+- Free local testing: Chromium, Firefox and WebKit; Android emulator, iOS Simulator (Mac) and real phones; clean virtual machines for desktop apps; backends in containers
+- Several models per build: strong planner, cheap coder (Chinese open models), fast edits, fixer, vision checker; escalate on failure
+- Templates, visual edit, versions and rollback; agents maintain and fix apps
+- Publish to the web, the app stores and desktop installers; export code to GitHub
+
+**7. Documents**
+- Watched folders per company; reads PDF, Word, Excel, PowerPoint, email and scans
+- Local search in Romanian and English, answers with file, page and passage
+- Real calculations on spreadsheets
+- Read-only by default; "local models only" folders for confidential files
+
+**8. Automation**
+- Scheduler that runs while the app is open and catches up on launch
+- Record browser actions, edit steps, add variables, replay on a schedule
+- AI fixes broken steps with your OK; logins from the OS keychain
+- Computer use inside a virtual machine (background, safe) and on your own desktop, only when you start it, with a stop hotkey
+
+**9. Web app and remote control**
+- Account, subscription and credits pages
+- Paired devices; start, watch and approve agents from the browser
+- Chat channels: Telegram, WhatsApp, Discord, Slack
+- End-to-end encryption and a phone app
+
+**10. Marketplace (free, on GitHub)**
+- Agents, workflows, app templates, MCP tools, prompts and skills, each with a `titan.json` manifest
+- Found through a GitHub topic; installs pinned to a commit, with changelogs
+- Fork and publish back to your GitHub
+- Permissions screen, sandbox, dependency scan, licence warnings, verified badge
+- Install any open-source project; GitLab, Codeberg and Hugging Face
+
+**11. Accounts, plans and credits**
+- Clerk sign-in; Lovable-style subscription plans with credit top-ups
+- Credit ledger and OpenRouter proxy in Convex; bring your own key
+- Teams, roles, audit log and an agency plan
+
+**12. Trust and security**
+- Safe defaults where general agents are risky: sandboxed shell, folder limits, checked skills
+- Approvals, budgets, memory you control, secrets in the OS keychain
+- Account deletion and GDPR to write up
+
+**13. Code builder and the coding engine**
+- One coding engine (leaning: OpenCode) behind every agent that writes code
+- Plan then act; diffs you accept or reject; runs commands, tests and the dev server
+- Any model; git, commits and pull requests; project memory
+- Sub-agents and a code review agent; live preview; open in your editor; remote tasks
+
+**14. SEO**
+- SEO built into every site we generate
+- Site audit and speed checks on every page; fixes made for you
+- Google Search Console, rank tracking, keyword research (paid data through credits)
+- SEO content writing, competitor checks, several languages
+- Local SEO, AI search visibility, weekly re-audits
+
+**15. Marketing**
+- Brand kit in memory, used by every marketing agent
+- Social posts, a content calendar, and scheduled publishing that works with the laptop closed
+- Newsletters through your email provider; email sequences and lead scoring
+- Landing pages, images, videos, analytics and campaign reports
+- Lead finding into the CRM; ad drafts and review monitoring
+
+**16. Web search**
+- One search tool for every agent
+- Default: a paid search API through credits (OpenRouter or Brave); your own key as an option
+- Free mode as an opt-in only (ddgs or open-webSearch)
+- Reads pages and whole sites into clean text; answers with sources
+- Deep research mode, trusted source lists, results in your language, a cache, costs within the task budget
+
+**17. Artifacts**
+- Live pages next to the chat for anything an agent makes: documents, web pages and small tools, charts, diagrams, slides, spreadsheets
+- Every report from the other agents is an artifact
+- Edit by asking or by hand; versions; brand kit applied; templates
+- A Download button on every artifact, in every format that fits: PDF, Word, PowerPoint, Excel, CSV, Markdown, offline HTML, PNG, SVG, ZIP of the code; real editable files, converted on the laptop; several at once as a ZIP; agents can save files to a folder
+- Optional sharing by private link, with comments; local until you share
+- Live data from sidebar apps, scheduled updates, and turning an artifact into a real app
