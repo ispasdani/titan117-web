@@ -43,7 +43,7 @@ The work is split into phases instead. Each phase builds on the ones before it a
 | 7 | Default web search | OpenRouter search | Feature map, decision 14 |
 | 8 | Plan names, prices, credits per plan, rollover | To decide with numbers | New: pricing note |
 | 9 | First customer and OS order | Small companies; Windows and macOS together | New: decisions |
-| 10 | Name and logo | Trademark check on "Titan117"; redraw the helmet as our own | Brand README |
+| 10 | Name and logo | Trademark check on "Titan117"; restyle the avatar logo as our own | Brand README |
 | 11 | Legal basics | Company, privacy policy, terms, GDPR deletion plan, open-source licence audit | New: decisions |
 
 ## Set up before phase 0

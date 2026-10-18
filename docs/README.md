@@ -14,9 +14,7 @@
 | [notes/design.md](notes/design.md) | Design system: colors, type, spacing, components, accessibility |
 | [notes/open-source-references.md](notes/open-source-references.md) | Best open-source projects per phase, where their code lives, licence status |
 | [notes/pricing.md](notes/pricing.md) | Plans, credits, top-ups, rollover |
-| [brand/README.md](brand/README.md) | Helmet logo, states, animations, logo files, stand-in media |
-| [mockups/final-a/index.html](mockups/final-a/index.html) | Saved mockups: web app and pro desktop app |
+| [brand/README.md](brand/README.md) | Logo (the hexagon avatar), Titan's states, agent avatars |
 
-Live mockups canvas: https://claude.ai/artifact/J2J8dUtQuemvBG931BNJs3 (page "Final · A"; private until shared).
 
 There's no `02` platform plan: the feature map and decisions cover it.

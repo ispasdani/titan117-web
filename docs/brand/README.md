@@ -1,62 +1,38 @@
 # Brand
 
-Draft, 16 Oct 2026. Titan's helmet, its states and the files for them. The full design system comes later in `notes/design.md`.
+18 Oct 2026. The old helmet logo, its state files, all mockups and the stand-in media were deleted ([decisions §9](../notes/decisions.md#9-brand)). This file keeps the rules; new files come later.
 
-## Status: concept
+## Logo
 
-The helmet is modified from "Helmet" by Andrés Cerdas, from the Noun Project (`noun_Helmet_22025`). Before it's used in public or as the logo:
+Titan's avatar: a **neon `#c4f012` hexagon with the angry expression**, drawn live by the bloub engine (MIT, [jeremy-prt/bloub](https://github.com/jeremy-prt/bloub)). Its eyes follow the cursor. Next to it, the wordmark "Titan117" in the system font, weight 700.
 
-- **Licence:** the free Noun Project licence needs attribution wherever it's used; a paid royalty-free licence removes that. A stock icon can't be registered as our trademark, since anyone can use the same icon.
-- **Resemblance:** its forehead plates, visor and cheek pieces read as a Halo Spartan (Master Chief) helmet, and the name has "117" in it.
+- On dark: the eyes show the dark background through them.
+- On light: the eyes show white.
+- Before beta, the shapes and eyes are restyled as our own (bloub recreates the x.ai avatar) and trademark-checked with the name.
 
-So the plan is to redraw it into our own shape (keeping the visor, eye slits and cheek lights) before launch. The states and animations below target only the eyes, visor and cheek lights, so they carry over to the redrawn helmet unchanged.
+## Titan's states
 
-## Colours
+The avatar's animation shows the state. A colour or label always comes with it (design.md §8).
 
-| Token | Value | Use |
+| State | bloub state | Colour |
 |---|---|---|
-| Neon | `#c4f012` | Eyes and cheek lights when idle, working or loading; the shield |
-| Amber | `#EF9F27` | Needs approval |
-| Red | `#E24B4A` | Error |
-| Grey | `#5F5E5A` | Offline |
-| Ink | `#0a0a0a` | The helmet on light backgrounds; the visor on dark ones |
-| Paper | `#f4f1ea` | The helmet on dark backgrounds |
+| Idle | `idle` | Neon |
+| Working | `thinking` | Neon |
+| Searching the web | `comet` | Neon |
+| Needs approval | `notify` | Amber `#ef9f27` |
+| Done | `wink` | Neon |
+| Error | `alert` | Red `#e24b4a` |
+| Offline | `sleep` | Grey `#8e8ea0` |
 
-## States
+## Agent avatars
 
-Each state is one self-contained animated SVG in `states/`, in a version for dark backgrounds (paper helmet) and one for light backgrounds (ink helmet). Preview them all in [`states/preview.html`](states/preview.html).
-
-| State | Eyes and cheek lights | Motion | Files |
-|---|---|---|---|
-| Idle | Neon | A slow blink every 5 seconds | `helmet-idle-dark.svg`, `helmet-idle-light.svg` |
-| Working | Neon | Eyes breathe; a scan line sweeps the visor | `helmet-working-*.svg` |
-| Loading | Neon | A hexagon energy shield turns around the helmet, with a pulse ring | `helmet-loading-*.svg` |
-| Needs approval | Amber | A slow pulse | `helmet-approval-*.svg` |
-| Error | Red | A short flicker | `helmet-error-*.svg` |
-| Offline | Grey | None | `helmet-offline-*.svg` |
+Every agent gets its own avatar: one of 8 shapes, a colour or a gradient, and a mood (16 expressions). Users can change them.
 
 ## Rules
 
-- **Reduced motion:** every file stops its animation when the user has turned on reduced motion; the colour alone shows the state.
-- **The tray icon** (Windows and macOS) can't run animations: it switches between static state icons (`concepts/helmet-2-state-*.svg`), at most two frames for a blink.
-- **Flat colours only:** no gradients, glows or blur, in line with the neo-brutalist style.
-- **The loading file is wider** than the others (its viewBox makes room for the shield), so give it the same box size and it will look slightly smaller.
+- **Reduced motion:** the avatar stops moving; the colour and label still show the state.
+- **Tray icon** (Windows and macOS): static frames of the avatar, one per state.
 
-## Design system
+## Media
 
-The chosen direction is tile **A · Quiet** on the OpenAI base settings with neon green as the one accent: [`../notes/design.md`](../notes/design.md). Its screens are on the canvas page **"Final · A (OpenAI base + neon)"**. Stand-in media (from verdictu-web) is in `media/`; logo files are in `logo/`.
-
-## Mockups
-
-The neon-brutalism mockups live on a design canvas: https://claude.ai/artifact/J2J8dUtQuemvBG931BNJs3 (private until shared from its Share menu). Web app: home, pricing, account and credits, remote control. Desktop app: workspace with Titan chat and an artifact, first launch setup, app builder.
-
-## Files
-
-| Path | What |
-|---|---|
-| `states/helmet-<state>-<dark or light>.svg` | The 6 animated states, 12 files |
-| `states/preview.html` | All states on dark and light |
-| `concepts/helmet-2-state-*.svg` | Static state icons (idle, approval, error, offline) |
-| `concepts/helmet-2-eye-slits.svg` | The chosen concept, static |
-| `concepts/helmet-1-neon-visor.svg` | The other concept (neon visor), not chosen |
-| `concepts/helmet-animations.html` | The first animation demo |
+None yet. Titan117's own images and video come later.

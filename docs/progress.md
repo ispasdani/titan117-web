@@ -2,7 +2,7 @@
 
 Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.md). Update this file in the same commit as the work: change the phase table when a phase starts or finishes, and add a log entry, newest first.
 
-**Now:** planning is done (feature map, architecture, guardrails, design, mockups, roadmap). **Next step:** phase 0, Setup, when you say so: the two repos, CI, the shared packages and an empty Electron app running on Windows. Nothing else is open before it.
+**Now:** planning is done (feature map, architecture, guardrails, design, roadmap). **Next step:** phase 0, Setup, when you say so: the two repos, CI, the shared packages and an empty Electron app running on Windows. Nothing else is open before it.
 
 ## Phases
 
@@ -31,6 +31,11 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 ## Log
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
+
+### 18 Oct 2026 · Mockups, old logo and media removed; avatar logo
+- Deleted every mockup (Final · A and the landing drafts), the helmet logo files and states, and the stand-in images and video. Docs no longer link to them. Only the information docs remain.
+- New logo decision: Titan's avatar, a neon hexagon with the angry expression whose eyes follow the cursor, drawn by [bloub](https://github.com/jeremy-prt/bloub) (MIT, commit `b4bb3c1`, kept in `titan117-references/avatars/bloub`). Details in [decisions §9](notes/decisions.md#9-brand) and [brand](brand/README.md); a row was added to [open-source-references](notes/open-source-references.md).
+- Open: bloub recreates the x.ai avatar, so the look must be restyled as our own and trademark-checked before beta.
 
 ### 17 Oct 2026 · No free plan, offline licence
 - No free plan: Titan117 works only with an active subscription ([decisions §13](notes/decisions.md#13-pricing), [pricing.md](notes/pricing.md)).
@@ -75,7 +80,7 @@ Each entry: date, phase, what was done, and anything left open. One entry per pi
 
 ### 16 Oct 2026 · Design: direction and mockups
 - Direction chosen after several rounds (brutalism, glass, editorial, white premium, lines, style tiles): tile A on the OpenAI base settings with neon green. Rules in [design.md](notes/design.md).
-- Mockups: home, pricing, account, remote control, and the pro desktop app (mission control, task view, setup, app builder). Saved as HTML in [mockups/final-a](mockups/final-a/index.html); also on the canvas, page "Final · A".
+- Mockups: home, pricing, account, remote control, and the pro desktop app (mission control, task view, setup, app builder). (Deleted on 18 Oct.)
 - Desktop app: no black buttons or selections.
 - Logo: helmet variations and animated states in [brand](brand/README.md); outline variation 03 chosen. Open: redraw as our own before beta.
 - Open: real images and video (the current ones are stand-ins from verdictu-web); prices and credit amounts.

@@ -2,7 +2,7 @@
 
 16 Oct 2026. How Titan117 gets from zero to launch. V1 is the whole product in [the feature map](notes/brainstorming-feature-map.md) (decisions §1); the work is split into 19 phases (0 to 18). Each phase has a **check that marks it done**; the next phase starts only when it passes. Status lives in [progress.md](progress.md). Where this file and [decisions.md](notes/decisions.md) disagree, decisions.md wins.
 
-Related: [architecture](03-architecture.md) · [guardrails](guardrails.md) · [design](notes/design.md) · [mockups](mockups/final-a/index.html).
+Related: [architecture](03-architecture.md) · [guardrails](guardrails.md) · [design](notes/design.md).
 
 ---
 
@@ -125,7 +125,7 @@ Feature numbers point to the feature map.
 | Coding engine (OpenCode) API changes | Pin versions, wrap it behind our own interface, compatibility tests |
 | Platform rules: app stores, social APIs, Google | Start API reviews early (phase 14 needs approvals months ahead) |
 | Signing and notarization delays | Buy the Apple and Windows signing accounts well before the first external testers (decisions §16) |
-| Trademark: "Titan117" and the helmet | Trademark check and our own redrawn helmet before beta |
+| Trademark: "Titan117" and the avatar logo | Trademark check and our own restyled avatar before beta |
 | Prompt injection and unsafe actions | Guardrails §4–§5, approval layer, injection suite in CI |
 
 Open decisions before phase 0 are listed in [decisions.md](notes/decisions.md#open-decisions).

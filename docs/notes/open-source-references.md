@@ -212,6 +212,14 @@ The projects most like Titan117: local-first desktop apps (Electron) that run pe
 
 ---
 
+## Website and brand
+
+| Project | What to take | Licence (believed) | Use | Folder | Licence checked | Commit |
+|---|---|---|---|---|---|---|
+| [jeremy-prt/bloub](https://github.com/jeremy-prt/bloub) | Agent avatars: one SVG shape morphing through 15 states (thinking, notify, orbit…), 8 shapes, 16 expressions, eyes that follow the pointer. Its framework-free `src/bot/` engine will draw the logo and every agent avatar | MIT | Code | `avatars/bloub` | MIT (Jérémy Perret, 2026) | `b4bb3c1` |
+
+**Note:** bloub's author describes it as a recreation of the x.ai bot avatar. The code is MIT, but the look is xAI's: before launch we restyle it (our own shapes, eyes and colours) (decisions §9).
+
 ## Also worth doing
 
 1. **A docs cache of official documentation** for our stack (Electron, Convex, Clerk, Stripe, OpenRouter, Next.js, Expo, Playwright, OpenCode), saved locally like Ninjathons' `.docs-cache`. Agents building a phase read the real, current API instead of memory.

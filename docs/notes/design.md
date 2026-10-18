@@ -2,7 +2,7 @@
 
 Version 0.1 · 16 Oct 2026
 
-Built on the measured OpenAI design settings (system fonts, 8px grid, one small radius, no shadows, 400ms ease), in the style of style tile **A · Quiet** on the mockups canvas, with Titan117's **neon green** added as the one accent. Mockups: https://claude.ai/artifact/J2J8dUtQuemvBG931BNJs3 (page "Final · A").
+Built on the measured OpenAI design settings (system fonts, 8px grid, one small radius, no shadows, 400ms ease), in the style of style tile **A · Quiet**, with Titan117's **neon green** added as the one accent.
 
 **Borrow the settings, not the brand.** We use OpenAI's general decisions (system font stack, spacing, radius, motion, restraint). We don't copy its logo, wordmark, illustrations, copy or page compositions.
 
@@ -121,7 +121,7 @@ The base sets headings at line height 1.5; large headlines get tighter leading (
 
 **Tables:** hairline rows, 14px text, caption headers in `--text-secondary`.
 
-**The helmet:** outline variant 03 at 1.0 line weight for the logo; eyes in the state color. At 32px and below, use the solid variant (04).
+**The logo:** Titan's avatar, the neon hexagon with the angry expression; its animation shows the state ([brand](../brand/README.md)).
 
 ---
 
@@ -143,4 +143,4 @@ All transitions 400ms `ease` (the base). Hover: color and background only. Reduc
 
 ## 9. Media
 
-Images and video in the mockups come from `docs/brand/media/` (copied from verdictu-web): `hero-image.webp`, `hall-image.webp`, `hero-video.mp4`. They're stand-ins until Titan117's own media exists.
+No images or video yet (the stand-ins were deleted on 18 Oct 2026).

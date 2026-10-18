@@ -16,7 +16,7 @@ Every decision taken so far, newest at the bottom of the table. Where this file 
 | 16 Oct 2026 | V1 is everything in the feature map; launch only when it all works | [1](#1-scope) |
 | 16 Oct 2026 | Design: style tile A on the OpenAI base settings, neon green as the one accent | [8](#8-design) |
 | 16 Oct 2026 | Desktop app: no black buttons or selections; pro desktop layout | [8](#8-design) |
-| 16 Oct 2026 | Logo: outline helmet (variation 03), to be redrawn as our own before beta | [9](#9-brand) |
+| 16 Oct 2026 | ~~Logo: outline helmet (variation 03), to be redrawn as our own before beta~~ (replaced 18 Oct by the hexagon avatar) | [9](#9-brand) |
 | 16 Oct 2026 | Build plan: 19 phases with a check that marks each one done | [10](#10-build-plan) |
 | 16 Oct 2026 | Electron for the desktop app; the engine runs on Electron's built-in Node | [12](#12-tech-stack) |
 | 16 Oct 2026 | Payments through Stripe directly, not Clerk Billing | [12](#12-tech-stack) |
@@ -36,6 +36,7 @@ Every decision taken so far, newest at the bottom of the table. Where this file 
 | 17 Oct 2026 | Tooling: pnpm as the package manager, Vitest for tests, Playwright for end-to-end tests | [16](#16-company-and-development-setup) |
 | 17 Oct 2026 | No free plan and no trial (trial ruled out 18 Oct): the app works only with an active subscription | [13](#13-pricing) |
 | 17 Oct 2026 | Signed licence lease for offline use (14 days, offline mode in V1); the app locks when it expires or the subscription ends | [17](#17-offline-use-and-licence) |
+| 18 Oct 2026 | Logo: an agent avatar (bloub engine), a neon hexagon with an angry face whose eyes follow the cursor; old helmet files, mockups and stand-in media deleted | [9](#9-brand) |
 
 ---
 
@@ -88,14 +89,16 @@ Every decision taken so far, newest at the bottom of the table. Where this file 
 
 ## 8. Design
 
-- **Direction:** style tile **A · Quiet** on the OpenAI base settings (system fonts, 8px grid, 5px radius, flat, 400ms ease), white, black and gray with **neon green `#c4f012`** as the one accent. Full rules: [design.md](design.md). Mockups: [mockups/final-a](../mockups/final-a/index.html) and the canvas page "Final · A".
+- **Direction:** style tile **A · Quiet** on the OpenAI base settings (system fonts, 8px grid, 5px radius, flat, 400ms ease), white, black and gray with **neon green `#c4f012`** as the one accent. Full rules: [design.md](design.md). All mockups were deleted on 18 Oct.
 - **Desktop app:** no black buttons or selections. Primary actions are neon; selected items are white with a neon edge; dark panels became light tints.
 - **Desktop layout:** the pro version (title bar with task tabs, icon rail, sidebar, run inspector, status bar) is the direction for the desktop app.
 
 ## 9. Brand
 
-- **Logo concept:** the outline helmet (variation 03) with neon eyes; the eyes show Titan's state (idle or working, approval, error, offline), with animated versions.
-- It's modified from a Noun Project icon and resembles a Halo Spartan helmet, so it **must be redrawn as our own and trademark-checked (with the name "Titan117") before beta.**
+- **Logo (18 Oct 2026):** Titan's avatar, a neon `#c4f012` hexagon with the angry expression, drawn live by the bloub engine (MIT, see [open-source-references](open-source-references.md#website-and-brand)). Its eyes follow the cursor, and its animation states (thinking, needs you, done, offline) show what Titan is doing. The other agents get their own bloub avatars (shape, colour or gradient, mood).
+- **Deleted on 18 Oct:** the helmet logo files and states, all mockups and the stand-in images and video from verdictu-web. New media will be made for Titan117.
+- bloub's author describes it as a recreation of the x.ai bot avatar, so the shapes and eyes **must be restyled as our own and trademark-checked (with the name "Titan117") before beta.**
+- ~~16 Oct: the outline helmet (variation 03) with neon eyes.~~ Replaced by the avatar above.
 
 ## 10. Build plan
 
@@ -208,5 +211,5 @@ To write in phase 2, as in Ninjathons: account deletion with a grace period, the
 
 To settle before or during phase 0:
 
-1. Trademark check and the redrawn helmet.
+1. Trademark check on the name and the avatar logo, after restyling it as our own.
 2. Legal basics: company, privacy policy, terms, GDPR deletion plan, licence audit.
