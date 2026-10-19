@@ -32,6 +32,11 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 19 Oct 2026 · Landing page mockup
+- Added `index.html` at the repo root: a standalone landing page mockup (open it in a browser, no build step). Glyph-reveal hero, an animated desktop app demo, an interactive demo per agent, local-first diagram and pricing from [pricing](notes/pricing.md).
+- The logo is the black hexagon avatar with the angry expression, drawn live by the bloub engine bundled inline (MIT); eyes follow the cursor.
+- Open: not part of the Next.js app yet; colours follow the white reference page, not the neon accent in decisions §8/§9. Demo company "Fjord & Co." and its suppliers are invented sample data.
+
 ### 18 Oct 2026 · Mockups, old logo and media removed; avatar logo
 - Deleted every mockup (Final · A and the landing drafts), the helmet logo files and states, and the stand-in images and video. Docs no longer link to them. Only the information docs remain.
 - New logo decision: Titan's avatar, a neon hexagon with the angry expression whose eyes follow the cursor, drawn by [bloub](https://github.com/jeremy-prt/bloub) (MIT, commit `b4bb3c1`, kept in `titan117-references/avatars/bloub`). Details in [decisions §9](notes/decisions.md#9-brand) and [brand](brand/README.md); a row was added to [open-source-references](notes/open-source-references.md).
