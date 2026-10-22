@@ -32,6 +32,14 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 22 Oct 2026 · Landing page: gray text ladder
+- `index.html`: text colours follow a gray ladder, after the Mobbin design notes. Ink `#141414` for headings and key copy, soft `#262626` for emphasised secondary text, muted `#6b6b6b` for descriptions, ledes, feature lists and captions, faint `#adadad` for hints only. Descriptions moved from near-black to muted.
+- Muted is `#6b6b6b` rather than Mobbin's `#707070` so 14px text still passes WCAG AA on the grey card surfaces.
+
+### 22 Oct 2026 · Landing page: Text component
+- `index.html`: all page copy now goes through one Text component. Use it as attributes on any element (`data-text="display|heading|body"` plus `data-size`, `data-weight`, `data-tone`, `data-align`, `data-font`, `data-leading`, `data-tracking`, `data-wrap`, `data-measure`, `data-caps`, `data-truncate`, `data-nums`) or as `Text({...})` in script with the same props. Variants and tokens come from the design notes (48/700, 32/600, 16/400, 1.5 leading); the old one-off type rules were removed.
+- Open: the mock app and demo internals keep their own small UI type. When the page moves into Next.js, the same props map onto a React `<Text>` component.
+
 ### 22 Oct 2026 · Landing page: full-width nav, system type
 - `index.html`: the nav is now a full-width bar, transparent at the top and frosted white with a hairline border once you scroll. It shows a scroll-progress line and marks the section in view. Added a Sign in link; the mobile menu is a full-width panel.
 - Type follows the OpenAI-style design notes: system-ui stack, display 700, headings 600, body 400 at 1.5 line height. Figtree removed; Geist Mono kept for labels and code. Large headings use tighter line height than 1.5.

@@ -14,10 +14,12 @@
 :root{
   color-scheme:light;
   --bg:#ffffff;
-  --ink:#000000;
-  --ink-soft:#2e2e2e;
-  --ink-2:#5f6468;
-  --muted:#b8b8b8;
+  /* text ladder (after Mobbin): ink for headings and key copy, soft for emphasised
+     secondary text, ink-2 for descriptions and supporting copy, muted for fine print */
+  --ink:#141414;
+  --ink-soft:#262626;
+  --ink-2:#6b6b6b;
+  --muted:#adadad;
   --surface:#f2f2f2;
   --surface-2:#f7f7f7;
   --line:#ededed;
@@ -27,6 +29,9 @@
   --ok:#2a9a30;
   --warn:#f6a825;
   --err:#e24b4a;
+  --accent-ink:#05627c;
+  --on-ink:#ffffff;
+  --on-ink-muted:#cfcfcf;
 
   --font-sans:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   --font-mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -72,16 +77,15 @@ section[id],article[id],header[id]{scroll-margin-top:72px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
 .brand__chip{width:30px;height:30px;display:grid;place-items:center}
 .brand__chip svg{width:30px;height:30px}
-.brand__word{font-weight:800;font-size:15px;letter-spacing:.08em}
 .nav__links{display:flex;gap:2px;margin:0 auto}
-.nav__links a{position:relative;color:var(--ink-2);text-decoration:none;font-size:15px;font-weight:500;padding:8px 14px;border-radius:8px;transition:color .2s ease,background-color .2s ease}
+.nav__links a{position:relative;color:var(--ink-2);text-decoration:none;padding:8px 14px;border-radius:8px;transition:color .2s ease,background-color .2s ease}
 .nav__links a:hover{color:var(--ink);background:rgba(0,0,0,.04)}
 .nav__links a.is-active{color:var(--ink)}
 .nav__links a.is-active::after{content:"";position:absolute;left:50%;bottom:1px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent)}
-.nav__signin{color:var(--ink);text-decoration:none;font-size:15px;font-weight:500;padding:8px 12px;border-radius:8px}
+.nav__signin{color:var(--ink);text-decoration:none;padding:8px 12px;border-radius:8px}
 .nav__signin:hover{background:rgba(0,0,0,.04)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:34px;padding:0 18px;border-radius:17px;border:0;
-  font-size:15px;font-weight:600;letter-spacing:-.02em;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .2s var(--ease-settle),background .2s}
+  font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .2s var(--ease-settle),background .2s}
 .btn:active{transform:scale(.97)}
 .btn--white{background:#fff;color:#000}
 .btn--black{background:#000;color:#fff}
@@ -101,15 +105,15 @@ section[id],article[id],header[id]{scroll-margin-top:72px}
 .hero__inner{position:relative;z-index:1;text-align:center;display:flex;flex-direction:column;align-items:center;pointer-events:none}
 .hero__inner a,.hero__inner button,.hero__inner h1 .w{pointer-events:auto}
 .hero__bot{width:76px;height:76px;margin-bottom:22px}
-.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);display:inline-flex;align-items:center;gap:8px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px}
 .eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(56,198,236,.6);animation:pulse 2s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(56,198,236,0)}100%{box-shadow:0 0 0 0 rgba(56,198,236,0)}}
-.hero h1{margin:18px 0 0;font-weight:700;font-size:clamp(34px,4.4vw,48px);line-height:1.15;letter-spacing:var(--tr-display);text-wrap:balance;max-width:18ch}
+.hero h1{margin:18px 0 0}
 .hero h1 .w{display:inline-block;white-space:pre}
-.hero__sub{margin:22px 0 0;font-size:clamp(15px,1.3vw,17.5px);color:var(--ink-soft);max-width:54ch;text-wrap:balance;line-height:1.45}
+.hero__sub{margin:22px 0 0}
 .hero__cta{margin-top:30px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.hero__meta{margin-top:18px;font-family:var(--font-mono);font-size:12px;color:var(--ink-2);letter-spacing:0}
-.hero__hint{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:22px;z-index:1;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+.hero__meta{margin-top:18px}
+.hero__hint{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:22px;z-index:1}
 
 /* ───── Band (product demo) ───── */
 .band{position:relative;background:linear-gradient(180deg,#0db5ed 0%,#38c6ec 46%,#8fdcf3 100%);overflow:hidden;padding:72px 0 88px}
@@ -236,22 +240,16 @@ section[id],article[id],header[id]{scroll-margin-top:72px}
 .st{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 6px 14px;border-radius:14px;background:var(--surface);cursor:pointer;border:0;transition:background .2s}
 .st:hover{background:#ebebeb}
 .st svg{width:64px;height:64px}
-.st b{font-size:13.5px;font-weight:600;letter-spacing:-.02em}
-.st span{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2);letter-spacing:0}
 
 /* ───── Section heads ───── */
 .shead{display:flex;flex-direction:column;gap:14px;max-width:720px}
 .shead--center{margin:0 auto;text-align:center;align-items:center}
-.h2{margin:0;font-weight:600;font-size:clamp(26px,2.8vw,32px);line-height:1.25;letter-spacing:var(--tr-title);text-wrap:balance}
-.lede{margin:0;font-size:17px;color:var(--ink-soft);max-width:60ch;text-wrap:pretty}
 
 /* ───── Feature rows ───── */
 .feats{padding-block:56px 40px;display:flex;flex-direction:column;gap:22px}
 .feat{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,4vw,64px);align-items:center;padding:56px 0;border-top:1px solid var(--line)}
 .feat__copy{display:flex;flex-direction:column;gap:14px;min-width:0}
-.feat__copy h3{margin:0;font-weight:600;font-size:clamp(22px,2vw,24px);line-height:1.3;letter-spacing:var(--tr-title);text-wrap:balance}
-.feat__copy p{margin:0;color:var(--ink-soft);font-size:16px;max-width:46ch;text-wrap:pretty}
-.feat__list{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:7px;font-size:14.5px;color:var(--ink-soft)}
+.feat__list{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
 .feat__list li{display:flex;gap:9px;align-items:baseline}
 .feat__list li::before{content:"";width:6px;height:6px;border-radius:1px;background:var(--accent);transform:rotate(45deg) translateY(-2px);flex:none}
 .more{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:15px;text-decoration:none;margin-top:6px;width:max-content}
@@ -260,11 +258,10 @@ section[id],article[id],header[id]{scroll-margin-top:72px}
 
 .stage{position:relative;background:var(--surface);border-radius:var(--r);padding:18px;min-height:420px;display:flex;flex-direction:column;gap:12px;overflow:hidden;font-size:13px;letter-spacing:-.01em}
 .stage__top{display:flex;align-items:center;gap:10px;min-width:0}
-.stage__eyebrow{font-weight:300;font-size:14px;color:var(--ink);letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stage__top .chip{margin-left:auto;background:#fff}
 .panel{background:#fff;border-radius:10px;padding:12px;box-shadow:0 0 0 1px rgba(0,0,0,.02);min-width:0}
 .panel--tabbed{border-radius:0 10px 10px 10px}
-.panel h4{margin:0 0 10px;font-size:13.5px;font-weight:600;letter-spacing:-.02em}
+.panel h4{margin:0 0 10px}
 .row{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.03);transition:background .3s,border-color .3s}
 .row + .row{margin-top:7px}
 .row .rt{font-weight:500;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -392,8 +389,7 @@ svg.d{width:16px;height:16px;display:block}
 /* ───── Small cards ───── */
 .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:34px}
 .card{background:var(--surface);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px;min-height:230px}
-.card h4{margin:auto 0 0;font-size:16px;font-weight:600;letter-spacing:-.03em}
-.card p{margin:0;font-size:13.5px;color:var(--ink-2)}
+.card h4{margin:auto 0 0}
 .card .panel{font-size:12px}
 .memline{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--line);font-size:12px}
 .memline:last-child{border:0}
@@ -406,36 +402,30 @@ svg.d{width:16px;height:16px;display:block}
 .plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:34px}
 .plan-c{border-radius:var(--r);background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:14px}
 .plan-c.is-pop{background:#000;color:#fff}
-.plan-c.is-pop .muted,.plan-c.is-pop li{color:#cfcfcf}
-.plan-c h3{margin:0;font-size:17px;font-weight:600;letter-spacing:-.03em;display:flex;align-items:center;gap:8px}
+.plan-c h3{display:flex;align-items:center;gap:8px}
 .plan-c h3 .chip{background:var(--accent);color:#00303d;height:20px;font-size:10.5px}
-.price{font-size:40px;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
-.price small{font-size:14px;letter-spacing:-.01em;font-weight:400;color:var(--ink-2)}
-.plan-c.is-pop .price small{color:#bbb}
-.plan-c ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;font-size:13.5px;color:var(--ink-soft)}
+.plan-c ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
 .plan-c li{display:flex;gap:8px}
 .plan-c li::before{content:"✓";color:var(--accent);font-weight:700}
 .plan-c .btn{margin-top:auto}
 .plan-c.is-pop .btn{background:#fff;color:#000}
 .calc{margin-top:14px;background:var(--surface);border-radius:var(--r);padding:20px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:center}
 .calc__out{background:#fff;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:6px}
-.calc__big{font-size:46px;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
-.calc label{display:block;font-family:var(--font-mono);font-size:11px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em;margin:0 0 7px}
+.calc label{display:block;margin:0 0 7px}
 .calc .seg{flex-wrap:wrap;background:#fff}
 .calc .seg button.is-on{background:var(--surface);box-shadow:none}
 
 /* ───── CTA / footer ───── */
 .cta{padding-block:70px 100px;text-align:center;position:relative;overflow:hidden}
 .cta svg.bot{width:120px;height:120px;margin:0 auto 26px}
-.cta .h2{font-size:clamp(34px,4.4vw,48px);font-weight:700;letter-spacing:var(--tr-display);line-height:1.15}
-.cta p{margin:16px auto 0;max-width:46ch;color:var(--ink-soft);font-size:17px}
+.cta p{margin:16px auto 0}
 .cta .hero__cta{margin-top:28px}
-.foot{border-top:1px solid var(--line);padding:34px 0 46px;font-size:13.5px;color:var(--ink-2)}
+.foot{border-top:1px solid var(--line);padding:34px 0 46px}
 .foot__grid{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:24px}
-.foot b{display:block;color:#000;font-weight:600;margin-bottom:10px}
+.foot b{display:block;margin-bottom:10px}
 .foot a{display:block;text-decoration:none;padding:3px 0}
 .foot a:hover{color:#000}
-.foot__brand{display:flex;align-items:center;gap:9px;color:#000;font-weight:800;letter-spacing:.06em}
+.foot__brand{display:flex;align-items:center;gap:9px}
 .foot__brand svg{width:26px;height:26px}
 
 /* ───── Entrance ───── */
@@ -447,6 +437,85 @@ svg.d{width:16px;height:16px;display:block}
 .js .hero__sub{animation:rise .62s var(--ease-settle) .62s both}
 .js .hero__cta,.js .hero__meta{animation:rise .58s var(--ease-settle) .78s both}
 .js .app{animation:rise .94s var(--ease-settle) .9s both}
+
+/* ═════════ Text component ═════════
+   The one place type is styled. Every piece of page copy uses it, either as attributes on
+   any element (data-text="heading" data-size="xl") or through Text({...}) in script, which
+   takes the same props and returns the same markup.
+
+   prop      attribute       values
+   variant   data-text       display | heading | body        design.md: 48/700, 32/600, 16/400, leading 1.5
+   as        (Text() only)   any tag; defaults h1 / h2 / p
+   size      data-size       xs 12 | sm 14 | md 16 | lg 20 | xl 24 | 2xl 32 | 3xl 48
+   weight    data-weight     400 | 500 | 600 | 700 | 800
+   tone      data-tone       ink | soft | muted | faint | accent | inverse | inverse-muted
+                             ink #141414 headings and key copy (the default)
+                             soft #262626 emphasised secondary text
+                             muted #6b6b6b descriptions, ledes, lists, captions
+                             faint #adadad hints and fine print only (too light for anything you must read)
+   align     data-align      start | center | end
+   font      data-font       sans | mono
+   leading   data-leading    none 1 | tight 1.15 | snug 1.3 | normal 1.5
+   tracking  data-tracking   tight | normal | wide
+   wrap      data-wrap       balance | pretty | nowrap
+   measure   data-measure    title 18ch | narrow 46ch | medium 54ch | normal 60ch
+   caps      data-caps       uppercase
+   truncate  data-truncate   one line with an ellipsis
+   nums      data-nums       tabular figures
+   Below 768px (design.md's breakpoint) display steps down to 36px and heading to 26px. */
+:root{
+  --text-display-size:48px; --text-display-weight:700;
+  --text-heading-size:32px; --text-heading-weight:600;
+  --text-body-size:16px;    --text-body-weight:400;
+  --text-leading:1.5;
+}
+@media (max-width:767.98px){ :root{ --text-display-size:36px; --text-heading-size:26px } }
+:where([data-text]){margin:0}
+[data-text]{font-size:var(--_size);font-weight:var(--_weight);line-height:var(--_leading,var(--text-leading));letter-spacing:var(--_tracking,0)}
+[data-text="display"]{--_size:var(--text-display-size);--_weight:var(--text-display-weight);--_tracking:-0.025em}
+[data-text="heading"]{--_size:var(--text-heading-size);--_weight:var(--text-heading-weight);--_tracking:-0.02em}
+[data-text="body"]{--_size:var(--text-body-size);--_weight:var(--text-body-weight)}
+[data-size="xs"]{--_size:12px}
+[data-size="sm"]{--_size:14px}
+[data-size="md"]{--_size:16px}
+[data-size="lg"]{--_size:20px}
+[data-size="xl"]{--_size:24px}
+[data-size="2xl"]{--_size:var(--text-heading-size)}
+[data-size="3xl"]{--_size:var(--text-display-size)}
+[data-weight="400"]{--_weight:400}
+[data-weight="500"]{--_weight:500}
+[data-weight="600"]{--_weight:600}
+[data-weight="700"]{--_weight:700}
+[data-weight="800"]{--_weight:800}
+[data-font="sans"]{font-family:var(--font-sans)}
+[data-font="mono"]{font-family:var(--font-mono);--_tracking:0}
+[data-leading="none"]{--_leading:1}
+[data-leading="tight"]{--_leading:1.15}
+[data-leading="snug"]{--_leading:1.3}
+[data-leading="normal"]{--_leading:1.5}
+[data-tracking="tight"]{--_tracking:-0.02em}
+[data-tracking="normal"]{--_tracking:0}
+[data-tracking="wide"]{--_tracking:.08em}
+[data-tone="ink"]{color:var(--ink)}
+[data-tone="soft"]{color:var(--ink-soft)}
+[data-tone="muted"]{color:var(--ink-2)}
+[data-tone="faint"]{color:var(--muted)}
+[data-tone="accent"]{color:var(--accent-ink)}
+[data-tone="inverse"]{color:var(--on-ink)}
+[data-tone="inverse-muted"]{color:var(--on-ink-muted)}
+[data-align="start"]{text-align:start}
+[data-align="center"]{text-align:center}
+[data-align="end"]{text-align:end}
+[data-wrap="balance"]{text-wrap:balance}
+[data-wrap="pretty"]{text-wrap:pretty}
+[data-wrap="nowrap"]{white-space:nowrap}
+[data-measure="title"]{max-width:18ch}
+[data-measure="narrow"]{max-width:46ch}
+[data-measure="medium"]{max-width:54ch}
+[data-measure="normal"]{max-width:60ch}
+[data-caps]{text-transform:uppercase}
+[data-truncate]{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+[data-nums]{font-variant-numeric:tabular-nums}
 
 /* ───── Responsive ───── */
 @media (max-width:1040px){
@@ -460,7 +529,7 @@ svg.d{width:16px;height:16px;display:block}
   .burger{display:flex}
   .navmenu{display:flex;flex-direction:column;gap:2px;position:absolute;top:calc(100% + 1px);left:0;right:0;padding:8px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);opacity:0;transform:translateY(-6px);transition:opacity .25s ease,transform .25s ease;pointer-events:none}
   .nav.is-open .navmenu{opacity:1;transform:none;pointer-events:auto}
-  .navmenu a{color:var(--ink);text-decoration:none;padding:12px 8px;border-radius:8px;font-weight:500;font-size:16px}
+  .navmenu a{color:var(--ink);text-decoration:none;padding:12px 8px;border-radius:8px}
   .navmenu a:hover{background:rgba(0,0,0,.04)}
   .navmenu .btn{margin-top:8px;height:44px;color:#fff}
   .app__body,.app.has-art .app__body{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;height:auto}
@@ -500,18 +569,18 @@ svg.d{width:16px;height:16px;display:block}
   <nav class="nav" aria-label="Primary">
     <a class="brand" href="#top" aria-label="TITAN117 home">
       <span class="brand__chip"><svg class="bot" data-bot="nav" aria-hidden="true"></svg></span>
-      <span class="brand__word">TITAN117</span>
+      <span class="brand__word" data-text="body" data-size="sm" data-weight="800" data-tracking="wide">TITAN117</span>
     </a>
-    <div class="nav__links">
+    <div class="nav__links" data-text="body" data-size="sm" data-weight="500">
       <a href="#product">Product</a>
       <a href="#agents">Agents</a>
       <a href="#local">Local-first</a>
       <a href="#pricing">Pricing</a>
     </div>
-    <a class="nav__signin" href="#pricing">Sign in</a>
-    <a class="btn btn--black" href="#pricing">Download</a>
+    <a class="nav__signin" href="#pricing" data-text="body" data-size="sm" data-weight="500">Sign in</a>
+    <a class="btn btn--black" href="#pricing" data-text="body" data-size="sm" data-weight="600">Download</a>
     <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navmenu"><i></i><i></i></button>
-    <div class="navmenu" id="navmenu">
+    <div class="navmenu" id="navmenu" data-text="body" data-size="md" data-weight="500">
       <a href="#product">Product</a>
       <a href="#agents">Agents</a>
       <a href="#local">Local-first</a>
@@ -527,16 +596,16 @@ svg.d{width:16px;height:16px;display:block}
   <canvas class="glyphs" id="glyphs" aria-hidden="true"></canvas>
   <div class="wrap hero__inner">
     <svg class="bot hero__bot" data-bot="hero" role="img" aria-label="Titan, the TITAN117 avatar"></svg>
-    <span class="eyebrow"><i class="pulse"></i>An AI team that runs on your laptop</span>
-    <h1 id="headline">Your whole AI team, working on your own laptop.</h1>
-    <p class="hero__sub">Titan and its specialist agents research, write code, build apps, read your documents and watch the web for you. Your files stay on your machine, and nothing happens until you approve it.</p>
+    <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted"><i class="pulse"></i>An AI team that runs on your laptop</span>
+    <h1 id="headline" data-text="display" data-leading="tight" data-wrap="balance" data-measure="title">Your whole AI team, working on your own laptop.</h1>
+    <p class="hero__sub" data-text="body" data-tone="muted" data-wrap="balance" data-measure="medium">Titan and its specialist agents research, write code, build apps, read your documents and watch the web for you. Your files stay on your machine, and nothing happens until you approve it.</p>
     <div class="hero__cta">
-      <a class="btn btn--black btn--lg" href="#pricing">Download for Windows</a>
-      <a class="btn btn--ghost btn--lg" href="#product">See it work</a>
+      <a class="btn btn--black btn--lg" data-text="body" data-size="md" data-weight="600" href="#pricing">Download for Windows</a>
+      <a class="btn btn--ghost btn--lg" data-text="body" data-size="md" data-weight="600" href="#product">See it work</a>
     </div>
-    <p class="hero__meta">Windows and macOS · local models or OpenRouter · from €15 a month</p>
+    <p class="hero__meta" data-text="body" data-size="xs" data-font="mono" data-tone="muted">Windows and macOS · local models or OpenRouter · from €15 a month</p>
   </div>
-  <span class="hero__hint">move your cursor ↗</span>
+  <span class="hero__hint" data-text="body" data-size="xs" data-font="mono" data-tone="faint">move your cursor ↗</span>
 </header>
 
 <section class="band" id="product" aria-label="Desktop app demo">
@@ -581,110 +650,110 @@ svg.d{width:16px;height:16px;display:block}
 
 <section class="states wrap" aria-labelledby="states-h">
   <div class="shead">
-    <span class="eyebrow">Titan's face is its status</span>
-    <h2 class="h2" id="states-h">You can tell what Titan is doing from across the room.</h2>
-    <p class="lede">The avatar changes shape for every state, and a colour and label always come with it. Click one to see it.</p>
+    <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Titan's face is its status</span>
+    <h2 data-text="heading" data-wrap="balance" id="states-h">You can tell what Titan is doing from across the room.</h2>
+    <p data-text="body" data-tone="muted" data-measure="normal" data-wrap="pretty">The avatar changes shape for every state, and a colour and label always come with it. Click one to see it.</p>
   </div>
   <div class="states__row" id="statesRow"></div>
 </section>
 
 <section class="feats wrap" id="agents" aria-labelledby="agents-h">
   <div class="shead">
-    <span class="eyebrow">The agents</span>
-    <h2 class="h2" id="agents-h">One memory. Many specialists. Every one of them asks first.</h2>
+    <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">The agents</span>
+    <h2 data-text="heading" data-wrap="balance" id="agents-h">One memory. Many specialists. Every one of them asks first.</h2>
   </div>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">Permission layer</span>
-      <h3>Nothing touches your files until you say yes.</h3>
-      <p>Every file, shell command, website and email goes through one approval layer. Set rules for what's always fine, and give each task a credit budget it can't go past.</p>
-      <ul class="feat__list"><li>Approve or deny each action, or set a rule once</li><li>Budgets cap what a task can spend</li><li>Web pages are read as data, never as instructions</li></ul>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Permission layer</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Nothing touches your files until you say yes.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">Every file, shell command, website and email goes through one approval layer. Set rules for what's always fine, and give each task a credit budget it can't go past.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Approve or deny each action, or set a rule once</li><li>Budgets cap what a task can spend</li><li>Web pages are read as data, never as instructions</li></ul>
     </div>
     <div class="stage" data-demo="approvals"></div>
   </article>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">Model router</span>
-      <h3>Pick the model for each agent. See the cost before it runs.</h3>
-      <p>Run local models for free and offline, or the strongest models through OpenRouter. Use our credits or your own API key, and switch per agent or per step.</p>
-      <ul class="feat__list"><li>llama.cpp built in, no Ollama to install</li><li>OpenRouter, Anthropic, OpenAI and Google keys</li><li>Every task shows its estimate first</li></ul>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Model router</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Pick the model for each agent. See the cost before it runs.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">Run local models for free and offline, or the strongest models through OpenRouter. Use our credits or your own API key, and switch per agent or per step.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>llama.cpp built in, no Ollama to install</li><li>OpenRouter, Anthropic, OpenAI and Google keys</li><li>Every task shows its estimate first</li></ul>
     </div>
     <div class="stage" data-demo="models"></div>
   </article>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">Folder agent</span>
-      <h3>Ask your documents. Get the answer and the page it came from.</h3>
-      <p>Point Titan at a folder. It reads PDFs, Word files, spreadsheets and scans, then answers with the file and page number, so you can check every claim in one click.</p>
-      <ul class="feat__list"><li>OCR for scanned paperwork</li><li>Spreadsheet maths done in code, not guessed</li><li>Mark a folder local-only and it never reaches a cloud model</li></ul>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Folder agent</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Ask your documents. Get the answer and the page it came from.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">Point Titan at a folder. It reads PDFs, Word files, spreadsheets and scans, then answers with the file and page number, so you can check every claim in one click.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>OCR for scanned paperwork</li><li>Spreadsheet maths done in code, not guessed</li><li>Mark a folder local-only and it never reaches a cloud model</li></ul>
     </div>
     <div class="stage" data-demo="folder"></div>
   </article>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">Code builder</span>
-      <h3>Fixes the bug, runs the tests, opens the pull request.</h3>
-      <p>The coding engine plans, edits, runs your test suite and shows you the diff before anything is committed. Review it like a teammate's work.</p>
-      <ul class="feat__list"><li>Plan and act modes</li><li>Diffs, tests and git in one place</li><li>Sub-agents for review</li></ul>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Code builder</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Fixes the bug, runs the tests, opens the pull request.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">The coding engine plans, edits, runs your test suite and shows you the diff before anything is committed. Review it like a teammate's work.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Plan and act modes</li><li>Diffs, tests and git in one place</li><li>Sub-agents for review</li></ul>
     </div>
     <div class="stage" data-demo="code"></div>
   </article>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">App builder</span>
-      <h3>Describe the app. Watch it build, test and publish.</h3>
-      <p>Web, mobile or desktop, one target per project. Preview it on your laptop, test it in a real browser or the Android emulator, then publish or add it to your sidebar.</p>
-      <ul class="feat__list"><li>Expo for phones, Tauri for desktop apps</li><li>Browser tests before every publish</li><li>Versions you can roll back</li></ul>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">App builder</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Describe the app. Watch it build, test and publish.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">Web, mobile or desktop, one target per project. Preview it on your laptop, test it in a real browser or the Android emulator, then publish or add it to your sidebar.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Expo for phones, Tauri for desktop apps</li><li>Browser tests before every publish</li><li>Versions you can roll back</li></ul>
     </div>
     <div class="stage" data-demo="builder"></div>
   </article>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">Sidebar apps</span>
-      <h3>Your CRM and your stock list, and Titan answers across both.</h3>
-      <p>Apps you build live in the sidebar and share one local database, so a question about customers can draw on inventory, invoices and anything else you keep there.</p>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Sidebar apps</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Your CRM and your stock list, and Titan answers across both.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">Apps you build live in the sidebar and share one local database, so a question about customers can draw on inventory, invoices and anything else you keep there.</p>
     </div>
     <div class="stage" data-demo="apps"></div>
   </article>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">QA and SEO agents</span>
-      <h3>Tests your site like a customer, then fixes what it finds.</h3>
-      <p>The QA agent clicks through every flow and writes the tests. The SEO agent audits pages, keywords and AI visibility, then proposes the fixes as a change you approve.</p>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">QA and SEO agents</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Tests your site like a customer, then fixes what it finds.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">The QA agent clicks through every flow and writes the tests. The SEO agent audits pages, keywords and AI visibility, then proposes the fixes as a change you approve.</p>
     </div>
     <div class="stage" data-demo="qa"></div>
   </article>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">Automation</span>
-      <h3>Runs on a schedule and watches the web while you work.</h3>
-      <p>Schedule reports, record a task once and replay it, or have a watcher tell you when a law, a price or a competitor's page changes. Missed runs catch up the next time you open the app.</p>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Automation</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Runs on a schedule and watches the web while you work.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">Schedule reports, record a task once and replay it, or have a watcher tell you when a law, a price or a competitor's page changes. Missed runs catch up the next time you open the app.</p>
     </div>
     <div class="stage" data-demo="auto"></div>
   </article>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">Marketing and video</span>
-      <h3>Turn your website into a promo video and a month of posts.</h3>
-      <p>Titan reads your site and brand kit, cuts a short video with open-source tools, and plans posts for LinkedIn, Facebook, Instagram, TikTok and X on one calendar.</p>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Marketing and video</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Turn your website into a promo video and a month of posts.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">Titan reads your site and brand kit, cuts a short video with open-source tools, and plans posts for LinkedIn, Facebook, Instagram, TikTok and X on one calendar.</p>
     </div>
     <div class="stage" data-demo="marketing"></div>
   </article>
 
   <article class="feat">
     <div class="feat__copy">
-      <span class="eyebrow">Remote and channels</span>
-      <h3>Start a task from your phone. Approve it from chat.</h3>
-      <p>The web app and Telegram talk to the engine on your laptop with end-to-end encryption. Your laptop does the work; your phone just says yes.</p>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Remote and channels</span>
+      <h3 data-text="heading" data-size="xl" data-leading="snug" data-wrap="balance">Start a task from your phone. Approve it from chat.</h3>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">The web app and Telegram talk to the engine on your laptop with end-to-end encryption. Your laptop does the work; your phone just says yes.</p>
     </div>
     <div class="stage" data-demo="remote"></div>
   </article>
@@ -693,10 +762,10 @@ svg.d{width:16px;height:16px;display:block}
 <section class="local" id="local" aria-labelledby="local-h">
   <div class="wrap local__grid">
     <div class="feat__copy">
-      <span class="eyebrow">Local-first</span>
-      <h2 class="h2" id="local-h">The work happens on your laptop. Our cloud only keeps your account.</h2>
-      <p>Agents, memory, documents and app data live on your machine. Company data only leaves it when you share something or send it to a cloud model you picked.</p>
-      <ul class="feat__list"><li>Closing the window doesn't stop agents; they keep running from the tray</li><li>Works offline for 14 days on a signed licence</li><li>Checkpoints resume a task after sleep or a crash</li></ul>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Local-first</span>
+      <h2 data-text="heading" data-wrap="balance" id="local-h">The work happens on your laptop. Our cloud only keeps your account.</h2>
+      <p data-text="body" data-tone="muted" data-measure="narrow" data-wrap="pretty">Agents, memory, documents and app data live on your machine. Company data only leaves it when you share something or send it to a cloud model you picked.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Closing the window doesn't stop agents; they keep running from the tray</li><li>Works offline for 14 days on a signed licence</li><li>Checkpoints resume a task after sleep or a crash</li></ul>
     </div>
     <div class="arch" id="arch"></div>
   </div>
@@ -704,8 +773,8 @@ svg.d{width:16px;height:16px;display:block}
 
 <section class="wrap" aria-labelledby="more-h" style="padding-bottom:90px">
   <div class="shead">
-    <span class="eyebrow">And everything around it</span>
-    <h2 class="h2" id="more-h">Built for a small company that wants to trust its tools.</h2>
+    <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">And everything around it</span>
+    <h2 data-text="heading" data-wrap="balance" id="more-h">Built for a small company that wants to trust its tools.</h2>
   </div>
   <div class="cards" id="cards"></div>
 </section>
@@ -713,8 +782,8 @@ svg.d{width:16px;height:16px;display:block}
 <section class="pricing" id="pricing" aria-labelledby="pricing-h">
   <div class="wrap">
     <div class="shead shead--center">
-      <span class="eyebrow">Pricing</span>
-      <h2 class="h2" id="pricing-h">Every agent on every plan. Local models are always free.</h2>
+      <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted">Pricing</span>
+      <h2 data-text="heading" data-wrap="balance" id="pricing-h">Every agent on every plan. Local models are always free.</h2>
       <div class="seg" id="billing" role="group" aria-label="Billing period"><button type="button" class="is-on" data-b="m">Monthly</button><button type="button" data-b="y">Yearly · 2 months free</button></div>
     </div>
     <div class="plans" id="plans"></div>
@@ -725,11 +794,11 @@ svg.d{width:16px;height:16px;display:block}
 <section class="cta" aria-labelledby="cta-h">
   <div class="wrap">
     <svg class="bot" data-bot="cta" aria-hidden="true"></svg>
-    <h2 class="h2" id="cta-h">Put Titan to work.</h2>
-    <p>Download, sign in, and give it its first task. Nothing to install first.</p>
+    <h2 id="cta-h" data-text="display" data-leading="tight" data-wrap="balance">Put Titan to work.</h2>
+    <p data-text="body" data-tone="muted" data-measure="narrow">Download, sign in, and give it its first task. Nothing to install first.</p>
     <div class="hero__cta">
-      <a class="btn btn--black btn--lg" href="#pricing">Download for Windows</a>
-      <a class="btn btn--ghost btn--lg" href="#pricing">Download for macOS</a>
+      <a class="btn btn--black btn--lg" data-text="body" data-size="md" data-weight="600" href="#pricing">Download for Windows</a>
+      <a class="btn btn--ghost btn--lg" data-text="body" data-size="md" data-weight="600" href="#pricing">Download for macOS</a>
     </div>
   </div>
 </section>
@@ -737,12 +806,12 @@ svg.d{width:16px;height:16px;display:block}
 <footer class="foot">
   <div class="wrap foot__grid">
     <div>
-      <div class="foot__brand"><svg class="bot" data-bot="foot" aria-hidden="true"></svg>TITAN117</div>
-      <p style="max-width:34ch;margin:12px 0 0">An AI team for small companies that runs on your own laptop. Made by Ecotechcore.</p>
+      <div class="foot__brand" data-text="body" data-size="sm" data-weight="800" data-tracking="wide" data-tone="ink"><svg class="bot" data-bot="foot" aria-hidden="true"></svg>TITAN117</div>
+      <p data-text="body" data-size="sm" data-tone="muted" style="max-width:34ch;margin:12px 0 0">An AI team for small companies that runs on your own laptop. Made by Ecotechcore.</p>
     </div>
-    <div><b>Product</b><a href="#product">Desktop app</a><a href="#agents">Agents</a><a href="#pricing">Pricing</a></div>
-    <div><b>Trust</b><a href="#local">Local-first</a><a href="#agents">Approvals</a><a href="#local">Offline mode</a></div>
-    <div><b>Company</b><a href="#top">About</a><a href="#top">Contact</a><a href="#top">Legal</a></div>
+    <div data-text="body" data-size="sm" data-tone="muted"><b data-text="body" data-size="sm" data-weight="600" data-tone="ink">Product</b><a href="#product">Desktop app</a><a href="#agents">Agents</a><a href="#pricing">Pricing</a></div>
+    <div data-text="body" data-size="sm" data-tone="muted"><b data-text="body" data-size="sm" data-weight="600" data-tone="ink">Trust</b><a href="#local">Local-first</a><a href="#agents">Approvals</a><a href="#local">Offline mode</a></div>
+    <div data-text="body" data-size="sm" data-tone="muted"><b data-text="body" data-size="sm" data-weight="600" data-tone="ink">Company</b><a href="#top">About</a><a href="#top">Contact</a><a href="#top">Legal</a></div>
   </div>
 </footer>
 <script>
@@ -754,6 +823,26 @@ document.documentElement.classList.add('js');
 var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 var $ = function(s, r){ return (r||document).querySelector(s); };
 var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+
+/* ───────── Text component (script side) ─────────
+   Same props as the data-text attributes in the CSS. Returns markup, e.g.
+   Text({variant:'heading', as:'h3', size:'xl', children:'Title'}) */
+var TEXT_PROPS = ['size','weight','tone','align','font','leading','tracking','wrap','measure'];
+var TEXT_TAG = {display:'h1', heading:'h2', body:'p'};
+function Text(p){
+  p = p || {};
+  var v = p.variant || 'body', tag = p.as || TEXT_TAG[v] || 'p', a = ' data-text="'+v+'"';
+  TEXT_PROPS.forEach(function(k){ if(p[k] != null) a += ' data-'+k+'="'+p[k]+'"'; });
+  if(p.caps) a += ' data-caps';
+  if(p.truncate) a += ' data-truncate';
+  if(p.nums) a += ' data-nums';
+  if(p.className) a += ' class="'+p.className+'"';
+  if(p.id) a += ' id="'+p.id+'"';
+  if(p.style) a += ' style="'+p.style+'"';
+  if(p.attrs) a += ' '+p.attrs;
+  return '<'+tag+a+'>'+(p.children == null ? '' : p.children)+'</'+tag+'>';
+}
+window.Text = Text;
 var STOP = {stop:true};
 function esc(t){ return String(t).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 
@@ -1152,7 +1241,7 @@ function waitFor(cond, w, maxMs){
     ['alert','Error','Something failed','#e24b4a'],
     ['sleep','Offline','No network','#8e8ea0']
   ];
-  row.innerHTML = S.map(function(s){ return '<button class="st" type="button" data-s="'+s[0]+'"><svg class="bot" aria-hidden="true"></svg><b>'+s[1]+'</b><span>'+s[2]+'</span></button>'; }).join('');
+  row.innerHTML = S.map(function(s){ return '<button class="st" type="button" data-s="'+s[0]+'"><svg class="bot" aria-hidden="true"></svg>'+Text({as:'b', size:'sm', weight:600, children:s[1]})+Text({as:'span', size:'xs', font:'mono', tone:'muted', children:s[2]})+'</button>'; }).join('');
   $$('.st', row).forEach(function(b, i){
     var bot = TitanBot.mount($('svg', b), {ink:S[i][3], paper:'#f2f2f2', shape:'hexagone', expression:'colere', state:S[i][0]});
     b.addEventListener('click', function(){ bot.setState('idle'); setTimeout(function(){ bot.setState(S[i][0]); }, 450); });
@@ -1178,9 +1267,9 @@ D.approvals = function(root){
     state:function(){ return {items:DEF.map(function(d, i){ return {d:d, st: i < 4 ? 'ok' : 'pending', by: i === 0 ? 'rule' : 'you'}; }), used:10, rule:true}; },
     reset:function(s){ s.items = []; s.used = 0; },
     render:function(s, r){
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># Titan / Prepare the Q3 VAT summary</span><span class="chip"><span class="mono">budget</span>&nbsp;'+s.used+' / 50 credits</span></div>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# Titan / Prepare the Q3 VAT summary'})+'<span class="chip"><span class="mono">budget</span>&nbsp;'+s.used+' / 50 credits</span></div>'+
         '<div class="meter" style="height:5px"><i style="width:'+(s.used/50*100)+'%"></i></div>'+
-        '<div class="panel" style="flex:1"><h4>Actions</h4>'+ (s.items.length ? s.items.map(function(it, i){
+        '<div class="panel" style="flex:1">'+Text({as:'h4', size:'sm', weight:600, children:'Actions'})+ (s.items.length ? s.items.map(function(it, i){
           var right = it.st === 'pending' ? '<div class="acts" style="display:flex;gap:6px"><button class="sbtn" type="button" data-act="deny:'+i+'">Deny</button><button class="sbtn sbtn--go" type="button" data-act="ok:'+i+'">Allow</button></div>'
             : '<span class="chip">'+(it.st === 'ok' ? (it.by === 'rule' ? 'Allowed by rule' : 'Allowed') : 'Denied')+'</span>';
           return '<div class="row'+(it.fresh ? ' is-new' : '')+'">'+(it.st === 'ok' ? DOT.ok : it.st === 'deny' ? DOT.err : DOT.warn)+'<div style="min-width:0"><div class="rt">'+it.d.t+'</div><div class="rs">'+it.d.d+'</div></div>'+right+'</div>';
@@ -1224,7 +1313,7 @@ D.models = function(root){
           '<div class="seg" role="group" aria-label="Model for '+a.n+'">'+OPT.map(function(op, j){ return '<button type="button" data-act="p:'+i+':'+j+'" class="'+(p === j ? 'is-on' : '')+'"'+(s.offline && j ? ' disabled' : '')+'>'+op.n+'</button>'; }).join('')+'</div></div>';
       }).join('');
       var cost = s.key ? 'billed by your provider' : '≈ €'+(total/100).toFixed(2);
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># Settings / Models per agent</span><span class="chip mono">'+(s.offline ? 'offline' : 'online')+'</span></div>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# Settings / Models per agent'})+'<span class="chip mono">'+(s.offline ? 'offline' : 'online')+'</span></div>'+
         (s.offline ? '<div class="row hl2 is-new">'+DOT.ok+'<div><div class="rt">Offline · local models only</div><div class="rs">licence valid for 14 more days</div></div><span></span></div>' : '')+
         '<div class="panel">'+rows+'</div>'+
         '<div class="panel" style="display:flex;flex-direction:column;gap:8px"><div class="kv"><span>A typical day, 40 tasks</span><b>'+(total ? total.toLocaleString('en')+' credits' : '0 credits')+'</b></div><div class="kv"><span>At 1 credit = €0.01</span><b>'+(total ? cost : 'free')+'</b></div>'+
@@ -1266,7 +1355,7 @@ D.folder = function(root){
     reset:function(s){ s.typed = ''; s.ans = 0; s.page = false; s.file = ''; },
     render:function(s, r){
       var q = Q[s.qi], done = s.ans >= q.a.length;
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># Folder agent / Documents</span><span class="chip mono">local-only · 0 credits</span></div>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# Folder agent / Documents'})+'<span class="chip mono">local-only · 0 credits</span></div>'+
         '<div><div class="tabs" role="tablist">'+Q.map(function(x, i){ return '<button class="tab'+(i === s.qi ? ' is-on' : '')+'" type="button" role="tab" aria-selected="'+(i === s.qi)+'" data-act="q:'+i+'">'+x.tab+'</button>'; }).join('')+'</div>'+
         '<div class="panel panel--tabbed grid2" style="align-items:start">'+
           '<div style="display:flex;flex-direction:column;gap:10px;min-width:0"><div class="ask"><span class="q'+(s.typed.length < q.q.length ? ' typing' : '')+'">'+esc(s.typed)+'</span></div>'+
@@ -1304,13 +1393,13 @@ D.code = function(root){
     reset:function(s){ s.tab = 0; s.plan = 0; s.diff = 0; s.tests = 0; s.pr = false; },
     render:function(s, r){
       var body = '';
-      if(s.tab === 0) body = '<h4>Plan</h4>' + PLAN.map(function(p, i){ return '<div class="row">'+(i < s.plan ? DOT.ok : i === s.plan ? DOT.run : DOT.idle)+'<div class="rt">'+p+'</div><span></span></div>'; }).join('');
-      if(s.tab === 1) body = '<h4>2 files changed <span class="muted" style="font-weight:400">· +4 −1</span></h4><div class="diff">'+DIFF.slice(0, s.diff).map(function(d){ return '<div class="'+d[0]+'">'+esc(d[1])+'</div>'; }).join('')+'</div>';
-      if(s.tab === 2){ var left = s.tests; body = '<h4>'+s.tests+' / 42 passed</h4><div class="meter" style="height:6px;margin-bottom:10px"><i style="width:'+(s.tests/42*100)+'%;background:var(--ok)"></i></div>'+TESTS.map(function(t){ var n = Math.max(0, Math.min(t[1], left)); left -= t[1]; return '<div class="row">'+(n === t[1] ? DOT.ok : n > 0 ? DOT.run : DOT.idle)+'<div class="rt mono" style="font-size:12px">'+t[0]+'</div><span class="chip mono">'+n+' / '+t[1]+'</span></div>'; }).join(''); }
+      if(s.tab === 0) body = ''+Text({as:'h4', size:'sm', weight:600, children:'Plan'})+'' + PLAN.map(function(p, i){ return '<div class="row">'+(i < s.plan ? DOT.ok : i === s.plan ? DOT.run : DOT.idle)+'<div class="rt">'+p+'</div><span></span></div>'; }).join('');
+      if(s.tab === 1) body = Text({as:'h4', size:'sm', weight:600, children:'2 files changed '+Text({as:'span', size:'sm', tone:'muted', children:'· +4 −1'})})+'<div class="diff">'+DIFF.slice(0, s.diff).map(function(d){ return '<div class="'+d[0]+'">'+esc(d[1])+'</div>'; }).join('')+'</div>';
+      if(s.tab === 2){ var left = s.tests; body = Text({as:'h4', size:'sm', weight:600, children:s.tests+' / 42 passed'})+'<div class="meter" style="height:6px;margin-bottom:10px"><i style="width:'+(s.tests/42*100)+'%;background:var(--ok)"></i></div>'+TESTS.map(function(t){ var n = Math.max(0, Math.min(t[1], left)); left -= t[1]; return '<div class="row">'+(n === t[1] ? DOT.ok : n > 0 ? DOT.run : DOT.idle)+'<div class="rt mono" style="font-size:12px">'+t[0]+'</div><span class="chip mono">'+n+' / '+t[1]+'</span></div>'; }).join(''); }
       if(s.tab === 3) body = s.pr ? '<div class="row" style="grid-template-columns:16px minmax(0,1fr) auto;padding:14px">'+DOT.ok+'<div style="min-width:0"><div class="rt" style="font-size:14px">#128 Fix discount codes applying twice</div><div class="rs">titan/fix-double-discount → main · +4 −1 · 2 files</div></div><span class="chip" style="background:rgba(42,154,48,.12);color:#1f7a24">Open</span></div>'+
         '<div class="row">'+DOT.ok+'<div class="rt">CI passed · 42 tests · 1.8 s</div><span></span></div><div class="row">'+DOT.ok+'<div style="min-width:0"><div class="rt">Reviewed by a second agent</div><div class="rs">1 note: rename lineTotal() arg</div></div><span></span></div><div class="row">'+DOT.warn+'<div class="rt">Waiting for your review</div><a class="sbtn" href="#f-code" style="display:inline-flex;align-items:center;text-decoration:none">Review</a></div>'
         : '<div class="muted">Opening pull request…</div>';
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># fjord-shop / Discount codes apply twice</span><span class="chip mono">DeepSeek V3 · 6 cr</span></div>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# fjord-shop / Discount codes apply twice'})+'<span class="chip mono">DeepSeek V3 · 6 cr</span></div>'+
         '<div style="flex:1;display:flex;flex-direction:column"><div class="tabs" role="tablist">'+TABS.map(function(t, i){ return '<button class="tab'+(i === s.tab ? ' is-on' : '')+'" type="button" role="tab" aria-selected="'+(i === s.tab)+'" data-act="t:'+i+'">'+t+'</button>'; }).join('')+'</div><div class="panel panel--tabbed" style="flex:1">'+body+'</div></div>';
     },
     act:function(a, b, ctx, s){ ctx.pause(10000); s.tab = +a.split(':')[1]; s.plan = 4; s.diff = DIFF.length; s.tests = 42; s.pr = true; },
@@ -1350,7 +1439,7 @@ D.builder = function(root){
       var lines = LOG[s.target].slice(0, s.log).map(function(l, i){ return '<div><span class="ok">✓</span><span>'+l+'</span></div>'; }).join('');
       if(s.log < LOG[s.target].length && s.built > 0) lines += '<div><span style="color:var(--accent)">●</span><span>'+LOG[s.target][s.log]+'…</span></div>';
       if(s.pub) lines += '<div><span class="ok">✓</span><span style="color:#000">Published to salonlys.dk</span></div>';
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># App builder / Salon booking</span>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# App builder / Salon booking'})+
         '<div class="seg" role="group" aria-label="Target" style="margin-left:auto">'+['web','phone','desk'].map(function(t){ return '<button type="button" data-act="t:'+t+'" class="'+(s.target === t ? 'is-on' : '')+'">'+NAMES[t]+'</button>'; }).join('')+'</div></div>'+
         '<div class="ask"><span class="q">A booking app for my hair salon, with reminders the day before</span></div>'+
         '<div class="bgrid" style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:12px;flex:1;align-items:center">'+
@@ -1387,12 +1476,12 @@ D.apps = function(root){
     render:function(s, r){
       var q = QS[s.qi];
       function tbl(title, rows, isInv){
-        return '<div class="panel"><h4>'+title+'</h4>'+rows.map(function(x){
+        return '<div class="panel">'+Text({as:'h4', size:'sm', weight:600, children:title})+rows.map(function(x){
           var hl = s.on && (isInv ? x[3] : (q.crm && (x[2] === 'house' || x[2] === 'decaf')));
           return '<div class="row'+(hl ? (isInv ? ' hl' : ' hl2') : '')+'">'+(isInv ? (x[3] ? DOT.warn : DOT.ok) : '<span style="width:16px;height:16px;border-radius:50%;background:#ececec;display:block"></span>')+'<div style="min-width:0"><div class="rt">'+x[0]+'</div><div class="rs">'+(isInv ? 'in stock' : 'last order')+'</div></div><span class="chip mono">'+x[1]+'</span></div>';
         }).join('')+'</div>';
       }
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># Sidebar / CRM + Inventory</span><span class="chip mono">shared local database</span></div>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# Sidebar / CRM + Inventory'})+'<span class="chip mono">shared local database</span></div>'+
         '<div class="ask"><svg class="bot" viewBox="-12 -12 24 24" aria-hidden="true">'+hexIcon().replace(/^<svg[^>]*>|<\/svg>$/g,'')+'</svg><span class="q'+(s.typed.length < q.q.length ? ' typing' : '')+'">'+esc(s.typed)+'</span>'+
         QS.map(function(x, i){ return '<button class="sbtn'+(i === s.qi ? ' sbtn--go' : '')+'" type="button" data-act="q:'+i+'">'+(i ? 'Reorder' : 'Low stock')+'</button>'; }).join('')+'</div>'+
         '<div class="grid2">'+tbl('CRM · customers', CRM, false)+tbl('Inventory', INV, true)+'</div>'+
@@ -1424,7 +1513,7 @@ D.qa = function(root){
     reset:function(s){ s.shown = 0; s.fixed = 0; s.k = 0; },
     render:function(s, r){
       var list = ISS[s.tab], vals = BEFORE.map(function(b, i){ return b + (AFTER[i]-b)*s.k; });
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># QA and SEO / fjordco.dk</span><span class="chip mono">'+(s.fixed >= list.length && s.shown ? 'all fixed' : s.shown+' issues')+'</span></div>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# QA and SEO / fjordco.dk'})+'<span class="chip mono">'+(s.fixed >= list.length && s.shown ? 'all fixed' : s.shown+' issues')+'</span></div>'+
         '<div class="dials">'+dial(vals[0],'Performance')+dial(vals[1],'SEO')+dial(vals[2],'Accessibility')+'</div>'+
         '<div><div class="tabs" role="tablist"><button class="tab'+(s.tab === 'qa' ? ' is-on' : '')+'" type="button" data-act="t:qa">QA agent</button><button class="tab'+(s.tab === 'seo' ? ' is-on' : '')+'" type="button" data-act="t:seo">SEO agent</button></div>'+
         '<div class="panel panel--tabbed">'+list.slice(0, s.shown).map(function(x, i){ var f = i < s.fixed; return '<div class="row">'+(f ? DOT.ok : DOT[x[0]])+'<div style="min-width:0"><div class="rt"'+(f ? ' style="color:var(--ink-2)"' : '')+'>'+x[1]+'</div><div class="rs">'+x[2]+'</div></div><span class="chip">'+(f ? 'Fixed' : x[0] === 'err' ? 'High' : 'Medium')+'</span></div>'; }).join('')+
@@ -1453,14 +1542,14 @@ D.auto = function(root){
     reset:function(s){ s.x = 0; s.change = false; s.runs = {}; },
     render:function(s, r){
       var dayIdx = Math.floor(s.x*7);
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># Automation / This week</span><span class="chip mono">runs while the app is open</span></div>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# Automation / This week'})+'<span class="chip mono">runs while the app is open</span></div>'+
         '<div class="week">'+DAYS.map(function(d, i){
           var jobs = '<div class="job '+(i < dayIdx ? 'done' : i === dayIdx ? 'run' : '')+'">07:30 Law watcher</div>' + JOBS.filter(function(j){ return j[0] === i; }).map(function(j){ var k = 'j'+i; var st = s.runs[k] || (i < dayIdx ? 'done' : i === dayIdx ? 'run' : ''); return '<button class="job '+st+'" type="button" data-act="run:'+i+'" style="border:0;text-align:left;cursor:pointer;font:inherit;font-size:10.5px">'+j[1]+'</button>'; }).join('');
           return '<div class="day"><b>'+d+'</b>'+jobs+'</div>';
         }).join('')+'<span class="playhead" style="left:calc('+(s.x*100).toFixed(2)+'% - 1px)" aria-hidden="true"></span></div>'+
         '<div class="grid2">'+
-          '<div class="panel"><h4>Law watcher</h4>'+(s.change ? '<div class="row hl is-new" style="margin-bottom:8px">'+DOT.warn+'<div style="min-width:0"><div class="rt">Change found on a watched page</div><div class="rs">VAT guidance for food sales · section 4</div></div><span></span></div><div style="font-size:12px;line-height:1.55">Invoices for business customers must be issued within <span class="del">30</span> <span class="ins">14</span> days of delivery.</div>' : '<div class="row">'+DOT.ok+'<div style="min-width:0"><div class="rt">No changes yet this week</div><div class="rs">4 pages watched · checked daily</div></div><span></span></div>')+'</div>'+
-          '<div class="panel"><h4>Recorded task</h4><div class="row">'+DOT.ok+'<div style="min-width:0"><div class="rt">Download the bank statement</div><div class="rs">6 steps · replays Mon 07:45</div></div><span></span></div><div class="buildlog" style="margin-top:8px">'+['Open bank portal','Sign in with saved passkey','Statements → October','Download CSV'].map(function(t, i){ return '<div><span class="'+(s.x > 0.02 + i*0.03 ? 'ok' : '')+'">'+(s.x > 0.02 + i*0.03 ? '✓' : '○')+'</span>'+t+'</div>'; }).join('')+'</div></div>'+
+          '<div class="panel">'+Text({as:'h4', size:'sm', weight:600, children:'Law watcher'})+(s.change ? '<div class="row hl is-new" style="margin-bottom:8px">'+DOT.warn+'<div style="min-width:0"><div class="rt">Change found on a watched page</div><div class="rs">VAT guidance for food sales · section 4</div></div><span></span></div><div style="font-size:12px;line-height:1.55">Invoices for business customers must be issued within <span class="del">30</span> <span class="ins">14</span> days of delivery.</div>' : '<div class="row">'+DOT.ok+'<div style="min-width:0"><div class="rt">No changes yet this week</div><div class="rs">4 pages watched · checked daily</div></div><span></span></div>')+'</div>'+
+          '<div class="panel">'+Text({as:'h4', size:'sm', weight:600, children:'Recorded task'})+'<div class="row">'+DOT.ok+'<div style="min-width:0"><div class="rt">Download the bank statement</div><div class="rs">6 steps · replays Mon 07:45</div></div><span></span></div><div class="buildlog" style="margin-top:8px">'+['Open bank portal','Sign in with saved passkey','Statements → October','Download CSV'].map(function(t, i){ return '<div><span class="'+(s.x > 0.02 + i*0.03 ? 'ok' : '')+'">'+(s.x > 0.02 + i*0.03 ? '✓' : '○')+'</span>'+t+'</div>'; }).join('')+'</div></div>'+
         '</div>';
     },
     act:function(a, b, ctx, s){ s.runs['j'+a.split(':')[1]] = 'run'; setTimeout(function(){ s.runs['j'+a.split(':')[1]] = 'done'; ctx.render(); }, 1400); },
@@ -1485,7 +1574,7 @@ D.marketing = function(root){
     render:function(s, r){
       var cal = ['M','T','W','T','F','S','S'].map(function(d){ return '<div class="h">'+d+'</div>'; }).join('') + '<div style="background:none"></div><div style="background:none"></div><div style="background:none"></div>';
       for(var d=1; d<=31; d++) cal += '<div>'+d+'<i>'+(s.sched && posts[d] ? posts[d].map(function(c, j){ return '<span style="background:'+c+';animation-delay:'+(d*12+j*30)+'ms"></span>'; }).join('') : '')+'</i></div>';
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># Marketing / fjordco.dk → video + October posts</span><span class="chip mono">brand kit</span></div>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# Marketing / fjordco.dk → video + October posts'})+'<span class="chip mono">brand kit</span></div>'+
         '<div class="grid2" style="flex:1;align-items:start">'+
           '<div style="display:flex;flex-direction:column;gap:10px"><div class="player">'+SC.map(function(c, i){ return '<div class="scene'+(i === s.sc ? ' on' : '')+'" style="background:'+c[2]+'"><h5>'+c[0]+'</h5><p>'+c[1]+'</p></div>'; }).join('')+'<div class="player__bar"><i style="width:'+((s.sc + s.p)/SC.length*100).toFixed(1)+'%"></i></div></div>'+
           '<div class="panel" style="display:flex;flex-direction:column;gap:6px"><div class="kv"><span>Promo video</span><b>0:30 · 1080p · 4 scenes</b></div><div class="kv"><span>Made with</span><b>Motion Canvas + FFmpeg</b></div></div></div>'+
@@ -1521,7 +1610,7 @@ D.remote = function(root){
       var lap = s.n < 2 ? '<div class="muted">Waiting for a task…</div>'
         : '<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span style="width:18px;height:18px;display:block">'+hexIcon()+'</span>Supplier emails<span class="chip" style="margin-left:auto;height:20px">'+(s.n === 2 ? 'Needs approval' : s.ok ? (s.sent >= 3 ? 'Done' : 'Sending') : 'Stopped')+'</span></div>'+
           ['Verde Imports','Origin Direct','Hill &amp; Harbor'].map(function(n, i){ return '<div class="row" style="padding:7px 8px">'+(i < s.sent ? DOT.ok : s.n >= 3 && s.ok && i === s.sent ? DOT.run : DOT.idle)+'<div class="rt" style="font-size:12px">'+n+'</div><span></span></div>'; }).join('');
-      r.innerHTML = '<div class="stage__top"><span class="stage__eyebrow"># Remote / Phone → your laptop</span><span class="chip mono">end-to-end encrypted</span></div>'+
+      r.innerHTML = '<div class="stage__top">'+Text({as:'span', size:'sm', truncate:true, className:'stage__eyebrow', children:'# Remote / Phone → your laptop'})+'<span class="chip mono">end-to-end encrypted</span></div>'+
         '<div class="remote"><div class="phone"><div class="phone__top"><span style="width:20px;height:20px;display:block">'+hexIcon()+'</span><span>Titan<br><span class="muted" style="font-weight:400;font-size:10.5px">via Telegram</span></span></div><div class="phone__chat">'+b.join('')+'</div></div>'+
         '<div class="laptop"><div class="laptop__screen">'+lap+'</div><div class="laptop__base"></div><div class="muted mono" style="font-size:10.5px;text-align:center;margin-top:10px">Your laptop · Aarhus office</div></div></div>';
     },
@@ -1567,10 +1656,10 @@ $$('[data-demo]').forEach(function(el){ var f = D[el.dataset.demo]; if(f) f(el);
   var FMT = ['PDF','Word','Excel','Slides','Link'], fi = 0;
   function render(){
     el.innerHTML =
-      '<div class="card"><div class="panel">'+(mem.length ? mem.map(function(m, i){ return '<div class="memline"><span>'+m+'</span><button type="button" data-forget="'+i+'" aria-label="Forget: '+m+'">✕</button></div>'; }).join('') : '<div class="muted">Nothing remembered. <button class="sbtn" type="button" data-restore style="height:24px;font-size:11px">Undo</button></div>')+'</div><h4>Memory you can read and edit</h4><p>See everything Titan remembers, scoped per agent or shared. Remove a line and it\'s gone.</p></div>'+
-      '<div class="card"><div class="panel" style="display:flex;flex-wrap:wrap;gap:6px">'+FMT.map(function(f, i){ return '<span class="chip" style="'+(i === fi ? 'background:#000;color:#fff' : '')+';transition:all .3s">'+f+'</span>'; }).join('')+'</div><h4>Artifacts in every format</h4><p>Reports, sheets and decks open in the artifact panel. Edit, version, comment, then download or share a link.</p></div>'+
-      '<div class="card"><div class="panel"><div class="row" style="padding:7px 8px">'+DOT.warn+'<div style="min-width:0"><div class="rt" style="font-size:12px">Bookkeeping sync agent</div><div class="rs">reads Invoices · no network</div></div><span class="chip" style="height:20px">Review</span></div></div><h4>Marketplace</h4><p>Install community agents and app templates from GitHub. Each one shows its permissions before it runs.</p></div>'+
-      '<div class="card"><div class="panel">'+[['Owner','Marta'],['Editor','Jonas'],['Viewer','Accountant']].map(function(r){ return '<div class="memline"><span>'+r[1]+'</span><span class="chip" style="height:20px;flex:none">'+r[0]+'</span></div>'; }).join('')+'</div><h4>Teams and roles</h4><p>Share agents and apps with your team, with roles and an audit log, on the Custom plan.</p></div>';
+      '<div class="card"><div class="panel">'+(mem.length ? mem.map(function(m, i){ return '<div class="memline"><span>'+m+'</span><button type="button" data-forget="'+i+'" aria-label="Forget: '+m+'">✕</button></div>'; }).join('') : '<div class="muted">Nothing remembered. <button class="sbtn" type="button" data-restore style="height:24px;font-size:11px">Undo</button></div>')+'</div>'+Text({as:'h4', size:'md', weight:600, children:'Memory you can read and edit'})+Text({size:'sm', tone:'muted', children:'See everything Titan remembers, scoped per agent or shared. Remove a line and it\'s gone.'})+'</div>'+
+      '<div class="card"><div class="panel" style="display:flex;flex-wrap:wrap;gap:6px">'+FMT.map(function(f, i){ return '<span class="chip" style="'+(i === fi ? 'background:#000;color:#fff' : '')+';transition:all .3s">'+f+'</span>'; }).join('')+'</div>'+Text({as:'h4', size:'md', weight:600, children:'Artifacts in every format'})+Text({size:'sm', tone:'muted', children:'Reports, sheets and decks open in the artifact panel. Edit, version, comment, then download or share a link.'})+'</div>'+
+      '<div class="card"><div class="panel"><div class="row" style="padding:7px 8px">'+DOT.warn+'<div style="min-width:0"><div class="rt" style="font-size:12px">Bookkeeping sync agent</div><div class="rs">reads Invoices · no network</div></div><span class="chip" style="height:20px">Review</span></div></div>'+Text({as:'h4', size:'md', weight:600, children:'Marketplace'})+Text({size:'sm', tone:'muted', children:'Install community agents and app templates from GitHub. Each one shows its permissions before it runs.'})+'</div>'+
+      '<div class="card"><div class="panel">'+[['Owner','Marta'],['Editor','Jonas'],['Viewer','Accountant']].map(function(r){ return '<div class="memline"><span>'+r[1]+'</span><span class="chip" style="height:20px;flex:none">'+r[0]+'</span></div>'; }).join('')+'</div>'+Text({as:'h4', size:'md', weight:600, children:'Teams and roles'})+Text({size:'sm', tone:'muted', children:'Share agents and apps with your team, with roles and an audit log, on the Custom plan.'})+'</div>';
   }
   el.addEventListener('click', function(e){
     var f = e.target.closest('[data-forget]'); if(f){ mem.splice(+f.dataset.forget, 1); render(); return; }
@@ -1594,13 +1683,19 @@ $$('[data-demo]').forEach(function(el){ var f = D[el.dataset.demo]; if(f) f(el);
     $('#plans').innerHTML = PLANS.map(function(p){
       var price = p.m === null ? 'Talk to us' : '€'+(yearly ? p.y : p.m);
       var feats = p.m === null ? ['A shared credit pool','Teams, roles, audit log, SSO','Agency and white-label','Dedicated support'] : [p.cr.toLocaleString('en')+' credits a month','Every agent and the app builder','Unlimited local models, previews, tests','Your own API keys',p.dev+' devices',p.sup];
-      return '<div class="plan-c'+(p.pop ? ' is-pop' : '')+'"><h3>'+p.n+(p.pop ? '<span class="chip">Most picked</span>' : '')+'</h3><div class="price">'+price+(p.m === null ? '' : ' <small>/ '+(yearly ? 'year' : 'month')+'</small>')+'</div><span class="muted" style="font-size:13.5px">'+p.blurb+'</span><ul>'+feats.map(function(f){ return '<li>'+f+'</li>'; }).join('')+'</ul><a class="btn '+(p.pop ? '' : 'btn--black')+'" href="#pricing">'+(p.m === null ? 'Contact sales' : 'Choose '+p.n)+'</a></div>';
+      var muted = p.pop ? 'inverse-muted' : 'muted';
+      return '<div class="plan-c'+(p.pop ? ' is-pop' : '')+'">'+
+        Text({as:'h3', size:'lg', weight:600, children:p.n+(p.pop ? '<span class="chip">Most picked</span>' : '')})+
+        Text({as:'div', variant:'heading', leading:'none', nums:true, children:price+(p.m === null ? '' : ' '+Text({as:'small', size:'sm', weight:400, tone:muted, children:'/ '+(yearly ? 'year' : 'month')}))})+
+        Text({as:'span', size:'sm', tone:muted, children:p.blurb})+
+        Text({as:'ul', size:'sm', tone:p.pop ? 'inverse-muted' : 'muted', children:feats.map(function(f){ return '<li>'+f+'</li>'; }).join('')})+
+        '<a class="btn '+(p.pop ? '' : 'btn--black')+'" href="#pricing" data-text="body" data-size="sm" data-weight="600">'+(p.m === null ? 'Contact sales' : 'Choose '+p.n)+'</a></div>';
     }).join('');
     var cr = PLANS[cp].cr, per = MODELS[mp][1], edits = per ? Math.round(cr/per) : null;
-    $('#calc').innerHTML = '<div style="display:flex;flex-direction:column;gap:16px"><div><span class="h2" style="font-size:24px;display:block">What do credits buy?</span><p class="muted" style="margin:8px 0 0;font-size:14px;max-width:52ch">1 credit is €0.01 of cloud usage: provider cost plus 25%. Estimates are for one typical build edit, about 30,000 tokens in and 3,000 out. Local models and your own keys never use credits.</p></div>'+
-      '<div><label>Plan</label><div class="seg" role="group" aria-label="Plan">'+PLANS.slice(0,3).map(function(p, i){ return '<button type="button" data-cp="'+i+'" class="'+(i === cp ? 'is-on' : '')+'">'+p.n+' · '+p.cr.toLocaleString('en')+'</button>'; }).join('')+'</div></div>'+
-      '<div><label>Model for the edit</label><div class="seg" role="group" aria-label="Model">'+MODELS.map(function(m, i){ return '<button type="button" data-mp="'+i+'" class="'+(i === mp ? 'is-on' : '')+'">'+m[0]+'</button>'; }).join('')+'</div></div></div>'+
-      '<div class="calc__out"><span class="muted" style="font-size:13px">Edits a month on '+PLANS[cp].n+'</span><span class="calc__big">'+(edits === null ? 'Unlimited' : '≈ '+edits.toLocaleString('en'))+'</span><span class="muted" style="font-size:13px">'+(per ? 'at about '+per+' credits per edit' : 'local models run free on your laptop')+'</span>'+
+    $('#calc').innerHTML = '<div style="display:flex;flex-direction:column;gap:16px"><div>'+Text({as:'h3', variant:'heading', size:'xl', leading:'snug', children:'What do credits buy?'})+Text({size:'sm', tone:'muted', measure:'normal', style:'margin-top:8px', children:'1 credit is €0.01 of cloud usage: provider cost plus 25%. Estimates are for one typical build edit, about 30,000 tokens in and 3,000 out. Local models and your own keys never use credits.'})+'</div>'+
+      '<div>'+Text({as:'label', size:'xs', font:'mono', caps:true, tracking:'wide', tone:'muted', children:'Plan'})+'<div class="seg" role="group" aria-label="Plan">'+PLANS.slice(0,3).map(function(p, i){ return '<button type="button" data-cp="'+i+'" class="'+(i === cp ? 'is-on' : '')+'">'+p.n+' · '+p.cr.toLocaleString('en')+'</button>'; }).join('')+'</div></div>'+
+      '<div>'+Text({as:'label', size:'xs', font:'mono', caps:true, tracking:'wide', tone:'muted', children:'Model for the edit'})+'<div class="seg" role="group" aria-label="Model">'+MODELS.map(function(m, i){ return '<button type="button" data-mp="'+i+'" class="'+(i === mp ? 'is-on' : '')+'">'+m[0]+'</button>'; }).join('')+'</div></div></div>'+
+      '<div class="calc__out">'+Text({as:'span', size:'sm', tone:'muted', children:'Edits a month on '+PLANS[cp].n})+Text({as:'span', variant:'display', leading:'none', nums:true, children:(edits === null ? 'Unlimited' : '≈ '+edits.toLocaleString('en'))})+Text({as:'span', size:'sm', tone:'muted', children:(per ? 'at about '+per+' credits per edit' : 'local models run free on your laptop')})+
       '<div class="meter" style="height:6px;margin-top:10px"><i style="width:'+(edits === null ? 100 : Math.min(100, edits/1750*100))+'%"></i></div></div>';
   }
   $('#billing').addEventListener('click', function(e){ var b = e.target.closest('button'); if(!b) return; yearly = b.dataset.b === 'y'; $$('#billing button').forEach(function(x){ x.classList.toggle('is-on', x === b); }); render(); });
