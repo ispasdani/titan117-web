@@ -32,6 +32,14 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 22 Oct 2026 · Landing page: eyes-only avatar
+- `index.html`: Titan's avatar now shows only the eyes, filled with a colour per mood (angry `#e5484d`, happy green, sad blue, and so on) or per state (working cyan, needs approval amber, done green, error red, offline grey). Colour changes ease over about 400 ms. The 16-mood picker (pick a mood, every live avatar takes it) is kept in the file as a commented-out reference but not shown on the homepage; users discover moods in the app.
+- Angry eyes are sharp-cornered blades instead of capsules: the bundled bloub engine got an optional `corner` setting per eye (1 = capsule, lower = sharper), which blends between expressions. Changes are marked `TITAN117` in the engine source.
+- Each mood has its own eye shape, and shapes morph into one another: angry blades, happy ^ arches, laughing > <, excited sparkles, sad drooping eyes, shy U shapes, proud domes, bored and sleepy half-closed moons, surprised and scared round eyes. Shapes live in `eyeforms.ts` in the bundled engine; every shape is resampled to the same 72 points so eyes blend point by point.
+- Eyes are centred in their box: each avatar is offset by an invisible twin that never follows the cursor, so the eyes still track the pointer around the centre. Cursor-follow now rests looking straight ahead (bloub's default turned 26° towards its side panel).
+- Small static agent icons are the same two angry eyes in each agent's colour.
+- Open: this changes the logo described in [decisions §9](notes/decisions.md#9-brand) and [brand](brand/README.md) (neon hexagon body with angry face). Not recorded as a decision yet; both docs need updating if we keep it.
+
 ### 22 Oct 2026 · Landing page: gray text ladder
 - `index.html`: text colours follow a gray ladder, after the Mobbin design notes. Ink `#141414` for headings and key copy, soft `#262626` for emphasised secondary text, muted `#6b6b6b` for descriptions, ledes, feature lists and captions, faint `#adadad` for hints only. Descriptions moved from near-black to muted.
 - Muted is `#6b6b6b` rather than Mobbin's `#707070` so 14px text still passes WCAG AA on the grey card surfaces.
