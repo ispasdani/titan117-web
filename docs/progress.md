@@ -32,6 +32,10 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 22 Oct 2026 · Landing page: full-width nav, system type
+- `index.html`: the nav is now a full-width bar, transparent at the top and frosted white with a hairline border once you scroll. It shows a scroll-progress line and marks the section in view. Added a Sign in link; the mobile menu is a full-width panel.
+- Type follows the OpenAI-style design notes: system-ui stack, display 700, headings 600, body 400 at 1.5 line height. Figtree removed; Geist Mono kept for labels and code. Large headings use tighter line height than 1.5.
+
 ### 19 Oct 2026 · Landing page mockup
 - Added `index.html` at the repo root: a standalone landing page mockup (open it in a browser, no build step). Glyph-reveal hero, an animated desktop app demo, an interactive demo per agent, local-first diagram and pricing from [pricing](notes/pricing.md).
 - The logo is the black hexagon avatar with the angry expression, drawn live by the bloub engine bundled inline (MIT); eyes follow the cursor.
