@@ -8,7 +8,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Syncopate:wght@700&display=swap">
 <style>
 /* Layout: centered hero on white (from the reference), product band below, then Cursor-style rows: copy left, live demo right. */
 :root{
@@ -35,6 +35,7 @@
 
   --font-sans:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   --font-mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-brand:'Syncopate',system-ui,-apple-system,'Segoe UI',sans-serif; /* the TITAN117 wordmark only */
 
   --tr-display:-0.025em;
   --tr-title:-0.02em;
@@ -100,20 +101,21 @@ section[id],article[id],header[id]{scroll-margin-top:72px}
 .navmenu{display:none}
 
 /* ───── Hero ───── */
-.hero{position:relative;padding:0 0 64px;padding-top:150px;overflow:hidden}
+.hero{position:relative;padding:0 0 72px;padding-top:128px;overflow:hidden}
 .glyphs{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
-.hero__inner{position:relative;z-index:1;text-align:center;display:flex;flex-direction:column;align-items:center;pointer-events:none}
+.hero__inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:clamp(24px,3vw,48px);align-items:center;pointer-events:none}
+.hero__copy{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.hero__visual{display:flex;justify-content:center;align-items:center;min-width:0}
 .hero__inner a,.hero__inner button,.hero__inner h1 .w{pointer-events:auto}
-.hero__bot{width:96px;height:96px;margin-bottom:14px}
+.hero__bot{width:min(100%,420px);height:auto;aspect-ratio:1}
 .eyebrow{display:inline-flex;align-items:center;gap:8px}
 .eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(56,198,236,.6);animation:pulse 2s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(56,198,236,0)}100%{box-shadow:0 0 0 0 rgba(56,198,236,0)}}
-.hero h1{margin:18px 0 0}
+.hero h1{margin:0}
 .hero h1 .w{display:inline-block;white-space:pre}
 .hero__sub{margin:22px 0 0}
 .hero__cta{margin-top:30px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.hero__meta{margin-top:18px}
-.hero__hint{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:22px;z-index:1}
+.hero .hero__cta{justify-content:flex-start}
 
 /* ───── Band (product demo) ───── */
 .band{position:relative;background:linear-gradient(180deg,#0db5ed 0%,#38c6ec 46%,#8fdcf3 100%);overflow:hidden;padding:72px 0 88px}
@@ -440,9 +442,9 @@ svg.d{width:16px;height:16px;display:block}
 @keyframes drop{from{opacity:0;translate:0 -10px}}
 .js .nav{animation:drop .62s var(--ease-settle) .05s both}
 .js .hero__bot{animation:rise .7s var(--ease-settle) .2s both}
-.js .hero .eyebrow{animation:rise .6s var(--ease-settle) .3s both}
+.js .hero h1{animation:rise .6s var(--ease-settle) .3s both}
 .js .hero__sub{animation:rise .62s var(--ease-settle) .62s both}
-.js .hero__cta,.js .hero__meta{animation:rise .58s var(--ease-settle) .78s both}
+.js .hero__cta{animation:rise .58s var(--ease-settle) .78s both}
 .js .app{animation:rise .94s var(--ease-settle) .9s both}
 
 /* ═════════ Text component ═════════
@@ -461,7 +463,7 @@ svg.d{width:16px;height:16px;display:block}
                              muted #6b6b6b descriptions, ledes, lists, captions
                              faint #adadad hints and fine print only (too light for anything you must read)
    align     data-align      start | center | end
-   font      data-font       sans | mono
+   font      data-font       sans | mono | brand (Syncopate, for the TITAN117 wordmark only)
    leading   data-leading    none 1 | tight 1.15 | snug 1.3 | normal 1.5
    tracking  data-tracking   tight | normal | wide
    wrap      data-wrap       balance | pretty | nowrap
@@ -496,6 +498,7 @@ svg.d{width:16px;height:16px;display:block}
 [data-weight="800"]{--_weight:800}
 [data-font="sans"]{font-family:var(--font-sans)}
 [data-font="mono"]{font-family:var(--font-mono);--_tracking:0}
+[data-font="brand"]{font-family:var(--font-brand);--_tracking:.08em}
 [data-leading="none"]{--_leading:1}
 [data-leading="tight"]{--_leading:1.15}
 [data-leading="snug"]{--_leading:1.3}
@@ -545,13 +548,15 @@ svg.d{width:16px;height:16px;display:block}
   .art{border-left:0;border-top:1px solid var(--line);height:0;transition:height .6s var(--ease-settle)}
   .app.has-art .art{height:380px}
   .app__search{display:none}
-  .feat,.local__grid,.calc{grid-template-columns:minmax(0,1fr)}
+  .feat,.local__grid,.calc,.hero__inner{grid-template-columns:minmax(0,1fr)}
+  .hero__visual{order:-1}
+  .hero__bot{width:min(64vw,260px)}
   .feat{padding:40px 0}
   .states__row,.moods__row{grid-template-columns:repeat(4,minmax(0,1fr))}
   .foot__grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:560px){
-  .hero{padding-top:128px}
+  .hero{padding-top:104px}
   .band{padding:40px 0 56px}
   .chat__head .chip{display:none}
   .grid2,.stage .bgrid{grid-template-columns:minmax(0,1fr)!important}
@@ -562,7 +567,6 @@ svg.d{width:16px;height:16px;display:block}
   .dials{grid-template-columns:repeat(3,minmax(0,1fr))}
   .dial svg{width:58px;height:58px}
   .arch__note{position:static;transform:none;justify-self:center;margin-top:10px}
-  .hero__hint{display:none}
   .app__crumb{display:none}
 }
 @media (prefers-reduced-motion:reduce){
@@ -576,7 +580,7 @@ svg.d{width:16px;height:16px;display:block}
   <nav class="nav" aria-label="Primary">
     <a class="brand" href="#top" aria-label="TITAN117 home">
       <span class="brand__chip"><svg class="bot" data-bot="nav" aria-hidden="true"></svg></span>
-      <span class="brand__word" data-text="body" data-size="sm" data-weight="800" data-tracking="wide">TITAN117</span>
+      <span class="brand__word" data-text="body" data-size="sm" data-weight="700" data-font="brand">TITAN117</span>
     </a>
     <div class="nav__links" data-text="body" data-size="sm" data-weight="500">
       <a href="#product">Product</a>
@@ -602,17 +606,18 @@ svg.d{width:16px;height:16px;display:block}
 <header class="hero" id="top">
   <canvas class="glyphs" id="glyphs" aria-hidden="true"></canvas>
   <div class="wrap hero__inner">
-    <svg class="bot hero__bot" data-bot="hero" role="img" aria-label="Titan, the TITAN117 avatar"></svg>
-    <span class="eyebrow" data-text="body" data-size="xs" data-font="mono" data-caps data-tracking="wide" data-tone="muted"><i class="pulse"></i>An AI team that runs on your laptop</span>
-    <h1 id="headline" data-text="display" data-leading="tight" data-wrap="balance" data-measure="title">Your whole AI team, working on your own laptop.</h1>
-    <p class="hero__sub" data-text="body" data-tone="muted" data-wrap="balance" data-measure="medium">Titan and its specialist agents research, write code, build apps, read your documents and watch the web for you. Your files stay on your machine, and nothing happens until you approve it.</p>
-    <div class="hero__cta">
-      <a class="btn btn--black btn--lg" data-text="body" data-size="md" data-weight="600" href="#pricing">Download for Windows</a>
-      <a class="btn btn--ghost btn--lg" data-text="body" data-size="md" data-weight="600" href="#product">See it work</a>
+    <div class="hero__copy">
+      <h1 id="headline" data-text="display" data-leading="tight" data-wrap="balance">Intelligence Designed to Evolve</h1>
+      <p class="hero__sub" data-text="body" data-tone="muted" data-wrap="pretty" data-measure="normal">Titan and its specialist agents research, write code, build apps, read your documents and watch the web for you. Your files stay on your machine, and nothing happens until you approve it.</p>
+      <div class="hero__cta">
+        <a class="btn btn--black btn--lg" data-text="body" data-size="md" data-weight="600" href="#pricing">Download for Windows</a>
+        <a class="btn btn--ghost btn--lg" data-text="body" data-size="md" data-weight="600" href="#product">See it work</a>
+      </div>
     </div>
-    <p class="hero__meta" data-text="body" data-size="xs" data-font="mono" data-tone="muted">Windows and macOS · local models or OpenRouter · from €15 a month</p>
+    <div class="hero__visual">
+      <svg class="bot hero__bot" data-bot="hero" role="img" aria-label="Titan, the TITAN117 avatar"></svg>
+    </div>
   </div>
-  <span class="hero__hint" data-text="body" data-size="xs" data-font="mono" data-tone="faint">move your cursor ↗</span>
 </header>
 
 <section class="band" id="product" aria-label="Desktop app demo">
@@ -620,7 +625,7 @@ svg.d{width:16px;height:16px;display:block}
   <div class="wrap">
     <div class="app" id="app">
       <div class="app__bar">
-        <span class="app__title"><svg class="bot" data-bot="mini" aria-hidden="true"></svg>TITAN117</span>
+        <span class="app__title"><svg class="bot" data-bot="mini" aria-hidden="true"></svg><span data-text="body" data-size="xs" data-weight="700" data-font="brand">TITAN117</span></span>
         <span class="app__crumb">Fjord &amp; Co. · Workspace</span>
         <span class="app__search"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="5" cy="5" r="3.8" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="m8 8 3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Search chats, files, apps<span class="mono" style="margin-left:auto;font-size:10px">Ctrl K</span></span>
         <span class="win" aria-hidden="true"><i>&#8211;</i><i>&#9633;</i><i>&#10005;</i></span>
@@ -821,7 +826,7 @@ svg.d{width:16px;height:16px;display:block}
 <footer class="foot">
   <div class="wrap foot__grid">
     <div>
-      <div class="foot__brand" data-text="body" data-size="sm" data-weight="800" data-tracking="wide" data-tone="ink"><svg class="bot" data-bot="foot" aria-hidden="true"></svg>TITAN117</div>
+      <div class="foot__brand" data-text="body" data-size="sm" data-weight="700" data-font="brand" data-tone="ink"><svg class="bot" data-bot="foot" aria-hidden="true"></svg>TITAN117</div>
       <p data-text="body" data-size="sm" data-tone="muted" style="max-width:34ch;margin:12px 0 0">An AI team for small companies that runs on your own laptop. Made by Ecotechcore.</p>
     </div>
     <div data-text="body" data-size="sm" data-tone="muted"><b data-text="body" data-size="sm" data-weight="600" data-tone="ink">Product</b><a href="#product">Desktop app</a><a href="#agents">Agents</a><a href="#pricing">Pricing</a></div>
@@ -940,7 +945,10 @@ mountBots();
     var off = document.createElement('canvas'); off.width = cols; off.height = rows;
     var o = off.getContext('2d');
     var fs = Math.min(rows*0.62, cols/ (WORD.length*0.66));
-    o.font = '900 '+fs+'px system-ui, Arial Black, sans-serif'; o.textAlign = 'center'; o.textBaseline = 'middle';
+    var face = '700 %spx Syncopate, system-ui, Arial Black, sans-serif';
+    o.font = face.replace('%s', fs);
+    var tw = o.measureText(WORD).width; if(tw > cols*0.92){ fs *= cols*0.92/tw; o.font = face.replace('%s', fs); }
+    o.textAlign = 'center'; o.textBaseline = 'middle';
     o.fillText(WORD, cols/2, rows*0.5);
     var d = o.getImageData(0,0,cols,rows).data; mask = new Uint8Array(cols*rows);
     for(var k=0;k<mask.length;k++) mask[k] = d[k*4+3] > 110 ? 1 : 0;

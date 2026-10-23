@@ -32,6 +32,13 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 22 Oct 2026 · Landing page: Syncopate wordmark
+- `index.html`: the TITAN117 wordmark (navbar, footer, app window title) is set in Syncopate Bold (Google Fonts, OFL) with slightly wide spacing, picked from 13 options. It is a `brand` value of the Text component's `font` prop (`data-font="brand"`), used for the wordmark only. The hidden TITAN117 in the hero glyph field uses the same face.
+
+### 22 Oct 2026 · Landing page: two-column hero
+- `index.html`: the hero is now two columns. Left: the title "Intelligence Designed to Evolve", the description and the Download for Windows / See it work buttons. Right: Titan's eyes. The text column takes about two thirds of the width, so the title sits on one line on desktop. On phones the eyes sit above the text.
+- Removed from the hero: the "An AI team that runs on your laptop" eyebrow, the "Windows and macOS · local models or OpenRouter · from €15 a month" line and the "move your cursor" hint.
+
 ### 22 Oct 2026 · Landing page: eyes-only avatar
 - `index.html`: Titan's avatar now shows only the eyes, filled with a colour per mood (angry `#e5484d`, happy green, sad blue, and so on) or per state (working cyan, needs approval amber, done green, error red, offline grey). Colour changes ease over about 400 ms. The 16-mood picker (pick a mood, every live avatar takes it) is kept in the file as a commented-out reference but not shown on the homepage; users discover moods in the app.
 - Angry eyes are sharp-cornered blades instead of capsules: the bundled bloub engine got an optional `corner` setting per eye (1 = capsule, lower = sharper), which blends between expressions. Changes are marked `TITAN117` in the engine source.
