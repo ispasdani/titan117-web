@@ -32,6 +32,36 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 23 Oct 2026 · Landing page: still logo, neon nav accents
+- `index.html`: the logo eyes (navbar, footer and the app window's title bar) are the angry blades in black and hold completely still: no cursor following, no drift. Hovering or focusing the logo fades them to neon; leaving turns them black again. This uses a `still` option on the avatar. A symmetric `calme` expression (two upright pills) was added to the bundled engine and is available but not used.
+- The navbar's active-section dot and the scroll progress line are brand neon `#c4f012` instead of blue.
+- Icon tiles in the Agents and Industries menus and the Industries section are neutral: white with a light grey border, no coloured fill. Industry icons are black; agent icons keep only the colour of their eyes.
+
+### 23 Oct 2026 · Landing page: still contour lines on the dark band
+- `index.html`: the dark band behind the app demo now shows a still pattern of fine topographic contour lines in light grey (every fifth line a little brighter), quieter in the middle behind the app window. No neon and no movement; it is drawn once and again on resize. Set by `BAND_BG = 'contours'`.
+- The moving ASCII mesh (`'mesh'`) and the blue waves (`'waves'`) stay in the file as references.
+
+### 23 Oct 2026 · Landing page: black ASCII mesh band
+- `index.html`: the band behind the desktop app demo is now near-black with an ASCII gradient mesh, after the "Mesh" background on asciify.org (our own code): soft pools of light drift slowly and are drawn as ` .·:-=+*#` characters in white, with the brightest spots in brand neon. One pool follows the cursor. Cells behind the app window are skipped, and reduced motion holds one still frame. The band has a little more room above and below the app window so more of the mesh shows.
+- The earlier blue gradient with drifting white lines is kept in the file as a reference and not used. Switch back by setting `BAND_BG = 'waves'` in the script.
+
+### 23 Oct 2026 · Landing page: ASCII caustics hero background
+- `index.html`: the hero background is now an ASCII caustics field, after the "Caustics" background on asciify.org (our own code, not their engine): thin lines of light that fold, part and meet, drawn as ` .:-=+*#` characters on a fixed grid. It stays quiet behind the headline and fades out under the navbar, brightens round the cursor like a lantern, and a Titan surge sends a thin neon ring through it. Reduced motion holds one still frame.
+- The hero is at least 60% of the window tall (`min-height: 60svh`; content centred, hero eyes in a box up to 380 px and zoomed in so they read larger) so the app demo shows on the first screen, and the caustic lines are thicker (about six characters) with a softer falloff on a slightly finer grid.
+- The earlier glyph field with the hidden TITAN117 wordmark is kept in the file as a reference and not used. Switch back by setting `HERO_BG = 'glyphs'` in the script.
+- Checked asciify-engine (MIT) on npm: the version old enough to use (4.10.0) does not include the background kit, so the effect was rebuilt instead of bundled.
+
+### 23 Oct 2026 · Landing page: neon eyes and energy surges
+- `index.html`: Titan's angry eyes are neon `#c4f012` (the brand neon), with a soft glow so they read on white (no outline). Agent icons and the Titan entries in the menus use the same neon.
+- The hero and closing avatars surge every 5 to 10 seconds: the eyes narrow into a new `furieux` expression in the bundled engine, flare, crackle with short lightning bolts, throw sparks, shake slightly and send a ring outwards; the ring also runs through the hero's glyph background in neon. Hovering or clicking the hero eyes sets one off. Small avatars (navbar, footer, app window) stay calm. Reduced motion turns the surges off.
+
+### 23 Oct 2026 · Landing page: navbar menus, industries, brochure link
+- `index.html`: the navbar uses Rethink Sans (the font on context.dev, Google Fonts, OFL) at a lighter weight, through a new `ui` value of the Text component's `font` prop. The links now sit on the right next to Sign in and Download.
+- Agents and Industries are dropdown menus modelled on context.dev: a highlight card, a two-column grid of icon, name and description, and a footer strip. Agents link to their sections on the page; industries open the matching tab in a new Industries section.
+- New Industries section with eight industries (retail and e-commerce, restaurants and cafés, accounting and bookkeeping, law firms, real estate agencies, agencies and studios, trades and construction, wholesale and manufacturing). Each has a short pitch, an example three-step workflow and four things Titan takes off their plate, tagged with the agent that does it. Tabs are deep-linkable as `#ind-<id>`.
+- New Brochure link with a download icon. For now it shows a "coming soon" message; the PDF comes later (wire it up through the `data-brochure` attribute).
+- The bar switches to the burger menu below 1040 px instead of 900 px, since it holds more links.
+
 ### 22 Oct 2026 · Landing page: Syncopate wordmark
 - `index.html`: the TITAN117 wordmark (navbar, footer, app window title) is set in Syncopate Bold (Google Fonts, OFL) with slightly wide spacing, picked from 13 options. It is a `brand` value of the Text component's `font` prop (`data-font="brand"`), used for the wordmark only. The hidden TITAN117 in the hero glyph field uses the same face.
 
