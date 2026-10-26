@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents · TITAN117</title>
+<meta name="description" content="Ten specialist agents with one shared memory, running on your laptop and asking before they act.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Syncopate:wght@700&family=Rethink+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="site" data-page="agents">
+<div class="guides" aria-hidden="true"></div>
+<div class="navwrap">
+  <nav class="nav" aria-label="Primary">
+    <a class="brand" href="index.html" aria-label="TITAN117 home">
+      <span class="brand__chip"><svg class="bot" data-bot="nav" aria-hidden="true"></svg></span>
+      <span class="brand__word" data-text="body" data-size="sm" data-weight="700" data-font="brand">TITAN117</span>
+    </a>
+    <div class="nav__links" data-text="body" data-size="sm" data-weight="400" data-font="ui">
+      <a href="index.html#product">Product</a>
+      <button class="nav__trigger is-current" type="button" aria-expanded="false" aria-controls="menu-agents" data-menu="agents">Agents<svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 3.75 5 6.25l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="nav__trigger" type="button" aria-expanded="false" aria-controls="menu-industries" data-menu="industries">Industries<svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 3.75 5 6.25l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="#brochure" data-brochure><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 2v7M4 6.5 7 9.5l3-3M2.5 11.5h9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Brochure</a>
+    </div>
+    <span class="nav__sep" aria-hidden="true"></span>
+    <a class="nav__signin" href="pricing.html" data-text="body" data-size="sm" data-weight="400" data-font="ui">Sign in</a>
+    <a class="btn btn--black" href="pricing.html" data-text="body" data-size="sm" data-weight="500" data-font="ui">Download</a>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navmenu"><i></i><i></i></button>
+    <div class="menu" id="menu-agents" role="region" aria-label="Agents" hidden></div>
+    <div class="menu" id="menu-industries" role="region" aria-label="Industries" hidden></div>
+    <div class="navmenu" id="navmenu" data-text="body" data-size="md" data-weight="400" data-font="ui">
+      <a href="index.html#product">Product</a>
+      <a href="agents.html">Agents</a>
+      <a href="index.html#industries">Industries</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="#brochure" data-brochure>Brochure</a>
+      <a href="pricing.html">Sign in</a>
+      <a class="btn btn--black" href="pricing.html">Download</a>
+    </div>
+    <span class="nav__progress" aria-hidden="true"></span>
+  </nav>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<main>
+<header class="sec sec--flush phero" id="top">
+  <canvas class="bg" data-bg="contours" data-ink="20,20,20" data-alpha="0.055,0.11" data-fade="left" data-navfade="1" data-seed="2.2" aria-hidden="true"></canvas>
+  <div class="wrap"><div class="phero__in">
+    <span class="k">Agents</span>
+    <h1 data-text="display" data-size="4xl" data-leading="tight" data-wrap="balance" data-decode>Ten specialists. One memory. All of them ask first.</h1>
+    <p data-text="body" data-size="lg" data-tone="muted" data-wrap="pretty" data-measure="medium">Titan plans the work and hands parts of it to specialist agents. They share what they learn, run on your laptop, and wait for your approval before they act. Every demo below is live: click around.</p>
+    <nav class="jump" aria-label="Agents on this page"><a href="#titan"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#c4f012" stroke="#c4f012" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>Titan</a><a href="#models"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#6b6b6b" stroke="#6b6b6b" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>Model router</a><a href="#folder"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#e0a100" stroke="#e0a100" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>Folder agent</a><a href="#code"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#2f6fed" stroke="#2f6fed" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>Code builder</a><a href="#builder"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#8b5cf6" stroke="#8b5cf6" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>App builder</a><a href="#apps"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#38c6ec" stroke="#38c6ec" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>Sidebar apps</a><a href="#qa"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#e24b4a" stroke="#e24b4a" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>QA and SEO</a><a href="#auto"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#14a37f" stroke="#14a37f" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>Automation</a><a href="#marketing"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#ec4899" stroke="#ec4899" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>Marketing</a><a href="#remote"><svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#141414" stroke="#141414" stroke-width="1.1" stroke-linejoin="round"><path d="M-10.6 -3.6 L-2 0.3 L-2 3 L-10.6 3Z" transform="rotate(8 -6.3 0)"/><path d="M10.6 -3.6 L2 0.3 L2 3 L10.6 3Z" transform="rotate(-8 6.3 0)"/></g></svg>Remote and channels</a></nav>
+  </div></div>
+</header>
+<section class="sec arow" id="titan" aria-labelledby="titan-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">01 / 10</span>
+      <span class="k">Titan · permission layer</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="titan-h">Titan plans the work. Nothing touches your files until you say yes.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">Every file, shell command, website and email goes through one approval layer. Set rules for what is always fine, and give each task a credit budget it can&#x27;t go past.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Approve or deny each action, or set a rule once</li><li>Budgets cap what a task can spend</li><li>Web pages are read as data, never as instructions</li></ul>
+    </div>
+    <div class="stage" data-demo="approvals"></div>
+  </article></div>
+</section>
+<section class="sec arow arow--flip" id="models" aria-labelledby="models-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">02 / 10</span>
+      <span class="k">Model router</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="models-h">Pick the model for each agent. See the cost before it runs.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">Run local models for free and offline, or the strongest models through OpenRouter. Use our credits or your own API key, and switch per agent or per step.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>llama.cpp built in, nothing else to install</li><li>OpenRouter, Anthropic, OpenAI and Google keys</li><li>Every task shows its estimate first</li></ul>
+    </div>
+    <div class="stage" data-demo="models"></div>
+  </article></div>
+</section>
+<section class="sec arow" id="folder" aria-labelledby="folder-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">03 / 10</span>
+      <span class="k">Folder agent</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="folder-h">Ask your documents. Get the answer and the page it came from.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">Point Titan at a folder. It reads PDFs, Word files, spreadsheets and scans, then answers with the file and page number, so you can check every claim in one click.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>OCR for scanned paperwork</li><li>Spreadsheet maths done in code, not guessed</li><li>Mark a folder local-only and it never reaches a cloud model</li></ul>
+    </div>
+    <div class="stage" data-demo="folder"></div>
+  </article></div>
+</section>
+<section class="sec arow arow--flip" id="code" aria-labelledby="code-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">04 / 10</span>
+      <span class="k">Code builder</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="code-h">Fixes the bug, runs the tests, opens the pull request.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">The coding engine plans, edits, runs your test suite and shows you the diff before anything is committed. Review it like a teammate&#x27;s work.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Plan and act modes</li><li>Diffs, tests and git in one place</li><li>Sub-agents for review</li></ul>
+    </div>
+    <div class="stage" data-demo="code"></div>
+  </article></div>
+</section>
+<section class="sec arow" id="builder" aria-labelledby="builder-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">05 / 10</span>
+      <span class="k">App builder</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="builder-h">Describe the app. Watch it build, test and publish.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">Web, mobile or desktop, one target per project. Preview it on your laptop, test it in a real browser or the Android emulator, then publish or add it to your sidebar.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Expo for phones, Tauri for desktop apps</li><li>Browser tests before every publish</li><li>Versions you can roll back</li></ul>
+    </div>
+    <div class="stage" data-demo="builder"></div>
+  </article></div>
+</section>
+<section class="sec arow arow--flip" id="apps" aria-labelledby="apps-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">06 / 10</span>
+      <span class="k">Sidebar apps</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="apps-h">Your CRM and your stock list, and Titan answers across both.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">Apps you build live in the sidebar and share one local database, so a question about customers can draw on inventory, invoices and anything else you keep there.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>One local database for every app</li><li>Ask across apps in plain language</li><li>Build new apps with the app builder</li></ul>
+    </div>
+    <div class="stage" data-demo="apps"></div>
+  </article></div>
+</section>
+<section class="sec arow" id="qa" aria-labelledby="qa-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">07 / 10</span>
+      <span class="k">QA and SEO agents</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="qa-h">Tests your site like a customer, then fixes what it finds.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">The QA agent clicks through every flow and writes the tests. The SEO agent audits pages, keywords and AI visibility, then proposes the fixes as a change you approve.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Real-browser tests on every screen size</li><li>SEO, accessibility and speed audits</li><li>Fixes arrive as one reviewable change</li></ul>
+    </div>
+    <div class="stage" data-demo="qa"></div>
+  </article></div>
+</section>
+<section class="sec arow arow--flip" id="auto" aria-labelledby="auto-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">08 / 10</span>
+      <span class="k">Automation</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="auto-h">Runs on a schedule and watches the web while you work.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">Schedule reports, record a task once and replay it, or have a watcher tell you when a law, a price or a competitor&#x27;s page changes. Missed runs catch up the next time you open the app.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Schedules that catch up after sleep</li><li>Record once, replay on a schedule</li><li>Watchers for laws, prices and pages</li></ul>
+    </div>
+    <div class="stage" data-demo="auto"></div>
+  </article></div>
+</section>
+<section class="sec arow" id="marketing" aria-labelledby="marketing-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">09 / 10</span>
+      <span class="k">Marketing and video</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="marketing-h">Turn your website into a promo video and a month of posts.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">Titan reads your site and brand kit, cuts a short video with open-source tools, and plans posts for LinkedIn, Facebook, Instagram, TikTok and X on one calendar.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Videos rendered on your laptop</li><li>Posts in your brand voice</li><li>One calendar for every channel</li></ul>
+    </div>
+    <div class="stage" data-demo="marketing"></div>
+  </article></div>
+</section>
+<section class="sec arow arow--flip" id="remote" aria-labelledby="remote-h">
+  <div class="wrap"><article class="feat">
+    <div class="feat__copy" data-reveal>
+      <span class="arow__n">10 / 10</span>
+      <span class="k">Remote and channels</span>
+      <h2 data-text="heading" data-size="2xl" data-leading="snug" data-wrap="balance" id="remote-h">Start a task from your phone. Approve it from chat.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty" data-measure="narrow">The web app and Telegram talk to the engine on your laptop with end-to-end encryption. Your laptop does the work; your phone just says yes.</p>
+      <ul class="feat__list" data-text="body" data-size="sm" data-tone="muted"><li>Telegram and the web app</li><li>End-to-end encrypted commands</li><li>Approvals wherever you are</li></ul>
+    </div>
+    <div class="stage" data-demo="remote"></div>
+  </article></div>
+</section>
+
+<section class="sec pad" id="custom" aria-labelledby="custom-h">
+  <div class="wrap">
+    <div class="sh" data-reveal><div class="sh__l"><span class="k"><b>11</b>Your own agents</span><h2 data-text="heading" data-wrap="balance" id="custom-h">Build the agent your company is missing.</h2></div><div class="sh__r"><p data-text="body" data-tone="muted" data-wrap="pretty">Every agent you add gets the same approval layer, budgets and shared memory as the built-in ones.</p></div></div>
+    <div class="cols"><div class="col" data-reveal style="--d:0.00s"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="3.5" width="15" height="17" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><h3 data-text="body" data-size="lg" data-weight="600" data-leading="snug" data-wrap="balance">Build one in a form</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">Name it, write its instructions, and pick its tools, model and folders. No code needed.</p></div><div class="col" data-reveal style="--d:0.08s"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></span><h3 data-text="body" data-size="lg" data-weight="600" data-leading="snug" data-wrap="balance">Install from the marketplace</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">Community agents and app templates from GitHub, each showing its permissions before it runs.</p></div><div class="col" data-reveal style="--d:0.16s"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M15.5 6.2a3 3 0 0 1 0 5.6M17 14.2a5.5 5.5 0 0 1 3.5 4.8"/></svg></span><h3 data-text="body" data-size="lg" data-weight="600" data-leading="snug" data-wrap="balance">Share with your team</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">On the Custom plan, share agents and apps with roles and an audit log of every approval.</p></div></div>
+  </div>
+</section>
+</main>
+<section class="sec dark cta2" aria-labelledby="cta-h">
+  <canvas class="bg" data-bg="flow" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <svg class="bot" data-bot="cta" aria-hidden="true"></svg>
+    <h2 data-text="display" data-size="4xl" data-leading="tight" data-wrap="balance" id="cta-h">Put Titan to work.</h2>
+    <p data-text="body" data-size="lg" data-tone="muted" data-wrap="pretty" data-measure="narrow">Download, sign in, and give it its first task. Nothing else to install.</p>
+    <div class="hero__cta">
+      <a class="btn btn--neon btn--lg" data-text="body" data-size="md" data-weight="600" href="pricing.html">Download for Windows</a>
+      <a class="btn btn--line btn--lg" data-text="body" data-size="md" data-weight="600" href="pricing.html">Download for macOS</a>
+    </div>
+  </div>
+</section>
+<footer class="sec dark foot2">
+  <div class="wrap">
+    <div class="foot2__grid">
+      <div>
+        <a class="foot2__brand" href="index.html" aria-label="TITAN117 home"><svg class="bot" data-bot="foot" data-ink="#ffffff" aria-hidden="true"></svg><span data-text="body" data-size="sm" data-weight="700" data-font="brand">TITAN117</span></a>
+        <p data-text="body" data-size="sm" data-tone="muted" style="max-width:34ch;margin-top:14px">An AI team for small companies that runs on your own laptop. Made by Ecotechcore.</p>
+        <p class="status" data-text="body" data-size="xs" data-font="mono" data-tone="muted" style="margin-top:18px"><i></i>Windows and macOS</p>
+      </div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">Product</b><a href="index.html#product">Desktop app</a><a href="agents.html">Agents</a><a href="security.html">Security</a><a href="pricing.html">Pricing</a><a href="#brochure" data-brochure>Brochure</a></div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">Agents</b><a href="agents.html#titan">Titan</a><a href="agents.html#folder">Folder agent</a><a href="agents.html#code">Code builder</a><a href="agents.html#builder">App builder</a><a href="agents.html#qa">QA and SEO</a><a href="agents.html#auto">Automation</a></div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">Industries</b><a href="industries/retail.html">Retail and e-commerce</a><a href="industries/hospitality.html">Restaurants and cafés</a><a href="industries/accounting.html">Accounting and bookkeeping</a><a href="industries/legal.html">Law firms</a></div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">&nbsp;</b><a href="industries/realestate.html">Real estate agencies</a><a href="industries/agencies.html">Agencies and studios</a><a href="industries/trades.html">Trades and construction</a><a href="industries/wholesale.html">Wholesale and manufacturing</a></div>
+    </div>
+    <canvas class="foot2__word" data-bg="word" aria-hidden="true"></canvas>
+    <div class="foot2__base"><span>© 2026 Ecotechcore. All rights reserved.</span><span>Prices before VAT · EUR and USD</span></div>
+  </div>
+</footer>
+</div>
+<script>window.SITE={root:""};</script>
+<script src="assets/data.js"></script>
+<script src="assets/bot.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

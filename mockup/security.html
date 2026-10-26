@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security · TITAN117</title>
+<meta name="description" content="Titan runs on your laptop: your data stays there, our cloud keeps your account, and every action waits for your approval.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Syncopate:wght@700&family=Rethink+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="site" data-page="security">
+<div class="guides" aria-hidden="true"></div>
+<div class="navwrap">
+  <nav class="nav nav--ondark" aria-label="Primary">
+    <a class="brand" href="index.html" aria-label="TITAN117 home">
+      <span class="brand__chip"><svg class="bot" data-bot="nav" aria-hidden="true"></svg></span>
+      <span class="brand__word" data-text="body" data-size="sm" data-weight="700" data-font="brand">TITAN117</span>
+    </a>
+    <div class="nav__links" data-text="body" data-size="sm" data-weight="400" data-font="ui">
+      <a href="index.html#product">Product</a>
+      <button class="nav__trigger" type="button" aria-expanded="false" aria-controls="menu-agents" data-menu="agents">Agents<svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 3.75 5 6.25l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="nav__trigger" type="button" aria-expanded="false" aria-controls="menu-industries" data-menu="industries">Industries<svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 3.75 5 6.25l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <a href="security.html" class="is-current" aria-current="page">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="#brochure" data-brochure><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 2v7M4 6.5 7 9.5l3-3M2.5 11.5h9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Brochure</a>
+    </div>
+    <span class="nav__sep" aria-hidden="true"></span>
+    <a class="nav__signin" href="pricing.html" data-text="body" data-size="sm" data-weight="400" data-font="ui">Sign in</a>
+    <a class="btn btn--black" href="pricing.html" data-text="body" data-size="sm" data-weight="500" data-font="ui">Download</a>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navmenu"><i></i><i></i></button>
+    <div class="menu" id="menu-agents" role="region" aria-label="Agents" hidden></div>
+    <div class="menu" id="menu-industries" role="region" aria-label="Industries" hidden></div>
+    <div class="navmenu" id="navmenu" data-text="body" data-size="md" data-weight="400" data-font="ui">
+      <a href="index.html#product">Product</a>
+      <a href="agents.html">Agents</a>
+      <a href="index.html#industries">Industries</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="#brochure" data-brochure>Brochure</a>
+      <a href="pricing.html">Sign in</a>
+      <a class="btn btn--black" href="pricing.html">Download</a>
+    </div>
+    <span class="nav__progress" aria-hidden="true"></span>
+  </nav>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<main>
+<header class="sec sec--flush dark dhero" id="top">
+  <canvas class="bg" data-bg="contours" data-fade="left" data-navfade="1" data-seed="1.3" aria-hidden="true"></canvas>
+  <div class="wrap"><div class="dhero__in">
+    <div class="dhero__copy">
+      <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">TITAN117</a><i></i><b>Security</b></nav>
+      <h1 data-text="display" data-size="4xl" data-leading="tight" data-wrap="balance" data-decode>Your company data stays on your laptop.</h1>
+      <p data-text="body" data-size="lg" data-tone="muted" data-wrap="pretty" data-measure="medium">Titan runs where your files are. Our cloud keeps your account, and nothing happens on your machine until you approve it. Switch the network off on the right and watch it keep working.</p>
+      <div class="hero__cta">
+        <a class="btn btn--neon btn--lg" data-text="body" data-size="md" data-weight="600" href="pricing.html">Download for Windows</a>
+        <a class="btn btn--line btn--lg" data-text="body" data-size="md" data-weight="600" href="#faq">Security FAQ</a>
+      </div>
+    </div>
+    <div class="dhero__side"><div class="arch" id="arch"></div></div>
+  </div></div>
+</header>
+
+<section class="sec pad" aria-labelledby="map-h">
+  <div class="wrap">
+    <div class="sh" data-reveal><div class="sh__l"><span class="k"><b>01</b>Where data lives</span><h2 data-text="heading" data-wrap="balance" id="map-h">Know exactly what goes where.</h2></div><div class="sh__r"><p data-text="body" data-tone="muted" data-wrap="pretty">Three places your data can be, and what each one holds.</p></div></div>
+    <div class="dmap" data-reveal><div class="dmap__c"><div class="dmap__h"><span class="dmap__dot" style="background:#141414"></span><h3 data-text="body" data-size="md" data-weight="600">Stays on your laptop</h3></div><ul><li>Agents and their memory</li><li>Documents and the search index</li><li>App data in the local database</li><li>Local models</li><li>File, shell and browser work</li><li>Checkpoints and schedules</li><li>Your API keys, in the OS keychain</li></ul></div><div class="dmap__c"><div class="dmap__h"><span class="dmap__dot" style="background:#adadad"></span><h3 data-text="body" data-size="md" data-weight="600">Reaches our cloud</h3></div><ul><li>Your account and plan</li><li>Credits and usage</li><li>Paired devices</li><li>Remote commands, end-to-end encrypted</li><li>Anything you choose to share</li></ul></div><div class="dmap__c"><div class="dmap__h"><span class="dmap__dot" style="background:#c4f012"></span><h3 data-text="body" data-size="md" data-weight="600">Reaches a model provider, if you choose</h3></div><ul><li>The text of a task you send to a cloud model</li><li>Files that task needs, when you approve it</li><li>Only providers you allow: no training, EU or US hosts</li><li class="no">Folders marked local-only</li></ul></div></div>
+  </div>
+</section>
+
+<section class="sec pad" aria-labelledby="ap-h">
+  <div class="wrap split">
+    <div class="sh__l" data-reveal>
+      <span class="k"><b>02</b>Approval layer</span>
+      <h2 data-text="heading" data-wrap="balance" id="ap-h">Nothing happens until you say yes.</h2>
+      <p data-text="body" data-tone="muted" data-wrap="pretty">Every file, shell command, website and email goes through one approval layer. Set rules for what is always fine, and give each task a credit budget it can't go past. Try it: allow or deny the actions on the right.</p>
+      <div class="light"><ul class="checks" data-text="body" data-size="sm"><li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Approve once, or set a rule for next time</span></li><li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Emails and sign-ins always ask</span></li><li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Web pages are read as data, never as instructions</span></li><li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Budgets cap what any task can spend</span></li></ul></div>
+    </div>
+    <div data-reveal style="--d:.1s"><div class="stage" data-demo="approvals"></div></div>
+  </div>
+</section>
+
+<section class="sec dark pad trust" aria-labelledby="pil-h">
+  <canvas class="bg" data-bg="dotwave" data-base="0.05" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="sh" data-reveal><div class="sh__l"><span class="k"><b>03</b>Built in</span><h2 data-text="heading" data-wrap="balance" id="pil-h">Safeguards in every part of the app.</h2></div><div class="sh__r"><p data-text="body" data-tone="muted" data-wrap="pretty">Not settings to find later: they are on from the first task.</p></div></div>
+    <div class="pillars" data-reveal><div class="pillar"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 5 6v5.5c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6l-7-2.5Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg></span><h3 data-text="body" data-size="md" data-weight="600">Approval layer</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">Files, commands, websites, emails and sign-ins each wait for a yes, or a rule you set once.</p></div><div class="pillar"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7.5Z"/></svg></span><h3 data-text="body" data-size="md" data-weight="600">Local-only folders</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">Mark a folder local-only and only a model on your laptop reads it.</p></div><div class="pillar"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="3.5"/><path d="m10.5 12.5 8-8M15.5 7.5l2 2M13.5 9.5l1.5 1.5"/></svg></span><h3 data-text="body" data-size="md" data-weight="600">Keys in your keychain</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">Your own API keys stay in the operating system&#x27;s keychain and go straight to the provider.</p></div><div class="pillar"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M8.5 16.5a5 5 0 0 1 7 0M5 12.6a10 10 0 0 1 4.2-2.4M19 12.6a10 10 0 0 0-3-2M2 9a14.5 14.5 0 0 1 4-2.6M22 9a14.5 14.5 0 0 0-9.5-3.4"/><circle cx="12" cy="19.5" r=".8"/></svg></span><h3 data-text="body" data-size="md" data-weight="600">Works offline</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">A signed licence keeps local work running for 14 days without a connection.</p></div><div class="pillar"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4h-4"/></svg></span><h3 data-text="body" data-size="md" data-weight="600">Checkpoints</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">Long tasks save their progress and resume after sleep, a crash or a restart.</p></div><div class="pillar"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></span><h3 data-text="body" data-size="md" data-weight="600">Marketplace permissions</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">Every agent or template you install shows its permissions before it runs.</p></div><div class="pillar"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.8"/></svg></span><h3 data-text="body" data-size="md" data-weight="600">Memory you can read</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">See everything Titan remembers, and delete any line for good.</p></div><div class="pillar"><span class="col__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><h3 data-text="body" data-size="md" data-weight="600">Encrypted remote control</h3><p data-text="body" data-size="sm" data-tone="muted" data-wrap="pretty">Commands from your phone are end-to-end encrypted and only accepted from paired devices.</p></div></div>
+  </div>
+</section>
+
+<section class="sec pad" id="faq" aria-labelledby="faq-h"><div class="wrap faq"><div class="faq__l" data-reveal><span class="k"><b>04</b>FAQ</span><h2 data-text="heading" data-wrap="balance" id="faq-h">Questions, answered.</h2></div><div data-reveal><details class="qa"><summary>Where does Titan run?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">On your laptop. The engine, agents, memory, document index and app data all live there. Our cloud keeps your account, plan, credits, devices and remote commands.</p></div></details><details class="qa"><summary>What reaches a model provider?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">Only the parts of a task you send to a cloud model you chose. Local-only folders are never sent. Requests can be limited to providers that don&#x27;t train on your data and host in the EU or US.</p></div></details><details class="qa"><summary>Where are my API keys kept?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">In your operating system&#x27;s keychain, on the device. Requests made with your own keys go straight to the provider.</p></div></details><details class="qa"><summary>What stops an agent doing something I didn&#x27;t want?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">Every file write, shell command, website, email and sign-in goes through one approval layer. You can set rules for what is always fine and give each task a credit budget.</p></div></details><details class="qa"><summary>Can a web page take over an agent?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">Titan treats what it reads on a page as information to use, not as instructions to follow, and anything it wants to do still needs your approval.</p></div></details><details class="qa"><summary>Is remote control secure?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">Commands from your phone or Telegram are end-to-end encrypted, so our servers pass along what they can&#x27;t read, and only paired devices on your account can send them.</p></div></details></div></div></section>
+</main>
+<section class="sec dark cta2" aria-labelledby="cta-h">
+  <canvas class="bg" data-bg="flow" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <svg class="bot" data-bot="cta" aria-hidden="true"></svg>
+    <h2 data-text="display" data-size="4xl" data-leading="tight" data-wrap="balance" id="cta-h">Put Titan to work.</h2>
+    <p data-text="body" data-size="lg" data-tone="muted" data-wrap="pretty" data-measure="narrow">Download, sign in, and give it its first task. Nothing else to install.</p>
+    <div class="hero__cta">
+      <a class="btn btn--neon btn--lg" data-text="body" data-size="md" data-weight="600" href="pricing.html">Download for Windows</a>
+      <a class="btn btn--line btn--lg" data-text="body" data-size="md" data-weight="600" href="pricing.html">Download for macOS</a>
+    </div>
+  </div>
+</section>
+<footer class="sec dark foot2">
+  <div class="wrap">
+    <div class="foot2__grid">
+      <div>
+        <a class="foot2__brand" href="index.html" aria-label="TITAN117 home"><svg class="bot" data-bot="foot" data-ink="#ffffff" aria-hidden="true"></svg><span data-text="body" data-size="sm" data-weight="700" data-font="brand">TITAN117</span></a>
+        <p data-text="body" data-size="sm" data-tone="muted" style="max-width:34ch;margin-top:14px">An AI team for small companies that runs on your own laptop. Made by Ecotechcore.</p>
+        <p class="status" data-text="body" data-size="xs" data-font="mono" data-tone="muted" style="margin-top:18px"><i></i>Windows and macOS</p>
+      </div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">Product</b><a href="index.html#product">Desktop app</a><a href="agents.html">Agents</a><a href="security.html">Security</a><a href="pricing.html">Pricing</a><a href="#brochure" data-brochure>Brochure</a></div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">Agents</b><a href="agents.html#titan">Titan</a><a href="agents.html#folder">Folder agent</a><a href="agents.html#code">Code builder</a><a href="agents.html#builder">App builder</a><a href="agents.html#qa">QA and SEO</a><a href="agents.html#auto">Automation</a></div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">Industries</b><a href="industries/retail.html">Retail and e-commerce</a><a href="industries/hospitality.html">Restaurants and cafés</a><a href="industries/accounting.html">Accounting and bookkeeping</a><a href="industries/legal.html">Law firms</a></div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">&nbsp;</b><a href="industries/realestate.html">Real estate agencies</a><a href="industries/agencies.html">Agencies and studios</a><a href="industries/trades.html">Trades and construction</a><a href="industries/wholesale.html">Wholesale and manufacturing</a></div>
+    </div>
+    <canvas class="foot2__word" data-bg="word" aria-hidden="true"></canvas>
+    <div class="foot2__base"><span>© 2026 Ecotechcore. All rights reserved.</span><span>Prices before VAT · EUR and USD</span></div>
+  </div>
+</footer>
+</div>
+<script>window.SITE={root:""};</script>
+<script src="assets/data.js"></script>
+<script src="assets/bot.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing · TITAN117</title>
+<meta name="description" content="Starter €15, Pro €25, Max €50 and Custom. Every agent on every plan; local models are always free.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Syncopate:wght@700&family=Rethink+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="site" data-page="pricing">
+<div class="guides" aria-hidden="true"></div>
+<div class="navwrap">
+  <nav class="nav" aria-label="Primary">
+    <a class="brand" href="index.html" aria-label="TITAN117 home">
+      <span class="brand__chip"><svg class="bot" data-bot="nav" aria-hidden="true"></svg></span>
+      <span class="brand__word" data-text="body" data-size="sm" data-weight="700" data-font="brand">TITAN117</span>
+    </a>
+    <div class="nav__links" data-text="body" data-size="sm" data-weight="400" data-font="ui">
+      <a href="index.html#product">Product</a>
+      <button class="nav__trigger" type="button" aria-expanded="false" aria-controls="menu-agents" data-menu="agents">Agents<svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 3.75 5 6.25l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="nav__trigger" type="button" aria-expanded="false" aria-controls="menu-industries" data-menu="industries">Industries<svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 3.75 5 6.25l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <a href="security.html">Security</a>
+      <a href="pricing.html" class="is-current" aria-current="page">Pricing</a>
+      <a href="#brochure" data-brochure><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 2v7M4 6.5 7 9.5l3-3M2.5 11.5h9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Brochure</a>
+    </div>
+    <span class="nav__sep" aria-hidden="true"></span>
+    <a class="nav__signin" href="pricing.html" data-text="body" data-size="sm" data-weight="400" data-font="ui">Sign in</a>
+    <a class="btn btn--black" href="pricing.html" data-text="body" data-size="sm" data-weight="500" data-font="ui">Download</a>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navmenu"><i></i><i></i></button>
+    <div class="menu" id="menu-agents" role="region" aria-label="Agents" hidden></div>
+    <div class="menu" id="menu-industries" role="region" aria-label="Industries" hidden></div>
+    <div class="navmenu" id="navmenu" data-text="body" data-size="md" data-weight="400" data-font="ui">
+      <a href="index.html#product">Product</a>
+      <a href="agents.html">Agents</a>
+      <a href="index.html#industries">Industries</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="#brochure" data-brochure>Brochure</a>
+      <a href="pricing.html">Sign in</a>
+      <a class="btn btn--black" href="pricing.html">Download</a>
+    </div>
+    <span class="nav__progress" aria-hidden="true"></span>
+  </nav>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<main>
+<header class="sec sec--flush phero phero--center" id="top">
+  <div class="dotgrid" aria-hidden="true"></div>
+  <div class="wrap"><div class="phero__in">
+    <span class="k">Pricing</span>
+    <h1 data-text="display" data-size="4xl" data-leading="tight" data-wrap="balance" data-decode>Every agent on every plan.</h1>
+    <p data-text="body" data-size="lg" data-tone="muted" data-align="center" data-wrap="pretty" data-measure="medium">Choose a plan for the cloud credits you need. Local models, previews, tests and your own API keys never use credits.</p>
+    <div class="toggle" id="billing2" role="group" aria-label="Billing period"><button type="button" class="is-on" data-b="m" aria-pressed="true">Monthly</button><button type="button" data-b="y" aria-pressed="false">Yearly<em>2 months free</em></button></div>
+  </div></div>
+</header>
+<section class="sec sec--flush" style="padding-bottom:var(--pad)">
+  <div class="wrap">
+    <div class="plans2" id="plans2" style="margin-top:0"></div>
+    <p data-text="body" data-size="xs" data-tone="muted" data-align="center" style="margin-top:18px">Prices are before VAT, added at checkout where it applies. EUR and USD, with the same numbers in both. No free plan and no trial.</p>
+  </div>
+</section>
+<section class="sec pad" aria-labelledby="calc-h">
+  <div class="wrap">
+    <div class="sh" data-reveal><div class="sh__l"><span class="k"><b>01</b>Credits</span><h2 data-text="heading" data-wrap="balance" id="calc-h">Know what a month of work costs.</h2></div><div class="sh__r"><p data-text="body" data-tone="muted" data-wrap="pretty">Credits pay for cloud models at the provider's cost plus 25%. Smart routing, with a strong planner and a cheap coder, makes them go further.</p></div></div>
+    <div class="calc2" id="calc2" data-reveal style="margin-top:48px"></div>
+  </div>
+</section>
+<section class="sec pad" aria-labelledby="cmp-h">
+  <div class="wrap">
+    <div class="sh" data-reveal><div class="sh__l"><span class="k"><b>02</b>Compare plans</span><h2 data-text="heading" data-wrap="balance" id="cmp-h">Everything in each plan</h2></div></div>
+    <div class="cmpwrap" data-reveal><table class="cmp"><thead><tr><th scope="col"><span class="sr" style="position:absolute;left:-9999px">Feature</span></th><th scope="col">Starter</th><th scope="col" class="pro">Pro</th><th scope="col">Max</th><th scope="col">Custom</th></tr></thead><tbody><tr><td>Price a month</td><td>€15</td><td class="pro">€25</td><td>€50</td><td>Talk to us</td></tr><tr><td>Price a year</td><td>€150</td><td class="pro">€250</td><td>€500</td><td>Custom</td></tr><tr><td>Credits a month</td><td>700</td><td class="pro">1,500</td><td>3,500</td><td>Shared pool</td></tr><tr><td>Local models, previews, tests</td><td>Unlimited</td><td class="pro">Unlimited</td><td>Unlimited</td><td>Unlimited</td></tr><tr><td>All agents and the app builder</td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="pro"><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr><tr><td>Your own API keys</td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="pro"><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr><tr><td>Credit top-ups</td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="pro"><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr><tr><td>Remote control and chat channels</td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="pro"><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr><tr><td>Share artifacts, publish apps</td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="pro"><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr><tr><td>Devices</td><td>2</td><td class="pro">3</td><td>5</td><td>Custom</td></tr><tr><td>Teams, roles, audit log, SSO</td><td><span style="color:var(--muted)">—</span></td><td class="pro"><span style="color:var(--muted)">—</span></td><td><span style="color:var(--muted)">—</span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr><tr><td>Agency and white-label</td><td><span style="color:var(--muted)">—</span></td><td class="pro"><span style="color:var(--muted)">—</span></td><td><span style="color:var(--muted)">—</span></td><td><span style="display:inline-flex"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="#d4d4d4"/><path d="M5 8.2 7 10.2 11 6" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr><tr><td>Support</td><td>Email</td><td class="pro">Email</td><td>Priority</td><td>Dedicated</td></tr></tbody></table></div>
+  </div>
+</section>
+<section class="sec pad" aria-labelledby="top-h">
+  <div class="wrap">
+    <div class="sh" data-reveal><div class="sh__l"><span class="k"><b>03</b>Top-ups and rollover</span><h2 data-text="heading" data-wrap="balance" id="top-h">Need more? Top up any time.</h2></div><div class="sh__r"><p data-text="body" data-tone="muted" data-wrap="pretty">Top-ups work on every plan, and bigger packs cost less per credit.</p></div></div>
+    <div class="tops" data-reveal><div class="top"><span data-text="body" data-size="sm" data-tone="muted">1,000 credits</span><div class="price"><b style="font-size:36px">€10</b></div><span data-text="body" data-size="xs" data-tone="muted" data-font="mono">€0.010 a credit</span></div><div class="top"><span data-text="body" data-size="sm" data-tone="muted">2,750 credits</span><div class="price"><b style="font-size:36px">€25</b></div><span data-text="body" data-size="xs" data-tone="muted" data-font="mono">€0.009 a credit</span></div><div class="top"><span data-text="body" data-size="sm" data-tone="muted">6,000 credits</span><div class="price"><b style="font-size:36px">€50</b></div><span data-text="body" data-size="xs" data-tone="muted" data-font="mono">€0.0083 a credit</span></div></div>
+    <div class="rules" data-reveal><div class="rule"><span class="n">01</span><div><h3 data-text="body" data-size="md" data-weight="600">Monthly credits roll over for one month</h3><p data-text="body" data-size="sm" data-tone="muted" style="margin-top:4px">Capped at one month&#x27;s allowance.</p></div></div><div class="rule"><span class="n">02</span><div><h3 data-text="body" data-size="md" data-weight="600">Top-up credits last 12 months</h3><p data-text="body" data-size="sm" data-tone="muted" style="margin-top:4px">Usable while a paid plan is active.</p></div></div><div class="rule"><span class="n">03</span><div><h3 data-text="body" data-size="md" data-weight="600">Order of use</h3><p data-text="body" data-size="sm" data-tone="muted" style="margin-top:4px">This month&#x27;s credits, then rolled-over credits, then top-ups, oldest first.</p></div></div><div class="rule"><span class="n">04</span><div><h3 data-text="body" data-size="md" data-weight="600">Upgrading and downgrading</h3><p data-text="body" data-size="sm" data-tone="muted" style="margin-top:4px">An upgrade starts at once, prorated. A downgrade takes effect at the next period.</p></div></div><div class="rule"><span class="n">05</span><div><h3 data-text="body" data-size="md" data-weight="600">Cancelling</h3><p data-text="body" data-size="sm" data-tone="muted" style="margin-top:4px">The plan runs to the end of the paid period. Then the app locks; your files stay on disk and data export stays available.</p></div></div><div class="rule"><span class="n">06</span><div><h3 data-text="body" data-size="md" data-weight="600">Refunds</h3><p data-text="body" data-size="sm" data-tone="muted" style="margin-top:4px">Unused top-ups within 14 days, under the EU right of withdrawal.</p></div></div></div>
+  </div>
+</section>
+<section class="sec pad" id="faq" aria-labelledby="faq-h"><div class="wrap faq"><div class="faq__l" data-reveal><span class="k"><b>04</b>FAQ</span><h2 data-text="heading" data-wrap="balance" id="faq-h">Questions, answered.</h2></div><div data-reveal><details class="qa"><summary>What is a credit?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">1 credit is €0.01 of cloud usage at our price: the provider&#x27;s cost plus 25%, rounded up. Every task shows its estimate first and can be capped.</p></div></details><details class="qa"><summary>What never uses credits?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">Local models, previews, tests, documents, and anything you run with your own API key.</p></div></details><details class="qa"><summary>Do unused credits roll over?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">Monthly credits roll over for one month, up to one month&#x27;s allowance. Top-up credits last 12 months while a paid plan is active.</p></div></details><details class="qa"><summary>What happens if I cancel?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">Your plan runs to the end of the paid period. Then the app locks, monthly credits expire, and top-ups wait up to 12 months for a new subscription. Your files stay on your disk.</p></div></details><details class="qa"><summary>Are prices shown with VAT?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">Prices are before VAT, which is added at checkout where it applies. We charge in EUR and USD, with the same numbers in both.</p></div></details><details class="qa"><summary>Is there a free plan or a trial?<span class="pm" aria-hidden="true"></span></summary><div class="qa__a"><p data-text="body" data-tone="muted" data-measure="normal">No. TITAN117 works with an active subscription, starting with Starter at €15 a month.</p></div></details></div></div></section>
+</main>
+<section class="sec dark cta2" aria-labelledby="cta-h">
+  <canvas class="bg" data-bg="flow" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <svg class="bot" data-bot="cta" aria-hidden="true"></svg>
+    <h2 data-text="display" data-size="4xl" data-leading="tight" data-wrap="balance" id="cta-h">Put Titan to work.</h2>
+    <p data-text="body" data-size="lg" data-tone="muted" data-wrap="pretty" data-measure="narrow">Download, sign in, and give it its first task. Nothing else to install.</p>
+    <div class="hero__cta">
+      <a class="btn btn--neon btn--lg" data-text="body" data-size="md" data-weight="600" href="pricing.html">Download for Windows</a>
+      <a class="btn btn--line btn--lg" data-text="body" data-size="md" data-weight="600" href="pricing.html">Download for macOS</a>
+    </div>
+  </div>
+</section>
+<footer class="sec dark foot2">
+  <div class="wrap">
+    <div class="foot2__grid">
+      <div>
+        <a class="foot2__brand" href="index.html" aria-label="TITAN117 home"><svg class="bot" data-bot="foot" data-ink="#ffffff" aria-hidden="true"></svg><span data-text="body" data-size="sm" data-weight="700" data-font="brand">TITAN117</span></a>
+        <p data-text="body" data-size="sm" data-tone="muted" style="max-width:34ch;margin-top:14px">An AI team for small companies that runs on your own laptop. Made by Ecotechcore.</p>
+        <p class="status" data-text="body" data-size="xs" data-font="mono" data-tone="muted" style="margin-top:18px"><i></i>Windows and macOS</p>
+      </div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">Product</b><a href="index.html#product">Desktop app</a><a href="agents.html">Agents</a><a href="security.html">Security</a><a href="pricing.html">Pricing</a><a href="#brochure" data-brochure>Brochure</a></div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">Agents</b><a href="agents.html#titan">Titan</a><a href="agents.html#folder">Folder agent</a><a href="agents.html#code">Code builder</a><a href="agents.html#builder">App builder</a><a href="agents.html#qa">QA and SEO</a><a href="agents.html#auto">Automation</a></div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">Industries</b><a href="industries/retail.html">Retail and e-commerce</a><a href="industries/hospitality.html">Restaurants and cafés</a><a href="industries/accounting.html">Accounting and bookkeeping</a><a href="industries/legal.html">Law firms</a></div>
+      <div data-text="body" data-size="sm"><b data-text="body" data-size="sm" data-weight="600">&nbsp;</b><a href="industries/realestate.html">Real estate agencies</a><a href="industries/agencies.html">Agencies and studios</a><a href="industries/trades.html">Trades and construction</a><a href="industries/wholesale.html">Wholesale and manufacturing</a></div>
+    </div>
+    <canvas class="foot2__word" data-bg="word" aria-hidden="true"></canvas>
+    <div class="foot2__base"><span>© 2026 Ecotechcore. All rights reserved.</span><span>Prices before VAT · EUR and USD</span></div>
+  </div>
+</footer>
+</div>
+<script>window.SITE={root:""};</script>
+<script src="assets/data.js"></script>
+<script src="assets/bot.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

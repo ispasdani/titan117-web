@@ -32,6 +32,13 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 26 Oct 2026 · Mockups: multi-page website and the desktop app
+- New `mockup/` folder (open `mockup/index.html` or `mockup/desktop.html`); `mockup/README.md` explains the layout. The root `index.html` is left as it was; it is the older single-page version.
+- Website (`mockup/index.html` and pages): a redesigned home plus `agents.html`, `pricing.html`, `security.html` and eight industry pages in `mockup/industries/`, after Harvey's industry pages. Each industry page has a dark hero with ASCII caustics and an animated workflow card, three highlights, four use cases that play as demos (request, steps, approval, result), a curved-line workflow, a local-first band, the agents involved, FAQ and links to the other industries. The visual system adds hairline rails with "+" section marks, a particle-flow call to action, a dot-wave trust band and an ASCII wordmark in the footer.
+- Copy and demo data live in one file, `mockup/src/content.py`; `mockup/src/build.py` generates every page. Prices, credits, top-ups, rollover, the 14-day offline licence and the EU/US provider rule come from `notes/pricing.md` and the decisions; no invented customers, quotes, stats or certifications.
+- Desktop app (`mockup/desktop.html`): a clickable mockup of the app window in light and dark themes (title bar switch, Settings > Appearance with Light, Dark and Match system, or Ctrl+Shift+L). Views: Home (composer, approvals waiting, running agents, recent tasks), chats that run a task live with approvals and the artifact panel, Agents with permissions and editable memory, sidebar apps (CRM, Inventory, Invoices) with a cross-app question, Automations, Documents with cited answers, Marketplace and Settings. Also an approvals drawer and a Ctrl+K command palette.
+- Open: the brochure PDF; desktop mockup data is fictional (Fjord & Co.).
+
 ### 23 Oct 2026 · Landing page: still logo, neon nav accents
 - `index.html`: the logo eyes (navbar, footer and the app window's title bar) are the angry blades in black and hold completely still: no cursor following, no drift. Hovering or focusing the logo fades them to neon; leaving turns them black again. This uses a `still` option on the avatar. A symmetric `calme` expression (two upright pills) was added to the bundled engine and is available but not used.
 - The navbar's active-section dot and the scroll progress line are brand neon `#c4f012` instead of blue.
