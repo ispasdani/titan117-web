@@ -232,7 +232,7 @@ def home():
         acc_list += acc_item(i, aid, a['label'], inner, 'pane-' + aid)
         panes += f'<div class="acc__pane" id="pane-{aid}">{stage_for(a)}</div>'
     body = f'''<header class="hero sec sec--flush" id="top">
-  <canvas class="glyphs" data-bg="caustics" data-quiet=".hero__copy" aria-hidden="true"></canvas>
+  <canvas class="glyphs" data-bg="caustics" aria-hidden="true"></canvas>
   <div class="wrap hero__inner">
     <div class="hero__copy">
       <h1 id="headline" data-text="display" data-leading="tight" data-wrap="balance" data-decode>Intelligence Designed to Evolve</h1>

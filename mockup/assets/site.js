@@ -265,20 +265,30 @@ function onResize(fn, host){
 }
 
 /* ASCII caustics: thin lines of light, like sunlight through moving water, drawn as characters
-   on a fixed grid (after Asciify's "Caustics" background; our own code). Lines are where two
-   slowly warping wave fields cross zero. Quiet behind the copy, a lantern round the cursor, and
-   a surge from Titan sends a neon ring through it. */
+   on a fixed grid. The wave model is ported from asciify-engine's "caustics" scene (MIT,
+   ayangabryl): two warped sine layers drift against each other and each draws a filament along
+   its zero line. The filament's width is measured in cells (the shader's fwidth, here the change
+   from one cell to the next), so every line stays one character wide and never breaks up.
+   Quiet behind the copy, and a surge from Titan sends a neon ring through it.
+   Hover is asciify's lantern: a soft light glides after the cursor and leaves a short fading
+   tail. It lifts the characters it passes (with a little per-cell grain, so the pool reads as
+   scattered letters, not a blot), tints the lit ones toward lime, and a few letters at its rim
+   step up the ramp and back, as if being retyped. */
 function caustics(o){
   var cv = o.canvas, host = o.host; if(!cv || !host) return;
   var ctx = cv.getContext('2d'), dark = !!o.dark;
-  var RAMP = ' .:-=+*#';
-  var W, H, dpr, cw, ch, cols, rows, quiet, font, ptr = null, lantern = 0, ring = null, t0 = performance.now(), vis = true;
+  var RAMP = ' .:-=+*#', N = RAMP.length;
+  var W, H, dpr, cw, ch, cols, rows, gw, quiet, va, vb, font, ptr = null, ring = null, t0 = performance.now(), vis = true;
+  var grain, buckets = [], TINTS = 4, lamp = {x:0, y:0, on:false, s:0, trail:[]}, lastNow = 0;
+  var INK = dark ? [255,255,255] : [20,20,20], LIME = dark ? [196,240,18] : [128,176,0];
   function size(){
     var f = fit(cv, host); W = f.W; H = f.H; dpr = f.dpr;
-    ch = W < 600 ? 11 : 12; cw = ch * 0.6;
-    cols = Math.ceil(W/cw); rows = Math.ceil(H/ch);
-    font = '500 '+(ch*0.86)+'px "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace';
-    quiet = new Float32Array(cols*rows).fill(1);
+    ch = W < 600 ? 10 : 11; cw = Math.round(ch*0.62*dpr)/dpr;
+    cols = Math.ceil(W/cw); rows = Math.ceil(H/ch); gw = cols + 2;
+    font = '400 '+(ch*0.86)+'px "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace';
+    va = new Float32Array(gw*(rows + 2)); vb = new Float32Array(gw*(rows + 2));
+    quiet = new Float32Array(cols*rows).fill(1); grain = new Float32Array(cols*rows);
+    for(var gi=0; gi<cols*rows; gi++){ var h = Math.sin((gi % cols)*12.9898 + Math.floor(gi/cols)*78.233)*43758.5453; grain[gi] = h - Math.floor(h); }
     var navFade = o.navFade !== false;
     for(var yy=0;yy<rows;yy++){ var top = navFade ? Math.max(0, Math.min(1, (yy*ch + ch/2 - 72)/90)) : 1; for(var xx=0;xx<cols;xx++) quiet[yy*cols+xx] = top; }
     (o.quiet || []).forEach(function(copy){
@@ -291,7 +301,7 @@ function caustics(o){
       }
     });
   }
-  host.addEventListener('pointermove', function(e){ var r = host.getBoundingClientRect(); ptr = {x:e.clientX-r.left, y:e.clientY-r.top}; });
+  host.addEventListener('pointermove', function(e){ var r = host.getBoundingClientRect(); ptr = {x:e.clientX-r.left, y:e.clientY-r.top}; if(!lamp.on){ lamp.x = ptr.x; lamp.y = ptr.y; lamp.on = true; } });
   host.addEventListener('pointerleave', function(){ ptr = null; });
   document.addEventListener('titan:surge', function(e){
     if(!host.contains(e.target)) return;
@@ -299,45 +309,97 @@ function caustics(o){
     ring = {x: r.left + r.width/2 - h.left, y: r.top + r.height/2 - h.top, t0: performance.now()};
   });
   visible(host, function(on){ vis = on; });
-  function field(x, y, t, k, a, b, s){
-    var u = x*k + Math.sin(y*k*a + t*0.7 + s)*1.4 + t*0.35;
-    var v = y*k*b + Math.sin(x*k*0.8 - t*0.55 + s*2)*1.2 - t*0.28;
-    var f = Math.sin(u) + Math.sin(v);
-    var du_dx = k, du_dy = Math.cos(y*k*a + t*0.7 + s)*1.4*k*a;
-    var dv_dx = Math.cos(x*k*0.8 - t*0.55 + s*2)*1.2*k*0.8, dv_dy = k*b;
-    var gx = Math.cos(u)*du_dx + Math.cos(v)*dv_dx, gy = Math.cos(u)*du_dy + Math.cos(v)*dv_dy;
-    return Math.abs(f) / (Math.sqrt(gx*gx + gy*gy) + 1e-4);
+  /* one wave layer at p (in units of the stage height); its zero line is the filament */
+  function wave(px, py, l, tt){
+    var sc = 5.4 + l*2.4, qx, qy;
+    if(l === 0){ qx = px*sc; qy = py*sc; } else { qx = (0.8*px + 0.6*py)*sc; qy = (-0.6*px + 0.8*py)*sc; }
+    var wx = Math.sin(qy*0.45 + tt*(1 + l*0.3))*1.3, wy = Math.cos(qx*0.4 - tt*(0.8 + l*0.4))*1.3;
+    qx += wx; qy += wy;
+    return Math.sin(qx + 1.4*Math.sin(qy*0.7 + tt)) + Math.sin(qy*1.1 + 1.2*Math.sin(qx*0.8 - tt*1.3))*0.9;
+  }
+  function filament(v, i, gain){
+    /* fwidth: how much the wave changes from this cell to its neighbours */
+    var wv = Math.max(1e-4, 0.5*(Math.abs(v[i+1] - v[i-1]) + Math.abs(v[i+gw] - v[i-gw]))), d = Math.abs(v[i])/wv;
+    var s = d <= 0.2 ? 0 : d >= 1.5 ? 1 : (d - 0.2)/1.3; s = s*s*(3 - 2*s);
+    return (1 - s)*gain + Math.exp(-d/5)*0.16;
+  }
+  /* the lantern glides toward the pointer (frame-rate independent) and drops a tail point every
+     28ms it moves; tail points fade over ~3s */
+  function stepLamp(now, S){
+    var dt = Math.min(0.1, Math.max(0, (now - lastNow)/1000)); lastNow = now;
+    if(ptr){
+      var k = 1 - Math.exp(-9*dt); lamp.x += (ptr.x - lamp.x)*k; lamp.y += (ptr.y - lamp.y)*k;
+      var tl = lamp.trail[lamp.trail.length - 1];
+      if(!tl || (now - tl.born > 28 && Math.hypot(lamp.x - tl.x, lamp.y - tl.y) > 0.004*S)){
+        lamp.trail.push({x:lamp.x, y:lamp.y, born:now}); if(lamp.trail.length > 12) lamp.trail.shift();
+      }
+    } else lamp.on = false;
+    lamp.s += ((ptr ? 1 : 0) - lamp.s)*(1 - Math.exp(-dt*(ptr ? 9 : 5)));
+    lamp.trail = lamp.trail.filter(function(p){ return now - p.born < 3200; });
+    lamp.trail.forEach(function(p){ p.w = 0.55*Math.exp(-(now - p.born)/800); });
   }
   var seed = o.seed || 0;
   function draw(now){
-    var t = (reduce ? 12 : (now - t0)/1000 * 0.42) + seed;
+    var t = (reduce ? 0 : (now - t0)/1000) + 40 + seed*7, tt = t*0.12;
+    var S = Math.max(H, 560), cx = W/2, cy = H/2;
+    for(var gy=0; gy<rows+2; gy++){
+      var py = ((gy - 1)*ch + ch/2 - cy)/S;
+      for(var gx=0; gx<gw; gx++){
+        var px = ((gx - 1)*cw + cw/2 - cx)/S, j = gy*gw + gx;
+        va[j] = wave(px, py, 0, tt); vb[j] = wave(px, py, 1, tt);
+      }
+    }
     ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height);
     ctx.setTransform(dpr,0,0,dpr,0,0); ctx.font = font; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    lantern += ((ptr ? 1 : 0) - lantern) * 0.08;
-    var lx = ptr ? ptr.x : -1e4, ly = ptr ? ptr.y : -1e4, LR = W < 600 ? 120 : 170;
+    stepLamp(now, S);
+    var LR2 = Math.pow(0.14*S, 2), lit = lamp.s > 0.003 || lamp.trail.length > 0, clock = Math.floor(now/1000*7);
+    var LB = lit ? Math.sqrt(LR2*9) : 0, bx0 = 1e9, bx1 = -1e9, by0 = 1e9, by1 = -1e9;
+    if(lit){
+      if(lamp.s > 0.003){ bx0 = lamp.x; bx1 = lamp.x; by0 = lamp.y; by1 = lamp.y; }
+      lamp.trail.forEach(function(p){ bx0 = Math.min(bx0, p.x); bx1 = Math.max(bx1, p.x); by0 = Math.min(by0, p.y); by1 = Math.max(by1, p.y); });
+      bx0 -= LB; bx1 += LB; by0 -= LB; by1 += LB;
+    }
     var rt = ring ? (now - ring.t0)/1000 : -1, RR = 70 + rt * 560, fade = Math.max(0, 1 - rt/1.4);
     if(ring && rt > 1.5) ring = null;
-    var k = 2*Math.PI / Math.max(520, W*0.42);
+    for(var b=0; b<N*(TINTS + 1); b++) buckets[b] = [];
     for(var y=0;y<rows;y++){
-      var py = y*ch + ch/2;
+      var cyy = y*ch + ch/2;
       for(var x=0;x<cols;x++){
-        var px = x*cw + cw/2, i = y*cols + x;
-        var d = Math.min(field(px, py, t, k, 0.9, 1.1, 0), field(px + 300, py - 140, t*0.85, k*1.25, 1.15, 0.85, 1.7));
-        var I = Math.max(0, 1 - d/28); I = I*I*(3 - 2*I); I = Math.pow(I, 1.35);
-        var hot = 0;
-        if(lantern > 0.01){
-          var dx = px - lx, dy = py - ly, ld = Math.sqrt(dx*dx + dy*dy);
-          if(ld < LR){ var g = 1 - ld/LR; g *= g; I = Math.min(1, I*(1 + 0.8*g*lantern) + 0.22*g*lantern*(0.5 + 0.5*Math.sin(px*0.05 + py*0.07 + t*3))); }
+        var cxx = x*cw + cw/2, i = y*cols + x, g = (y + 1)*gw + x + 1;
+        var a = filament(va, g, 0.78), c = filament(vb, g, 0.62);
+        var light = Math.max(a, c) + 0.3*Math.min(a, c);
+        var pulse = 0.85 + 0.15*Math.sin(tt*3 + (cxx - cx)/S*1.7 - (cyy - cy)/S*1.1);
+        var I = Math.min(0.78, light*light*pulse), hot = 0, glow = 0, flick = 0;
+        if(lit && cxx > bx0 && cxx < bx1 && cyy > by0 && cyy < by1){
+          var dx = cxx - lamp.x, dy = cyy - lamp.y;
+          glow = lamp.s*Math.exp(-(dx*dx + dy*dy)/LR2);
+          for(var p=0; p<lamp.trail.length; p++){ var e = lamp.trail[p], ex = cxx - e.x, ey = cyy - e.y; glow += e.w*Math.exp(-(ex*ex + ey*ey)/(LR2*0.55)); }
+          glow = Math.min(1, glow)*quiet[i];
+          var gr = grain[i], fr = gr*13.7 + (clock + Math.floor(gr*5))*0.37;
+          I = Math.min(1, I + glow*0.24*(0.7 + 0.6*gr));
+          if(!reduce && fr - Math.floor(fr) > 0.9 && glow*(1 - glow)*4 > 0.5) flick = 1;
         }
-        if(ring){ var rx = px - ring.x, ry = py - ring.y, dr = Math.sqrt(rx*rx + ry*ry) - RR; hot = Math.exp(-(dr*dr)/(2*14*14)) * fade * quiet[i]; }
+        if(ring){ var rx = cxx - ring.x, ry = cyy - ring.y, dr = Math.sqrt(rx*rx + ry*ry) - RR; hot = Math.exp(-(dr*dr)/(2*14*14)) * fade * quiet[i]; }
         I *= quiet[i];
-        var v = Math.max(I, hot);
-        if(v < 0.06) continue;
-        var ci = Math.min(RAMP.length - 1, 1 + Math.floor(v * 0.86 * (RAMP.length - 1)));
-        if(hot > 0.06 && hot >= I){ ctx.fillStyle = 'rgba('+(dark ? '196,240,18' : '150,200,0')+','+Math.min(1, hot*0.85).toFixed(3)+')'; ci = Math.min(ci, 5); }
-        else ctx.fillStyle = dark ? 'rgba(255,255,255,'+(0.06 + 0.30*I).toFixed(3)+')' : 'rgba(20,20,20,'+(0.12 + 0.34*I).toFixed(3)+')';
-        ctx.fillText(RAMP[ci], px, py);
+        var neon = hot > 0.06 && hot >= I, v = neon ? hot : I;
+        var ci = Math.min(N - 1, Math.round(v*(N - 1)) + (flick && v > 0.02 ? 1 : 0));
+        if(neon) ci = Math.max(1, Math.min(ci, 5));
+        if(ci < 1) continue;
+        buckets[(neon ? TINTS : Math.min(TINTS - 1, Math.round(glow*1.6*(TINTS - 1))))*N + ci].push(cxx, cyy);
       }
+    }
+    /* buckets: (tint level, glyph); the last tint row is the surge ring's neon */
+    for(var bi=0; bi<N*(TINTS + 1); bi++){
+      var list = buckets[bi], n = bi % N; if(!list.length || !n) continue;
+      var tone = n/(N - 1), tint = Math.floor(bi/N), al, rgb;
+      if(tint === TINTS){ rgb = dark ? [196,240,18] : [150,200,0]; al = Math.min(1, 0.35 + 0.65*tone); }
+      else {
+        var m = tint/(TINTS - 1)*0.85;
+        rgb = [0,1,2].map(function(z){ return Math.round(INK[z] + (LIME[z] - INK[z])*m); });
+        al = (dark ? 0.10 + 0.30*tone : 0.18 + 0.32*tone) + m*0.3;
+      }
+      ctx.fillStyle = 'rgba('+rgb.join(',')+','+Math.min(1, al).toFixed(3)+')';
+      for(var q=0; q<list.length; q+=2) ctx.fillText(RAMP[n], list[q], list[q+1]);
     }
   }
   function loop(now){ requestAnimationFrame(loop); if(vis) draw(now); }

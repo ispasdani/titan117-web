@@ -32,6 +32,15 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 31 Oct 2026 · Mockups: smoother ASCII caustics
+- The ASCII caustics behind the home hero and the industry heroes (`caustics()` in `mockup/src/js/10-bg.js`, built into `mockup/assets/site.js`) now uses the wave model from asciify-engine's caustics scene (MIT, added to the sources in `notes/open-source-references.md`). Each line's width is measured in cells, the CPU version of the shader's `fwidth`, so every filament is one character wide and stays connected. Before, lines were 4–6 characters thick and broke up wherever the field flattened. Glyphs are batched per ramp step: about 2.4× fewer draws per frame.
+- Hover now follows asciify's lantern. A soft light glides after the cursor and leaves a tail that fades over about 3 s. It lifts the characters it passes, with per-cell grain so the lit area reads as scattered letters. Lit lines turn lime, and a few characters at its edge flicker up a step, as if being retyped. Titan's surge ring is unchanged.
+- The home hero no longer dims the field behind its copy (the soft clearing round the headline is gone), so the lines and the hover run under the text at full strength. The industry heroes keep their quiet zone behind the copy and the workflow card.
+- The website nav's bottom hairline now always shows, also at the top of the page before scrolling. The nav keeps one height (68px) when scrolled instead of shrinking to 58px; only its background and blur change.
+- Buttons are less round: 8px radius (10px for large buttons) instead of full pills, and the agents page's jump links match.
+- The page rails (the two vertical hairlines) now start below the nav on every page, so they never cross it. On the home page the hero and the "Works with" strip have their own white ground above them, and the first dark section ("The desktop app") hides its own rails too.
+- Open: the footer's ASCII wordmark logs a `getImageData` error when its canvas has zero width (it was already there before this change).
+
 ### 26 Oct 2026 · Mockups: multi-page website and the desktop app
 - New `mockup/` folder (open `mockup/index.html` or `mockup/desktop.html`); `mockup/README.md` explains the layout. The root `index.html` is left as it was; it is the older single-page version.
 - Website (`mockup/index.html` and pages): a redesigned home plus `agents.html`, `pricing.html`, `security.html` and eight industry pages in `mockup/industries/`, after Harvey's industry pages. Each industry page has a dark hero with ASCII caustics and an animated workflow card, three highlights, four use cases that play as demos (request, steps, approval, result), a curved-line workflow, a local-first band, the agents involved, FAQ and links to the other industries. The visual system adds hairline rails with "+" section marks, a particle-flow call to action, a dot-wave trust band and an ASCII wordmark in the footer.

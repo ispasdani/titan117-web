@@ -60,9 +60,9 @@ section[id],article[id],header[id]{scroll-margin-top:72px}
   padding-top:env(safe-area-inset-top,0px);
   padding-left:max(16px,env(safe-area-inset-left,0px),calc((100% - var(--wrap))/2 + 16px));
   padding-right:max(16px,env(safe-area-inset-right,0px),calc((100% - var(--wrap))/2 + 16px));
-  background-color:rgba(255,255,255,0);border-bottom:1px solid rgba(0,0,0,0);
-  transition:height .4s ease,background-color .4s ease,border-color .4s ease,-webkit-backdrop-filter .4s ease,backdrop-filter .4s ease}
-.nav.is-scrolled,.nav.is-open{height:58px;background-color:rgba(255,255,255,.72);border-bottom-color:rgba(0,0,0,.07);
+  background-color:rgba(255,255,255,0);border-bottom:1px solid rgba(0,0,0,.07);
+  transition:background-color .4s ease,border-color .4s ease,-webkit-backdrop-filter .4s ease,backdrop-filter .4s ease}
+.nav.is-scrolled,.nav.is-open{background-color:rgba(255,255,255,.72);border-bottom-color:rgba(0,0,0,.07);
   -webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px)}
 .nav__progress{position:absolute;left:0;bottom:-1px;width:100%;height:2px;background:var(--neon);transform:scaleX(0);transform-origin:0 50%;opacity:0;transition:opacity .4s ease;pointer-events:none}
 .nav.is-scrolled .nav__progress{opacity:1}
@@ -129,7 +129,7 @@ section[id],article[id],header[id]{scroll-margin-top:72px}
 .nav__links a.is-active::after{content:"";position:absolute;left:50%;bottom:1px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--neon)}
 .nav__signin{color:var(--ink);text-decoration:none;padding:8px 12px;border-radius:8px}
 .nav__signin:hover{background:rgba(0,0,0,.04)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:34px;padding:0 18px;border-radius:17px;border:0;
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:34px;padding:0 18px;border-radius:8px;border:0;
   font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .2s var(--ease-settle),background .2s}
 .btn:active{transform:scale(.97)}
 .btn--white{background:#fff;color:#000}
@@ -137,7 +137,7 @@ section[id],article[id],header[id]{scroll-margin-top:72px}
 .btn--black:hover{background:#222}
 .btn--ghost{background:var(--surface);color:#000}
 .btn--ghost:hover{background:#e9e9e9}
-.btn--lg{height:44px;padding:0 22px;border-radius:22px}
+.btn--lg{height:44px;padding:0 22px;border-radius:10px}
 .burger{display:none;margin-left:auto;width:40px;height:40px;border:0;background:none;cursor:pointer;flex-direction:column;justify-content:center;gap:5px;padding:0 10px;border-radius:8px}
 .burger i{display:block;height:2px;background:var(--ink);border-radius:1px;transition:transform .22s}
 .nav.is-open .burger i:first-child{transform:translateY(3.5px) rotate(45deg)}
@@ -661,9 +661,10 @@ svg.d{width:16px;height:16px;display:block}
 .dark [data-tone="soft"]{color:#d6d6d9}
 .dark [data-tone="ink"]{color:#fff}
 
-/* rails: two fixed hairlines at the content edges, and a "+" where each section starts */
+/* rails: two fixed hairlines at the content edges, starting below the nav (68px + its border), and a "+"
+   where each section starts */
 .guides{position:fixed;inset:0;pointer-events:none;z-index:0}
-.guides::before,.guides::after{content:"";position:absolute;top:0;bottom:0;width:1px;background:var(--guide)}
+.guides::before,.guides::after{content:"";position:absolute;top:calc(69px + env(safe-area-inset-top,0px));bottom:0;width:1px;background:var(--guide)}
 .guides::before{left:var(--rail)}
 .guides::after{right:var(--rail)}
 .sec{position:relative;border-top:1px solid var(--guide)}
@@ -671,7 +672,9 @@ svg.d{width:16px;height:16px;display:block}
 .sec.dark::before,.sec.dark::after{content:"";position:absolute;top:0;bottom:0;width:1px;background:var(--line-d);pointer-events:none;z-index:1}
 .sec.dark::before{left:var(--rail)}
 .sec.dark::after{right:var(--rail)}
+#product.sec.dark::before,#product.sec.dark::after{display:none} /* the home page's first dark band has no rails */
 .sec--flush{border-top:0}
+.hero{z-index:1;background:var(--bg)} /* the home hero covers the rails */
 .sec > .wrap{position:relative;z-index:2}
 .cross{position:absolute;top:-5px;width:9px;height:9px;z-index:3;pointer-events:none}
 .cross::before,.cross::after{content:"";position:absolute;background:#c4c4c4}
@@ -734,7 +737,7 @@ svg.d{width:16px;height:16px;display:block}
 /* ───── home: hero additions ───── */
 .hero__note{margin-top:28px;display:flex;align-items:center;gap:10px}
 .hero__note i{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(42,154,48,.14);flex:none}
-.strip{border-top:1px solid var(--guide);position:relative;z-index:1}
+.strip{border-top:1px solid var(--guide);position:relative;z-index:1;background:var(--bg)} /* covers the rails, like the hero */
 .strip__in{display:grid;grid-template-columns:auto minmax(0,1fr);gap:32px;align-items:center;padding-block:22px}
 .strip__row{display:flex;gap:10px 34px;flex-wrap:wrap;justify-content:space-between;align-items:center}
 .strip__row span{font-family:var(--font-ui);font-size:15px;font-weight:500;color:#8e8e93;letter-spacing:-.01em;white-space:nowrap;transition:color .2s}
@@ -958,7 +961,7 @@ svg.d{width:16px;height:16px;display:block}
 .js .phero__in > *:nth-child(4){animation-delay:.24s}
 .dotgrid{background-image:radial-gradient(rgba(20,20,20,.13) 1px,transparent 1.3px);background-size:18px 18px;-webkit-mask-image:radial-gradient(70% 90% at 50% 0%,#000 0%,transparent 75%);mask-image:radial-gradient(70% 90% at 50% 0%,#000 0%,transparent 75%);position:absolute;inset:0;z-index:0;pointer-events:none}
 .jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.jump a{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 13px 0 9px;border-radius:17px;border:1px solid var(--line-2);background:#fff;text-decoration:none;color:var(--ink-soft);font-size:13.5px;transition:border-color .2s,background-color .2s}
+.jump a{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 13px 0 9px;border-radius:8px;border:1px solid var(--line-2);background:#fff;text-decoration:none;color:var(--ink-soft);font-size:13.5px;transition:border-color .2s,background-color .2s}
 .jump a:hover{border-color:var(--ink);background:#fff}
 .jump svg{width:16px;height:16px}
 

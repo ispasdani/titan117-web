@@ -25,9 +25,10 @@
 .dark [data-tone="soft"]{color:#d6d6d9}
 .dark [data-tone="ink"]{color:#fff}
 
-/* rails: two fixed hairlines at the content edges, and a "+" where each section starts */
+/* rails: two fixed hairlines at the content edges, starting below the nav (68px + its border), and a "+"
+   where each section starts */
 .guides{position:fixed;inset:0;pointer-events:none;z-index:0}
-.guides::before,.guides::after{content:"";position:absolute;top:0;bottom:0;width:1px;background:var(--guide)}
+.guides::before,.guides::after{content:"";position:absolute;top:calc(69px + env(safe-area-inset-top,0px));bottom:0;width:1px;background:var(--guide)}
 .guides::before{left:var(--rail)}
 .guides::after{right:var(--rail)}
 .sec{position:relative;border-top:1px solid var(--guide)}
@@ -35,7 +36,9 @@
 .sec.dark::before,.sec.dark::after{content:"";position:absolute;top:0;bottom:0;width:1px;background:var(--line-d);pointer-events:none;z-index:1}
 .sec.dark::before{left:var(--rail)}
 .sec.dark::after{right:var(--rail)}
+#product.sec.dark::before,#product.sec.dark::after{display:none} /* the home page's first dark band has no rails */
 .sec--flush{border-top:0}
+.hero{z-index:1;background:var(--bg)} /* the home hero covers the rails */
 .sec > .wrap{position:relative;z-index:2}
 .cross{position:absolute;top:-5px;width:9px;height:9px;z-index:3;pointer-events:none}
 .cross::before,.cross::after{content:"";position:absolute;background:#c4c4c4}
@@ -98,7 +101,7 @@
 /* ───── home: hero additions ───── */
 .hero__note{margin-top:28px;display:flex;align-items:center;gap:10px}
 .hero__note i{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(42,154,48,.14);flex:none}
-.strip{border-top:1px solid var(--guide);position:relative;z-index:1}
+.strip{border-top:1px solid var(--guide);position:relative;z-index:1;background:var(--bg)} /* covers the rails, like the hero */
 .strip__in{display:grid;grid-template-columns:auto minmax(0,1fr);gap:32px;align-items:center;padding-block:22px}
 .strip__row{display:flex;gap:10px 34px;flex-wrap:wrap;justify-content:space-between;align-items:center}
 .strip__row span{font-family:var(--font-ui);font-size:15px;font-weight:500;color:#8e8e93;letter-spacing:-.01em;white-space:nowrap;transition:color .2s}
@@ -322,7 +325,7 @@
 .js .phero__in > *:nth-child(4){animation-delay:.24s}
 .dotgrid{background-image:radial-gradient(rgba(20,20,20,.13) 1px,transparent 1.3px);background-size:18px 18px;-webkit-mask-image:radial-gradient(70% 90% at 50% 0%,#000 0%,transparent 75%);mask-image:radial-gradient(70% 90% at 50% 0%,#000 0%,transparent 75%);position:absolute;inset:0;z-index:0;pointer-events:none}
 .jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.jump a{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 13px 0 9px;border-radius:17px;border:1px solid var(--line-2);background:#fff;text-decoration:none;color:var(--ink-soft);font-size:13.5px;transition:border-color .2s,background-color .2s}
+.jump a{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 13px 0 9px;border-radius:8px;border:1px solid var(--line-2);background:#fff;text-decoration:none;color:var(--ink-soft);font-size:13.5px;transition:border-color .2s,background-color .2s}
 .jump a:hover{border-color:var(--ink);background:#fff}
 .jump svg{width:16px;height:16px}
 
