@@ -32,6 +32,30 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 31 Oct 2026 · Mockups: new hero headline
+- The home hero headline is now "AI teammates that give you your time back." (was "Intelligence Designed to Evolve"), picked from eight copy and type options. It is set in Rethink Sans Bold (the navbar's font; weight 700 added to the font link) at the page heroes' 4xl size, 40 to 72px, with tight tracking. The paragraph under it stays: it says how, on your laptop and with your approval.
+- Checked in the browser: two lines at 1440px, three at 375px, no sideways scroll.
+- The paragraph under it now reads in front of the landscape: dark grey `#3f3f44` instead of muted, with a thin white halo around its letters so the grid and lines stop short of them (no box or blur behind the block). Checked at 800px.
+- The paragraph can be selected again. The hero's content layer has `pointer-events: none` so the cursor reaches the landscape, with only links, buttons and the headline's words switched back on; the paragraph is now on that list too. The landscape still follows the cursor over it, since events bubble up to the hero. Checked by triple-clicking it at 800px.
+
+### 31 Oct 2026 · Mockups: Unbounded wordmark
+- The TITAN117 wordmark in the mockups is now set in Unbounded SemiBold (Google Fonts, OFL), picked from 12 options, replacing Syncopate Bold. Spacing is tighter (0.04em, was 0.08em) because Unbounded is already wide. It covers the navbar, the footer, the app window title, the desktop app's title bar and the big ASCII wordmark in the footer (`--font-brand` in `base.css`, `--brand` in `desktop.css`, the font link in `build.py`, `asciiWord()` in `10-bg.js`). The root `index.html` (the older single page) still uses Syncopate.
+- Checked in the browser: navbar and footer at 800px, the desktop app's title bar.
+
+### 31 Oct 2026 · Mockups: buttons with the cut corner
+- Website buttons now share the cards' shape: square, with the top-right corner cut (8px, 10px on large buttons), in `v2.css`. Outlined buttons on the dark heroes draw the diagonal so their edge stays closed. The cut would hide an outside focus outline, so keyboard focus shows as a ring inside the button (accent, with a white gap). The small buttons inside the product demos are unchanged.
+- The navbar's links, menu triggers and Sign in take the same cut on their hover fill (6px), with keyboard focus as a ring inside. Checked in the browser at 1100px (hovering Security and Agents).
+- Checked in the browser: home hero and nav buttons at 1440px, the outlined button and keyboard focus on an industry hero at 800px.
+
+### 31 Oct 2026 · Mockups: the hero's eyes are black until Titan gets angry
+- The home hero's Titan now has ink eyes at rest. When he gets angry (a surge: hovering him, clicking, or on his own every 5 to 10 seconds) they turn neon with the energy ring and sparks, then ease back to ink when the 1.9 s surge ends (`mountBots()` in `mockup/src/js/00-core.js`). The call-to-action Titan and the logo are unchanged.
+- Checked in the browser at 1440px: ink at rest, neon while angry, ink again about two seconds later.
+- While the eyes are ink they have no shadow: the bot engine's blurred glow layer (drawn even at rest for the energy effect) is hidden with `.hero__bot.is-calm`, and comes back with the surge.
+
+### 31 Oct 2026 · Mockups: a gathering in the hero's valley
+- The valley under Titan in the hero's agent terrain now holds a gathering (after Vivodyne's "Healthy phenotypes" cluster): 1,100 particles (no glow under them), densest in the middle, turning slowly (about a third of the first speed) and drifting inward and fading in at the edge so the cloud keeps feeding itself. Mostly Titan's green (a deeper green on the white hero, where lime dots would vanish), about one in six in an agent's colour, as if gathered from the peaks. Clicking Titan makes it swell for a moment.
+- About 2.8 ms of maths per frame at 1440×900 (was 2). Checked in the browser at 1440px.
+
 ### 31 Oct 2026 · Mockups: one moving line, mono, with borders
 - The ticker under the home hero keeps only the promises line, now in the small mono style with square markers: runs on your laptop, asks before every action, cost shown before it runs, works offline for 14 days, keeps working from the tray, resumes after a crash, local-only folders never leave. The stack line and the eyes are gone (`TICKER_STACK` removed from `content.py`).
 - Each pass holds the list twice, so the loop has no gap even on a 3,000px-wide screen; screen readers still hear it once. It has a hairline border above and below; the edge fade sits on the moving row, so the borders run the full width.

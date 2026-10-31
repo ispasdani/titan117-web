@@ -78,7 +78,17 @@ function mountBots(){
       return;
     }
     // the big avatars surge with energy now and then
-    BOT[k] = TitanBot.mount(svg, {expression:'colere', energy: k === 'hero' || k === 'cta', zoom: k === 'hero' ? 2.6 : undefined});
+    BOT[k] = TitanBot.mount(svg, {expression:'colere', energy: k === 'hero' || k === 'cta', zoom: k === 'hero' ? 2.6 : undefined, color: k === 'hero' ? '#141414' : undefined});
+    if(k === 'hero'){
+      // the hero's eyes are ink, and turn neon only while Titan is angry: a surge lasts 1.9 s.
+      // While they are ink, .is-calm hides the engine's blurred glow layer, which would read as a shadow.
+      var calm = 0;
+      svg.classList.add('is-calm');
+      svg.addEventListener('titan:surge', function(){
+        BOT.hero.setColor(null); svg.classList.remove('is-calm'); clearTimeout(calm);
+        calm = setTimeout(function(){ BOT.hero.setColor('#141414'); svg.classList.add('is-calm'); }, 1900);
+      });
+    }
   });
 }
 mountBots();
@@ -419,7 +429,8 @@ function asciiField(o){
    perspective with one peak per specialist agent, each a cloud of particles in the agent's colour under
    a label, and a line from every summit down into the valley under Titan, where pulses travel both
    ways. The peaks breathe and the land sways; the cursor lights the nearest agent, and a surge from
-   Titan sends a pulse out along every line. Labels that would sit on the copy (avoid) are left out. */
+   Titan sends a pulse out along every line. In the valley the agents' work gathers: a dense cloud that
+   spirals slowly inward, mostly in Titan's green, some in the agents' colours, and swells on a surge. Labels that would sit on the copy (avoid) are left out. */
 function terrain(o){
   var cv = o.canvas, host = o.host, anchor = o.anchor; if(!cv || !host) return;
   var ctx = cv.getContext('2d'), dark = !!o.dark;
@@ -431,8 +442,9 @@ function terrain(o){
     if(dark && rgb[0] + rgb[1] + rgb[2] < 160) rgb = [232,232,234];
     return {name:a.name, rgb:rgb, x:SPOT[i][0], z:SPOT[i][1], h:SPOT[i][2], s:SPOT[i][3], hb:SPOT[i][2], f:0, sx:0, sy:0};
   });
+  var GREEN = dark ? [196,240,18] : [128,184,0], CORE = dark ? [236,255,190] : [104,160,0];
   var VALLEY = dark ? [196,240,18] : [20,20,20], GRID = dark ? '150,140,255' : '20,20,20', INK = dark ? '232,232,234' : '20,20,20';
-  var W, H, dpr, F, CAM = 9, ZV = 10, Z0 = 14, cx, hy, quiet = [], avoid = [], dots = [], ptr = null, theta = 0, tilt = 0, surge = -1e9, t0 = performance.now(), vis = true;
+  var W, H, dpr, F, CAM = 9, ZV = 10, Z0 = 14, cx, hy, quiet = [], avoid = [], dots = [], crowd = [], ptr = null, theta = 0, tilt = 0, surge = -1e9, t0 = performance.now(), vis = true;
   function rnd(seed){ var x = Math.sin(seed*127.1)*43758.5453; return x - Math.floor(x); }
   function height(x, z){
     var y = -0.8*Math.exp(-(x*x + z*z)/(2*2.2*2.2));
@@ -471,6 +483,12 @@ function terrain(o){
       }
     });
     for(var j=0; j<420; j++, k++) dots.push({p:-1, x:(rnd(k) - 0.5)*60, z:rnd(k + 0.5)*34 - 8, lift:0.05, top:0, tw:rnd(k + 0.75)*6.28});
+    /* the gathering in the valley: each dot sits at a radius and angle, and drifts in on a slow spiral */
+    crowd = [];
+    for(var j=0; j<1100; j++, k++){
+      var u = rnd(k), r = Math.min(7, 2.6*Math.sqrt(-2*Math.log(1e-4 + rnd(k + 0.5)*0.9999)));
+      crowd.push({r:r, a:rnd(k + 0.25)*6.2832, ph:u, lift:Math.abs(rnd(k + 0.75) - 0.5)*0.6, c:rnd(k + 0.33) < 0.16 ? Math.floor(rnd(k + 0.66)*P.length) : -1, tw:rnd(k + 0.9)*6.28});
+    }
   }
   host.addEventListener('pointermove', function(e){ var r = host.getBoundingClientRect(); ptr = {x:e.clientX - r.left, y:e.clientY - r.top}; });
   host.addEventListener('pointerleave', function(){ ptr = null; });
@@ -543,8 +561,18 @@ function terrain(o){
         ctx.beginPath(); ctx.arc(c[0], c[1], r*3, 0, 6.2832); ctx.fill();
       });
     });
-    /* particles, batched by agent and strength */
-    var buckets = {};
+    /* particles, batched by colour and strength; the gathering first */
+    var buckets = {}, swell = se >= 0 && se < 2.5 ? 1 + 0.7*Math.exp(-se*2.2)*Math.min(1, se*8) : 1;
+    for(var j=0; j<crowd.length; j++){
+      var c = crowd[j], u = reduce ? c.ph : (t*0.035 + c.ph) % 1, rr = c.r*(1.7 - 1.3*u)*swell, ang = c.a + (reduce ? 0 : t*0.12/(0.6 + rr));
+      var x = Math.cos(ang)*rr, z = Math.sin(ang)*rr*0.8;
+      if(!proj(x, height(x, z) + c.lift*(0.4 + rr*0.15), z)) continue;
+      var core = Math.exp(-rr*rr/2.4), fade = Math.min(1, u/0.12)*Math.min(1, (7.5 - rr)/2), tw = reduce ? 1 : 0.7 + 0.3*Math.sin(t*2.2 + c.tw);
+      var a = (0.26 + 0.48*core)*fade*tw;
+      if(a < 0.04) continue;
+      var key = (c.c >= 0 ? c.c : core > 0.55 ? 'k' : 'g') + ':' + Math.min(4, Math.floor(a*5)), sz = Math.min(2.6, Math.max(0.9, (1 + 1.2*core)*F/out.d*0.042));
+      (buckets[key] = buckets[key] || []).push(out.x - sz/2, out.y - sz/2, sz);
+    }
     for(var j=0; j<dots.length; j++){
       var d = dots[j], p = d.p >= 0 ? P[d.p] : null;
       if(!proj(d.x, height(d.x, d.z) + d.lift, d.z)) continue;
@@ -555,8 +583,9 @@ function terrain(o){
       (buckets[key] = buckets[key] || []).push(out.x - sz/2, out.y - sz/2, sz);
     }
     Object.keys(buckets).forEach(function(key){
-      var parts = key.split(':'), p = parts[0] === 'x' ? null : P[+parts[0]], list = buckets[key];
-      ctx.fillStyle = 'rgba('+(p ? p.rgb : INK)+','+((+parts[1] + 0.5)/5).toFixed(3)+')';
+      var parts = key.split(':'), id = parts[0], list = buckets[key];
+      var rgb = id === 'x' ? INK : id === 'g' ? GREEN : id === 'k' ? CORE : P[+id].rgb;
+      ctx.fillStyle = 'rgba('+rgb+','+((+parts[1] + 0.5)/5).toFixed(3)+')';
       for(var q=0; q<list.length; q+=3) ctx.fillRect(list[q], list[q+1], list[q+2], list[q+2]);
     });
     /* labels over the summits; narrow screens have no room for them */
@@ -727,7 +756,7 @@ function asciiWord(o){
     cols = Math.ceil(W/cw); rows = Math.ceil(H/ch);
     font = '500 '+(ch*0.95)+'px "Geist Mono", ui-monospace, monospace';
     var off = document.createElement('canvas'), S = 4; off.width = cols*S; off.height = rows*S;
-    var g = off.getContext('2d'), fs = off.height*0.92, face = '700 %spx Syncopate, system-ui, sans-serif';
+    var g = off.getContext('2d'), fs = off.height*0.92, face = '600 %spx Unbounded, system-ui, sans-serif';
     g.font = face.replace('%s', fs);
     var tw = g.measureText(WORD).width; if(tw > off.width*0.99){ fs *= off.width*0.99/tw; g.font = face.replace('%s', fs); }
     g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#000';

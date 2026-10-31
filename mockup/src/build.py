@@ -76,7 +76,7 @@ def faq(items, n, title='Questions, answered.', side='', scene=None):
 
 # ───────── shell ─────────
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
-         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Syncopate:wght@700&family=Rethink+Sans:wght@400;500;600&display=swap">')
+         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Unbounded:wght@600&family=Rethink+Sans:wght@400;500;600;700&display=swap">')
 
 def nav(p, cur, ondark):
     def a(href, text, key): return '<a href="%s"%s>%s</a>' % (href, ' class="is-current" aria-current="page"' if cur == key else '', text)
@@ -86,7 +86,7 @@ def nav(p, cur, ondark):
   <nav class="nav{' nav--ondark' if ondark else ''}" aria-label="Primary">
     <a class="brand" href="{p}index.html" aria-label="TITAN117 home">
       <span class="brand__chip"><svg class="bot" data-bot="nav" aria-hidden="true"></svg></span>
-      <span class="brand__word" data-text="body" data-size="sm" data-weight="700" data-font="brand">TITAN117</span>
+      <span class="brand__word" data-text="body" data-size="sm" data-weight="600" data-font="brand">TITAN117</span>
     </a>
     <div class="nav__links" data-text="body" data-size="sm" data-weight="400" data-font="ui">
       {a(p + 'index.html#product', 'Product', 'product')}
@@ -139,7 +139,7 @@ def footer(p):
   <div class="wrap">
     <div class="foot2__grid">
       <div>
-        <a class="foot2__brand" href="{p}index.html" aria-label="TITAN117 home"><svg class="bot" data-bot="foot" data-ink="#ffffff" aria-hidden="true"></svg><span data-text="body" data-size="sm" data-weight="700" data-font="brand">TITAN117</span></a>
+        <a class="foot2__brand" href="{p}index.html" aria-label="TITAN117 home"><svg class="bot" data-bot="foot" data-ink="#ffffff" aria-hidden="true"></svg><span data-text="body" data-size="sm" data-weight="600" data-font="brand">TITAN117</span></a>
         {T('p', 'An AI team for small companies that runs on your own laptop. Made by Ecotechcore.', size='sm', tone='muted', style='max-width:34ch;margin-top:14px')}
         <p class="status" data-text="body" data-size="xs" data-font="mono" data-tone="muted" style="margin-top:18px"><i></i>Windows and macOS</p>
       </div>
@@ -170,7 +170,7 @@ def stage_for(a): return '<div class="stage" data-demo="%s"></div>' % a['demo']
 def app_window():
     return '''<div class="app" id="app">
       <div class="app__bar">
-        <span class="app__title"><svg class="bot" data-bot="mini" aria-hidden="true"></svg><span data-text="body" data-size="xs" data-weight="700" data-font="brand">TITAN117</span></span>
+        <span class="app__title"><svg class="bot" data-bot="mini" aria-hidden="true"></svg><span data-text="body" data-size="xs" data-weight="600" data-font="brand">TITAN117</span></span>
         <span class="app__crumb">Fjord &amp; Co. · Workspace</span>
         <span class="app__search"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="5" cy="5" r="3.8" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="m8 8 3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Search chats, files, apps<span class="mono" style="margin-left:auto;font-size:10px">Ctrl K</span></span>
         <span class="win" aria-hidden="true"><i>&#8211;</i><i>&#9633;</i><i>&#10005;</i></span>
@@ -273,7 +273,7 @@ def home():
   <canvas class="glyphs" data-bg="terrain" data-avoid=".hero__copy" data-anchor=".hero__bot" aria-hidden="true"></canvas>
   <div class="wrap hero__inner">
     <div class="hero__copy">
-      <h1 id="headline" data-text="display" data-leading="tight" data-wrap="balance" data-decode>Intelligence Designed to Evolve</h1>
+      <h1 id="headline" data-text="display" data-size="4xl" data-font="ui" data-leading="tight" data-wrap="balance" data-decode>AI teammates that give you your time back.</h1>
       <p class="hero__sub" data-text="body" data-tone="muted" data-wrap="pretty" data-measure="normal">Titan and its specialist agents research, write code, build apps, read your documents and watch the web for you. Your files stay on your machine, and nothing happens until you approve it.</p>
       <div class="hero__cta">
         <a class="btn btn--black btn--lg" data-text="body" data-size="md" data-weight="600" href="pricing.html">Download for Windows</a>

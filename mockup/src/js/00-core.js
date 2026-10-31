@@ -77,7 +77,17 @@ function mountBots(){
       return;
     }
     // the big avatars surge with energy now and then
-    BOT[k] = TitanBot.mount(svg, {expression:'colere', energy: k === 'hero' || k === 'cta', zoom: k === 'hero' ? 2.6 : undefined});
+    BOT[k] = TitanBot.mount(svg, {expression:'colere', energy: k === 'hero' || k === 'cta', zoom: k === 'hero' ? 2.6 : undefined, color: k === 'hero' ? '#141414' : undefined});
+    if(k === 'hero'){
+      // the hero's eyes are ink, and turn neon only while Titan is angry: a surge lasts 1.9 s.
+      // While they are ink, .is-calm hides the engine's blurred glow layer, which would read as a shadow.
+      var calm = 0;
+      svg.classList.add('is-calm');
+      svg.addEventListener('titan:surge', function(){
+        BOT.hero.setColor(null); svg.classList.remove('is-calm'); clearTimeout(calm);
+        calm = setTimeout(function(){ BOT.hero.setColor('#141414'); svg.classList.add('is-calm'); }, 1900);
+      });
+    }
   });
 }
 mountBots();
