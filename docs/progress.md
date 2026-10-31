@@ -32,6 +32,21 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 31 Oct 2026 · Mockups: hero eyes angry only on click
+
+Titan's hero eyes no longer surge on a timer (every 5 to 10 s) or on hover; they turn angry and neon only when clicked. Checked: no surge in 14 s idle, one surge on click.
+
+### 31 Oct 2026 · Mockups: desktop app demo moved up
+
+The "01 The desktop app" heading and its intro line are gone from the home page; the app demo now opens straight under the hero, with a smaller top gap (72px on wide screens, 40px on phones).
+
+### 31 Oct 2026 · Mockups: new hero paragraph
+
+The home hero paragraph now tells the team story: start with one teammate, add another as the work grows (a project, outbound, your systems), they work in parallel, hand work to each other, and keep going 24/7 while the laptop is on, with nothing happening until you approve it. The hero keeps its size (540px at 1440×900).
+
+### 31 Oct 2026 · Mockups: moving line removed
+- The moving line under the home hero is gone (markup, styles, the `ticker()` helper and `TICKER_PROMISES`), so "01 The desktop app" now follows the hero directly. The hero keeps its size (540px tall at 1440×900). Checked in the browser.
+
 ### 31 Oct 2026 · Mockups: new hero headline
 - The home hero headline is now "AI teammates that give you your time back." (was "Intelligence Designed to Evolve"), picked from eight copy and type options. It is set in Rethink Sans Bold (the navbar's font; weight 700 added to the font link) at the page heroes' 4xl size, 40 to 72px, with tight tracking. The paragraph under it stays: it says how, on your laptop and with your approval.
 - Checked in the browser: two lines at 1440px, three at 375px, no sideways scroll.
@@ -51,6 +66,7 @@ Each entry: date, phase, what was done, and anything left open. One entry per pi
 - The home hero's Titan now has ink eyes at rest. When he gets angry (a surge: hovering him, clicking, or on his own every 5 to 10 seconds) they turn neon with the energy ring and sparks, then ease back to ink when the 1.9 s surge ends (`mountBots()` in `mockup/src/js/00-core.js`). The call-to-action Titan and the logo are unchanged.
 - Checked in the browser at 1440px: ink at rest, neon while angry, ink again about two seconds later.
 - While the eyes are ink they have no shadow: the bot engine's blurred glow layer (drawn even at rest for the energy effect) is hidden with `.hero__bot.is-calm`, and comes back with the surge.
+- No expanding ring round the hero's eyes when Titan gets angry: `.hero__bot circle[fill="none"]` hides it (the engine's only unfilled circle); the neon, glow, lightning and sparks stay. Checked mid-surge at 1440px.
 
 ### 31 Oct 2026 · Mockups: a gathering in the hero's valley
 - The valley under Titan in the hero's agent terrain now holds a gathering (after Vivodyne's "Healthy phenotypes" cluster): 1,100 particles (no glow under them), densest in the middle, turning slowly (about a third of the first speed) and drifting inward and fading in at the edge so the cloud keeps feeding itself. Mostly Titan's green (a deeper green on the white hero, where lime dots would vanish), about one in six in an agent's colour, as if gathered from the peaks. Clicking Titan makes it swell for a moment.

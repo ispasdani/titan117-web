@@ -82,6 +82,8 @@ function mountBots(){
     if(k === 'hero'){
       // the hero's eyes are ink, and turn neon only while Titan is angry: a surge lasts 1.9 s.
       // While they are ink, .is-calm hides the engine's blurred glow layer, which would read as a shadow.
+      // It never surges on a timer: the engine's next scheduled surge is pinned to never, so only a click (poke) sets it off.
+      Object.defineProperty(BOT.hero, 'nextSurge', {get: function(){ return Infinity; }, set: function(){}});
       var calm = 0;
       svg.classList.add('is-calm');
       svg.addEventListener('titan:surge', function(){
@@ -96,7 +98,6 @@ function setLogoInk(bot, ink){ if(!bot || bot._ink === ink) return; bot._ink = i
 
 (function(){
   var h = $('.hero__bot'); if(!h || !BOT.hero) return;
-  h.addEventListener('pointerenter', function(){ BOT.hero.poke(); });
   h.addEventListener('click', function(){ BOT.hero.poke(); });
 })();
 

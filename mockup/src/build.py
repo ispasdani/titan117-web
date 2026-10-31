@@ -234,14 +234,6 @@ def wcard(n):
     return (f'<div class="wcard"><div class="wcard__top"><span class="menu__icon">{lineicon(n["id"])}</span>{T("b", E(n["name"]), size="md", weight="600")}'
             f'<span class="chip mono">approval on</span></div><ol class="wcard__flow">{flow}</ol><ul class="wcard__hl">{hl}</ul></div>')
 
-def ticker():
-    """An endless line under the hero with Titan's promises. The track is drawn twice so the loop has
-    no seam; the copy is hidden from screen readers."""
-    once = ''.join(f'<span class="ticker__s">{E(t)}</span>' for t in TICKER_PROMISES)
-    items = once + f'<span class="ticker__more" aria-hidden="true">{once}</span>'  # one pass wider than a wide screen
-    return (f'<section class="ticker" aria-label="What TITAN117 promises"><div class="ticker__row">'
-            f'<div class="ticker__track">{items}</div><div class="ticker__track" aria-hidden="true">{items}</div></div></section>')
-
 def icard(n, p, sm=False):
     return (f'<a class="icard" href="{p}industries/{n["id"]}.html"{" style=min-height:190px" if sm else ""}>'
             f'<span class="menu__icon">{lineicon(n["id"])}</span>{T("h3", E(n["name"]), size="lg", weight="600", leading="snug")}'
@@ -274,7 +266,7 @@ def home():
   <div class="wrap hero__inner">
     <div class="hero__copy">
       <h1 id="headline" data-text="display" data-size="4xl" data-font="ui" data-leading="tight" data-wrap="balance" data-decode>AI teammates that give you your time back.</h1>
-      <p class="hero__sub" data-text="body" data-tone="muted" data-wrap="pretty" data-measure="normal">Titan and its specialist agents research, write code, build apps, read your documents and watch the web for you. Your files stay on your machine, and nothing happens until you approve it.</p>
+      <p class="hero__sub" data-text="body" data-tone="muted" data-wrap="pretty" data-measure="normal">Start with one teammate and add another when the work grows: one on a project, one on outbound, one on your systems. They work in parallel, hand work to each other when it helps, and keep going 24/7 while your laptop is on. Nothing happens until you approve it.</p>
       <div class="hero__cta">
         <a class="btn btn--black btn--lg" data-text="body" data-size="md" data-weight="600" href="pricing.html">Download for Windows</a>
         <a class="btn btn--ghost btn--lg" data-text="body" data-size="md" data-weight="600" href="#product">See it work</a>
@@ -286,15 +278,10 @@ def home():
   </div>
 </header>
 
-{ticker()}
 
-<section class="band band--dark sec dark" id="product" aria-labelledby="product-h">
+<section class="band band--dark sec dark" id="product" aria-label="The desktop app">
   <canvas class="band__waves" data-bg="contours" data-fade="center" aria-hidden="true"></canvas>
   <div class="wrap">
-    <div class="band__head" data-reveal>
-      <div class="sh__l">{k('The desktop app', '01')}{T('h2', 'One workspace. Every agent. Your approval on every step.', 'heading', wrap='balance', id='product-h')}</div>
-      <div class="sh__r">{T('p', 'Pick a task to watch Titan plan it, search, ask before it acts, and hand you the finished file. Click Approve or Deny when it asks.', tone='muted', wrap='pretty')}</div>
-    </div>
     {app_window()}
   </div>
 </section>

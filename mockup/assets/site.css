@@ -745,20 +745,11 @@ svg.d{width:16px;height:16px;display:block}
 .hero .hero__sub{color:#3f3f44;text-shadow:0 0 2px #fff,0 0 4px #fff,0 0 7px #fff}
 /* Titan's ink eyes at rest have no glow: the bot engine's blurred layer is the only filtered group outside a surge */
 .hero__bot.is-calm g[filter]{display:none}
+/* no expanding ring round the hero's eyes when Titan gets angry (the engine's only unfilled circle) */
+.hero__bot circle[fill="none"]{display:none}
 .sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .hero__note{margin-top:28px;display:flex;align-items:center;gap:10px}
 .hero__note i{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(42,154,48,.14);flex:none}
-/* an endless line under the hero: Titan's promises in small mono */
-.ticker{position:relative;z-index:1;padding-block:22px;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg)}
-.ticker__row{display:flex;width:100%;overflow:hidden;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
-.ticker__track{display:flex;align-items:center;flex:none;animation:tick 100s linear infinite}
-.ticker:hover .ticker__track{animation-play-state:paused}
-@keyframes tick{to{transform:translateX(-100%)}}
-.ticker__more{display:contents}
-.ticker__s{display:inline-flex;align-items:center;gap:18px;padding-right:18px;font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
-.ticker__s::before{content:"";width:5px;height:5px;background:var(--ink);flex:none}
-@media (prefers-reduced-motion:reduce){ .ticker__track{animation:none} }
 
 /* ───── home: product band header ───── */
 .band__head{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:20px 56px;align-items:end;margin-bottom:56px}
@@ -767,6 +758,8 @@ svg.d{width:16px;height:16px;display:block}
 .band .k b{color:#fff}
 .band .k::before{background:var(--neon)}
 .band{padding:var(--pad) 0}
+/* the home demo band has no heading: the app window opens close under the hero */
+#product{padding-top:clamp(40px,5vw,72px)}
 
 /* ───── highlight cards ───── */
 .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:56px}
