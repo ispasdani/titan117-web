@@ -12,7 +12,7 @@ Built on the measured OpenAI design settings (system fonts, 8px grid, one small 
 
 1. **Quiet confidence.** White, black and gray do the work. The interface doesn't shout.
 2. **One accent, used sparingly.** Neon green `#c4f012` marks what's alive or important: Titan's eyes, a live status, one key highlight. Never large areas, never text on white.
-3. **Flat.** No decorative shadows or gradients. Surfaces separate by hairlines, spacing and a light gray fill. The one exception is media: product windows and photos may sit on one soft shadow.
+3. **Flat.** No decorative shadows or gradients. Surfaces separate by spacing and fill: in the app by a light gray fill and hairlines, on the website by full-bleed bands and filled cards (see Layout). The one exception is media: product windows and photos may sit on one soft shadow.
 4. **Everything on the 8px grid.**
 5. **Readable first.** Body text is near-black, not the gray-purple (see Accessibility).
 
@@ -93,7 +93,7 @@ The base sets headings at line height 1.5; large headlines get tighter leading (
 - **Container:** max 1280px, side padding 24px (16px on phones).
 - **Breakpoint:** 768px. Below it, columns stack, the nav collapses, hero media moves under the text.
 - **Hero:** text left (about 46%), media right (video or product window), on the 8px grid.
-- **Sections** (Redox and Anduril ideas): a 1px top hairline, a small caption label on the left (`01 · Agents`), the headline on the right; image tiles with the label in the bottom-left corner and `↗` in the bottom-right.
+- **Sections** (website, after Anduril's product pages; changed 31 Oct 2026): full-bleed bands, white `#ffffff` or black `#0b0b0c`, mostly alternating. No rules, page rails or `+` marks between sections. Each starts with a small caption label on the left (`01 · Agents`) and the headline beside it; image tiles keep the label bottom-left and `↗` bottom-right. Black bands carry trust, calls to action and product moments, each with its own moving background: a live ASCII scene (caustics, contour, ripple; one character wide, lit by a lantern under the cursor), still contour lines, a dot wave or a particle flow.
 
 ---
 
@@ -115,7 +115,7 @@ The base sets headings at line height 1.5; large headlines get tighter leading (
 
 **Inputs:** 44px, 5px radius, `--surface` fill, 1px transparent border that turns `--ink` on focus.
 
-**Cards:** `--surface` fill or white with a 1px `--border`, 5px radius, 24px padding, no shadow.
+**Cards:** `--surface` fill or white with a 1px `--border`, 5px radius, 24px padding, no shadow. On the website, cards are square with one cut corner (top right, 20px; 14px on small tiles), no border: light gray `#f4f4f5` on white, white on a black ASCII band (with the light page's text colours), `#161618` on the other black bands. Cards in a group sit 16px apart, never joined by hairlines. Hairlines stay only as row dividers inside lists, accordions, FAQs and tables.
 
 **Chips and status:** 5px radius, 12px caption text; status uses a 8px dot in the state color plus a text label (never color alone).
 

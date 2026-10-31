@@ -32,6 +32,19 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 31 Oct 2026 · Mockups: black ASCII bands instead of bone
+- The bone colour is gone. Sections are white or black; the former bone sections are either white again or black bands with a live ASCII scene behind them. The ASCII renderer (`asciiField()` in `mockup/src/js/10-bg.js`, was `caustics()`) now takes a scene, with two more ported from asciify-engine (MIT): `contour` (survey lines, every fifth stronger) and `ripple` (drops whose rings widen and fade, one character wide). Each band has the lantern hover.
+- Black ASCII bands: home (Titan's states: contour; pricing: ripple), industry pages (use cases: caustics; FAQ: contour), every other agent row on the agents page (cycling caustics, contour, ripple) and the pricing page (credit calculator: contour; top-ups: ripple). Security's approval section is white again.
+- Cut-corner cards stay: white on a black ASCII band (keeping the light page's text colours), light gray `#f4f4f5` on white, `#161618` on the other black bands. The popular plan is `#1c1c1f` on black. The accordion, FAQ, rules and agent lists got dark-band colours.
+- Checked in the browser at 1440px on the home, industry, agents and pricing pages, and at 375px on the home page (no sideways scroll). `design.md` (Layout, Cards) and the sources row for asciify-engine are updated.
+
+### 31 Oct 2026 · Mockups: bands and cut-corner cards instead of rails
+- The website mockups drop their line structure: no page rails, no `+` marks where sections meet, no hairline above each section. Sections are now full-bleed bands in white, bone (`#efeee9`) or black, after Anduril's product pages, and neighbouring bands never share a tone. The home page runs white, black, white, bone, white, bone, black, white, bone, white; the industry, agents, pricing and security pages alternate the same way.
+- Every hairline grid became separate cards, 16px apart, square with one cut corner (top right), filled the opposite way to their band: highlights, Titan's states, industries, the bento, plans, top-ups, the credit calculator, the comparison table, the data map and the security pillars. Demo panels on bone sit on white.
+- Row dividers inside the accordion, FAQ, checklists, rules and tables stay. Hero, type, colours, buttons and the moving backgrounds are unchanged.
+- `docs/notes/design.md` (Principles, Layout, Cards) now describes bands and cut-corner cards for the website; the desktop app keeps hairlines and the gray fill.
+- Checked in the browser at 1440px on every page type and at 375px on the home page (no sideways scroll).
+
 ### 31 Oct 2026 · Mockups: smoother ASCII caustics
 - The ASCII caustics behind the home hero and the industry heroes (`caustics()` in `mockup/src/js/10-bg.js`, built into `mockup/assets/site.js`) now uses the wave model from asciify-engine's caustics scene (MIT, added to the sources in `notes/open-source-references.md`). Each line's width is measured in cells, the CPU version of the shader's `fwidth`, so every filament is one character wide and stays connected. Before, lines were 4–6 characters thick and broke up wherever the field flattened. Glyphs are batched per ramp step: about 2.4× fewer draws per frame.
 - Hover now follows asciify's lantern. A soft light glides after the cursor and leaves a tail that fades over about 3 s. It lifts the characters it passes, with per-cell grain so the lit area reads as scattered letters. Lit lines turn lime, and a few characters at its edge flicker up a step, as if being retyped. Titan's surge ring is unchanged.

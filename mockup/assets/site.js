@@ -194,7 +194,6 @@ function setLogoInk(bot, ink){ if(!bot || bot._ink === ink) return; bot._ink = i
 })();
 
 /* section marks: a "+" where each section's top hairline meets the rails */
-$$('.sec:not(.sec--flush)').forEach(function(s){ s.insertAdjacentHTML('afterbegin', '<i class="cross l" aria-hidden="true"></i><i class="cross r" aria-hidden="true"></i>'); });
 
 /* scroll reveals; anything already on screen shows at once, and everything shows if observers are missing */
 (function(){
@@ -264,19 +263,22 @@ function onResize(fn, host){
   if(window.ResizeObserver && host) new ResizeObserver(go).observe(host);
 }
 
-/* ASCII caustics: thin lines of light, like sunlight through moving water, drawn as characters
-   on a fixed grid. The wave model is ported from asciify-engine's "caustics" scene (MIT,
-   ayangabryl): two warped sine layers drift against each other and each draws a filament along
-   its zero line. The filament's width is measured in cells (the shader's fwidth, here the change
-   from one cell to the next), so every line stays one character wide and never breaks up.
+/* ASCII field: a live scene drawn as characters on a fixed grid. The scenes are ported from
+   asciify-engine (MIT, ayangabryl):
+   - caustics: light through moving water. Two warped sine layers drift against each other and
+     each draws a filament along its zero line.
+   - contour: a slow terrain read as survey lines; every fifth is an index line.
+   - ripple: still water where drops land here and there, each a few rings that widen and fade.
+   Line width is measured in cells (the shader's fwidth, here the change from one cell to the
+   next), so every line stays one character wide and never breaks up.
    Quiet behind the copy, and a surge from Titan sends a neon ring through it.
    Hover is asciify's lantern: a soft light glides after the cursor and leaves a short fading
    tail. It lifts the characters it passes (with a little per-cell grain, so the pool reads as
    scattered letters, not a blot), tints the lit ones toward lime, and a few letters at its rim
    step up the ramp and back, as if being retyped. */
-function caustics(o){
+function asciiField(o){
   var cv = o.canvas, host = o.host; if(!cv || !host) return;
-  var ctx = cv.getContext('2d'), dark = !!o.dark;
+  var ctx = cv.getContext('2d'), dark = !!o.dark, dim = o.dim || 1;
   var RAMP = ' .:-=+*#', N = RAMP.length;
   var W, H, dpr, cw, ch, cols, rows, gw, quiet, va, vb, font, ptr = null, ring = null, t0 = performance.now(), vis = true;
   var grain, buckets = [], TINTS = 4, lamp = {x:0, y:0, on:false, s:0, trail:[]}, lastNow = 0;
@@ -323,6 +325,50 @@ function caustics(o){
     var s = d <= 0.2 ? 0 : d >= 1.5 ? 1 : (d - 0.2)/1.3; s = s*s*(3 - 2*s);
     return (1 - s)*gain + Math.exp(-d/5)*0.16;
   }
+  function fr(v){ return v - Math.floor(v); }
+  function hash(x, y){ x = fr(x*123.34); y = fr(y*456.21); var d = x*(x + 45.32) + y*(y + 45.32); return fr((x + d)*(y + d)); }
+  function noise(x, y){
+    var ix = Math.floor(x), iy = Math.floor(y), fx = x - ix, fy = y - iy, ux = fx*fx*(3 - 2*fx), uy = fy*fy*(3 - 2*fy);
+    var a = hash(ix, iy), b = hash(ix + 1, iy), c = hash(ix, iy + 1), d = hash(ix + 1, iy + 1);
+    return a + (b - a)*ux + (c - a)*uy + (a - b - c + d)*ux*uy;
+  }
+  /* each scene fills one or two value grids (field, at p in units of the stage height) and reads a
+     cell's tone back from them (tone, with g the cell's grid index) */
+  var SCENES = {
+    caustics: {layers: 2,
+      field: function(px, py, l, t){ return wave(px, py, l, t*0.12); },
+      tone: function(g, px, py, t){
+        var a = filament(va, g, 0.78), c = filament(vb, g, 0.62), light = Math.max(a, c) + 0.3*Math.min(a, c);
+        return Math.min(0.78, light*light*(0.85 + 0.15*Math.sin(t*0.36 + px*1.7 - py*1.1)));
+      }},
+    contour: {layers: 1,
+      field: function(px, py, l, t){
+        var tt = t*0.02, qx = px*1.15 + tt, qy = py*1.15 - tt*0.6;
+        var h = noise(qx, qy)*0.62 + noise(qx*2.07 + 3.1, qy*2.07 + 3.1)*0.27 + noise(qx*4.3 - tt + 7, qy*4.3 - tt + 7)*0.11;
+        return (h + 0.08*Math.sin(tt*2 + px*0.8))*13;
+      },
+      tone: function(g){
+        var k = va[g], w = Math.max(1e-4, 0.5*(Math.abs(va[g+1] - va[g-1]) + Math.abs(va[g+gw] - va[g-gw])));
+        var d = Math.abs(fr(k + 0.5) - 0.5)/w, major = (((Math.floor(k + 0.5) % 5) + 5) % 5) === 0;
+        var e1 = major ? 1 : 1.25, s = d <= 0.35 ? 0 : d >= e1 ? 1 : (d - 0.35)/(e1 - 0.35); s = s*s*(3 - 2*s);
+        return (1 - s)*(major ? 0.78 : 0.45);
+      }},
+    ripple: {layers: 1,
+      field: function(px, py, l, t){
+        /* drops on a jittered grid; each sends a ring and two followers, one cell wide */
+        var G = 0.5, idx = Math.floor(px/G), idy = Math.floor(py/G), tone = 0, w = cellP*0.75;
+        for(var j=-1; j<=1; j++) for(var i=-1; i<=1; i++){
+          var cx = idx + i, cy = idy + j, hx = hash(cx, cy), hy = hash(cx + 7.3, cy + 7.3);
+          var age = fr(t*0.3/(5 + hx*5)*4 + hy), d = Math.hypot(px - (cx + 0.2 + 0.6*hx)*G, py - (cy + 0.2 + 0.6*hy)*G) - age*0.45;
+          if(d > 0.02 || d < -0.16) continue;
+          var born = age >= 0.06 ? 1 : age/0.06, life = Math.pow(1 - age, 1.6)*born*born*(3 - 2*born)*(0.7 + 0.3*hx);
+          for(var k=0; k<3; k++){ var e = (d + k*0.055)/w; tone += Math.exp(-e*e)*(1 - k*0.32)*life; }
+        }
+        return Math.min(0.78, tone*1.2);
+      },
+      tone: function(g){ return va[g]; }}
+  };
+  var scene = SCENES[o.scene] || SCENES.caustics, cellP = 0.02;
   /* the lantern glides toward the pointer (frame-rate independent) and drops a tail point every
      28ms it moves; tail points fade over ~3s */
   function stepLamp(now, S){
@@ -340,13 +386,13 @@ function caustics(o){
   }
   var seed = o.seed || 0;
   function draw(now){
-    var t = (reduce ? 0 : (now - t0)/1000) + 40 + seed*7, tt = t*0.12;
-    var S = Math.max(H, 560), cx = W/2, cy = H/2;
+    var t = (reduce ? 0 : (now - t0)/1000) + 40 + seed*7;
+    var S = Math.max(H, 560), cx = W/2, cy = H/2; cellP = ch/S;
     for(var gy=0; gy<rows+2; gy++){
       var py = ((gy - 1)*ch + ch/2 - cy)/S;
       for(var gx=0; gx<gw; gx++){
         var px = ((gx - 1)*cw + cw/2 - cx)/S, j = gy*gw + gx;
-        va[j] = wave(px, py, 0, tt); vb[j] = wave(px, py, 1, tt);
+        va[j] = scene.field(px, py, 0, t); if(scene.layers > 1) vb[j] = scene.field(px, py, 1, t);
       }
     }
     ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height);
@@ -366,10 +412,7 @@ function caustics(o){
       var cyy = y*ch + ch/2;
       for(var x=0;x<cols;x++){
         var cxx = x*cw + cw/2, i = y*cols + x, g = (y + 1)*gw + x + 1;
-        var a = filament(va, g, 0.78), c = filament(vb, g, 0.62);
-        var light = Math.max(a, c) + 0.3*Math.min(a, c);
-        var pulse = 0.85 + 0.15*Math.sin(tt*3 + (cxx - cx)/S*1.7 - (cyy - cy)/S*1.1);
-        var I = Math.min(0.78, light*light*pulse), hot = 0, glow = 0, flick = 0;
+        var I = scene.tone(g, (cxx - cx)/S, (cyy - cy)/S, t), hot = 0, glow = 0, flick = 0;
         if(lit && cxx > bx0 && cxx < bx1 && cyy > by0 && cyy < by1){
           var dx = cxx - lamp.x, dy = cyy - lamp.y;
           glow = lamp.s*Math.exp(-(dx*dx + dy*dy)/LR2);
@@ -396,7 +439,7 @@ function caustics(o){
       else {
         var m = tint/(TINTS - 1)*0.85;
         rgb = [0,1,2].map(function(z){ return Math.round(INK[z] + (LIME[z] - INK[z])*m); });
-        al = (dark ? 0.10 + 0.30*tone : 0.18 + 0.32*tone) + m*0.3;
+        al = (dark ? 0.10 + 0.30*tone : 0.18 + 0.32*tone)*dim + m*0.3;
       }
       ctx.fillStyle = 'rgba('+rgb.join(',')+','+Math.min(1, al).toFixed(3)+')';
       for(var q=0; q<list.length; q+=2) ctx.fillText(RAMP[n], list[q], list[q+1]);
@@ -626,7 +669,7 @@ function decode(h, delay){
 /* page-level backgrounds, wired by data attributes so every page shares one setup */
 $$('canvas[data-bg]').forEach(function(cv){
   var kind = cv.dataset.bg, host = cv.parentNode, q = cv.dataset.quiet ? $$(cv.dataset.quiet, host) : null;
-  if(kind === 'caustics') caustics({canvas:cv, host:host, dark:cv.dataset.dark === '1', quiet:q, seed:+(cv.dataset.seed||0)});
+  if(kind === 'caustics' || kind === 'ascii') asciiField({canvas:cv, host:host, scene:cv.dataset.scene, dark:cv.dataset.dark === '1', quiet:q, seed:+(cv.dataset.seed||0), navFade:cv.dataset.navfade !== '0', dim:+(cv.dataset.dim||1)});
   else if(kind === 'contours') contours({canvas:cv, host:host, ink:cv.dataset.ink, alpha:cv.dataset.alpha ? cv.dataset.alpha.split(',').map(Number) : null, fade:cv.dataset.fade, seed:+(cv.dataset.seed||0), navFade:cv.dataset.navfade === '1'});
   else if(kind === 'flow') flow({canvas:cv, host:host});
   else if(kind === 'dotwave') dotwave({canvas:cv, host:host, ink:cv.dataset.ink, base:cv.dataset.base ? +cv.dataset.base : null});

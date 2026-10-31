@@ -65,11 +65,14 @@ def sh(n, label, title, right='', hid=None, center=False):
 
 def link(href, text): return '<a class="link" href="%s">%s <span aria-hidden="true">→</span></a>' % (href, text)
 
-def faq(items, n, title='Questions, answered.', side=''):
+def ascii_bg(scene, seed=0):
+    return '<canvas class="bg" data-bg="ascii" data-scene="%s" data-dark="1" data-navfade="0" data-dim="0.8" data-seed="%s" aria-hidden="true"></canvas>' % (scene, seed)
+
+def faq(items, n, title='Questions, answered.', side='', scene=None):
     qs = ''.join('<details class="qa"><summary>%s<span class="pm" aria-hidden="true"></span></summary><div class="qa__a">%s</div></details>' %
                  (E(q), T('p', E(a), tone='muted', measure='normal')) for q, a in items)
-    return ('<section class="sec pad" id="faq" aria-labelledby="faq-h"><div class="wrap faq"><div class="faq__l" data-reveal>%s%s%s</div><div data-reveal>%s</div></div></section>' %
-            (k('FAQ', n), T('h2', title, 'heading', wrap='balance', id='faq-h'), side, qs))
+    return ('<section class="sec pad%s" id="faq" aria-labelledby="faq-h">%s<div class="wrap faq"><div class="faq__l" data-reveal>%s%s%s</div><div data-reveal>%s</div></div></section>' %
+            (' dark sec--ascii' if scene else '', ascii_bg(scene, 3) if scene else '', k('FAQ', n), T('h2', title, 'heading', wrap='balance', id='faq-h'), side, qs))
 
 # ───────── shell ─────────
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
@@ -155,7 +158,7 @@ def page(name, title, desc, body, p='', cur='', ondark=False, main=False):
             f'{FONTS}\n<link rel="stylesheet" href="{p}assets/site.css">')
     scripts = (f'<script>window.SITE={{root:"{p}"}};</script>\n<script src="{p}assets/data.js"></script>\n'
                f'<script src="{p}assets/bot.js"></script>\n<script src="{p}assets/site.js"></script>')
-    inner = f'<div class="site" data-page="{name}">\n<div class="guides" aria-hidden="true"></div>\n{nav(p, cur, ondark)}\n<main>\n{body}\n</main>\n{cta(p)}\n{footer(p)}\n</div>\n{scripts}'
+    inner = f'<div class="site" data-page="{name}">\n{nav(p, cur, ondark)}\n<main>\n{body}\n</main>\n{cta(p)}\n{footer(p)}\n</div>\n{scripts}'
     if main and MODE == 'artifact':
         return head + '\n' + inner + '\n'
     return ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
@@ -280,7 +283,8 @@ def home():
   </div>
 </section>
 
-<section class="sec pad" aria-labelledby="states-h">
+<section class="sec dark sec--ascii pad" aria-labelledby="states-h">
+  {ascii_bg("contour", 1)}
   <div class="wrap">
     {sh('04', 'Titan\'s face is its status', 'You can tell what Titan is doing from across the room.', T('p', 'The eyes change shape for every state, and a label always comes with them. Click one to see it.', tone='muted', wrap='pretty'), 'states-h')}
     <div class="srail" id="statesRow" data-reveal></div>
@@ -315,7 +319,8 @@ def home():
   </div>
 </section>
 
-<section class="sec pad" id="pricing" aria-labelledby="pricing-h">
+<section class="sec dark sec--ascii pad" id="pricing" aria-labelledby="pricing-h">
+  {ascii_bg("ripple", 2)}
   <div class="wrap">
     {sh('08', 'Pricing', 'Every agent on every plan. Local models are always free.', '<div class="toggle" id="billing2" role="group" aria-label="Billing period"><button type="button" class="is-on" data-b="m" aria-pressed="true">Monthly</button><button type="button" data-b="y" aria-pressed="false">Yearly<em>2 months free</em></button></div>' + link('pricing.html', 'Compare every plan'), 'pricing-h')}
     <div class="plans2" id="plans2" data-reveal></div>
@@ -390,7 +395,8 @@ def industry(n, idx):
   </div>
 </section>
 
-<section class="sec pad" id="uses" aria-labelledby="uses-h">
+<section class="sec dark sec--ascii pad" id="uses" aria-labelledby="uses-h">
+  {ascii_bg("caustics", idx)}
   <div class="wrap">
     {sh('02', 'Use cases', 'How ' + WHO[n['id']] + ' put Titan to work', T('p', 'Pick a task to watch it run: the request, the steps, the approval and the result. Approve or deny it yourself when it asks.', tone='muted', wrap='pretty'), 'uses-h')}
     <div class="acc" data-reveal>
@@ -422,7 +428,7 @@ def industry(n, idx):
   </div>
 </section>
 
-{faq(n['faq'], '06', side=T('p', 'More on plans and data in the pricing and security pages.', tone='muted') + '<div style="display:flex;gap:20px;flex-wrap:wrap">' + link(p + 'pricing.html', 'Pricing') + link(p + 'security.html', 'Security') + '</div>')}
+{faq(n['faq'], '06', scene='contour', side=T('p', 'More on plans and data in the pricing and security pages.', tone='muted') + '<div style="display:flex;gap:20px;flex-wrap:wrap">' + link(p + 'pricing.html', 'Pricing') + link(p + 'security.html', 'Security') + '</div>')}
 
 <section class="sec pad" aria-labelledby="more-h">
   <div class="wrap">
@@ -439,7 +445,8 @@ def agents():
     rows = ''
     for i, a in enumerate(AGENTS):
         lis = ''.join('<li>%s</li>' % E(b) for b in a['bullets'])
-        rows += f'''<section class="sec arow{' arow--flip' if i % 2 else ''}" id="{a['id']}" aria-labelledby="{a['id']}-h">
+        rows += f'''<section class="sec arow{' arow--flip dark sec--ascii' if i % 2 else ''}" id="{a['id']}" aria-labelledby="{a['id']}-h">
+  {ascii_bg(('caustics', 'contour', 'ripple')[i // 2 % 3], i) if i % 2 else ''}
   <div class="wrap"><article class="feat">
     <div class="feat__copy" data-reveal>
       <span class="arow__n">{i+1:02d} / {len(AGENTS):02d}</span>
@@ -501,7 +508,8 @@ def pricing():
     {T('p', 'Prices are before VAT, added at checkout where it applies. EUR and USD, with the same numbers in both. No free plan and no trial.', size='xs', tone='muted', align='center', style='margin-top:18px')}
   </div>
 </section>
-<section class="sec pad" aria-labelledby="calc-h">
+<section class="sec dark sec--ascii pad" aria-labelledby="calc-h">
+  {ascii_bg("contour", 4)}
   <div class="wrap">
     {sh('01', 'Credits', 'Know what a month of work costs.', T('p', 'Credits pay for cloud models at the provider\'s cost plus 25%. Smart routing, with a strong planner and a cheap coder, makes them go further.', tone='muted', wrap='pretty'), 'calc-h')}
     <div class="calc2" id="calc2" data-reveal style="margin-top:48px"></div>
@@ -513,7 +521,8 @@ def pricing():
     <div class="cmpwrap" data-reveal><table class="cmp"><thead>{head}</thead><tbody>{price_row}{year_row}{rows}</tbody></table></div>
   </div>
 </section>
-<section class="sec pad" aria-labelledby="top-h">
+<section class="sec dark sec--ascii pad" aria-labelledby="top-h">
+  {ascii_bg("ripple", 5)}
   <div class="wrap">
     {sh('03', 'Top-ups and rollover', 'Need more? Top up any time.', T('p', 'Top-ups work on every plan, and bigger packs cost less per credit.', tone='muted', wrap='pretty'), 'top-h')}
     <div class="tops" data-reveal>{tops}</div>

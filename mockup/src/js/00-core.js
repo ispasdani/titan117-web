@@ -193,7 +193,6 @@ function setLogoInk(bot, ink){ if(!bot || bot._ink === ink) return; bot._ink = i
 })();
 
 /* section marks: a "+" where each section's top hairline meets the rails */
-$$('.sec:not(.sec--flush)').forEach(function(s){ s.insertAdjacentHTML('afterbegin', '<i class="cross l" aria-hidden="true"></i><i class="cross r" aria-hidden="true"></i>'); });
 
 /* scroll reveals; anything already on screen shows at once, and everything shows if observers are missing */
 (function(){
