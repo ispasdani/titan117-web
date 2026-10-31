@@ -1,6 +1,32 @@
 
-/* ═════════ accordions ═════════ */
-$$('.acc').forEach(function(a){ accordion(a); });
+/* ═════════ pinned split sections ═════════
+   The scroll position through the section picks the step (and --sp, how far into it); a step's button
+   scrolls to it. On narrow screens nothing pins and the buttons switch steps directly. */
+$$('.scrolly').forEach(function(root){
+  var steps = $$('.scrolly__step', root), panes = $$('.scrolly__pane', root), heads = $$('.scrolly__h', root);
+  var n = steps.length, cur = -1, pin = $('.scrolly__pin', root), narrow = matchMedia('(max-width:900px)'), queued = false;
+  function select(i){
+    if(i === cur) return; cur = i;
+    steps.forEach(function(s, k){ s.classList.toggle('is-on', k === i); $('.scrolly__btn', s).setAttribute('aria-expanded', k === i); });
+    panes.forEach(function(p, k){ p.classList.toggle('is-on', k === i); });
+    heads.forEach(function(h, k){ h.classList.toggle('is-on', k === i); h.setAttribute('aria-hidden', k !== i); });
+  }
+  function span(){ return root.offsetHeight - pin.offsetHeight; }
+  function update(){
+    queued = false; if(narrow.matches) return;
+    var f = Math.min(n - 0.001, Math.max(0, -root.getBoundingClientRect().top / Math.max(1, span()) * n)), i = Math.floor(f);
+    select(i); root.style.setProperty('--sp', (f - i).toFixed(3));
+  }
+  addEventListener('scroll', function(){ if(!queued){ queued = true; requestAnimationFrame(update); } }, {passive:true});
+  addEventListener('resize', update);
+  steps.forEach(function(s, k){
+    $('.scrolly__btn', s).addEventListener('click', function(){
+      if(narrow.matches){ select(k); root.style.setProperty('--sp', 0); return; }
+      scrollTo({top: scrollY + root.getBoundingClientRect().top + (k + 0.35)/n*span(), behavior: reduce ? 'auto' : 'smooth'});
+    });
+  });
+  select(0); update();
+});
 
 /* ═════════ plans (home and pricing) ═════════ */
 var CHECK = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.3 5.8 10 11 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';

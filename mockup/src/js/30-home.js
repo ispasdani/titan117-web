@@ -63,9 +63,9 @@
     var b = e.target.closest('.side__item'); if(!b) return;
     var a = AGENTS.filter(function(x){ return x.id === b.dataset.agent; })[0];
     if(a && a.task !== undefined){ start(a.task, true); return; }
-    // agents without a scripted task open their item in the agents accordion, or their row on the agents page
-    var id = (a && a.id) || b.dataset.jump, item = document.getElementById('acc-'+id);
-    if(item){ $('.acc__btn', item).click(); item.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'center'}); }
+    // agents without a scripted task open their step in the agents section, or their row on the agents page
+    var id = (a && a.id) || b.dataset.jump, k = DATA.homeAgents.indexOf(id), item = document.getElementById('step-agents-'+k);
+    if(item) $('.scrolly__btn', item).click();
     else location.href = href('agents.html#'+id);
   });
   // task chips

@@ -92,8 +92,9 @@ The base sets headings at line height 1.5; large headlines get tighter leading (
 
 - **Container:** max 1280px, side padding 24px (16px on phones).
 - **Breakpoint:** 768px. Below it, columns stack, the nav collapses, hero media moves under the text.
-- **Hero:** text left (about 46%), media right (video or product window), on the 8px grid.
+- **Hero:** text left (about 46%), media right (video or product window), on the 8px grid. On the website home, Titan's eyes sit on the right of the hero and the copy on the left. Behind them (31 Oct 2026), the agent terrain: a wireframe landscape in perspective with one peak per specialist agent (a particle cloud in the agent's colour under a mono label) and a line from every summit into the valley under Titan, with pulses travelling both ways. The cursor lights the nearest agent; clicking Titan sends a pulse out along every line. Labels hide below 700px and wherever they would sit on the copy; the landscape itself runs under the text unfaded.
 - **Sections** (website, after Anduril's product pages; changed 31 Oct 2026): full-bleed bands, white `#ffffff` or black `#0b0b0c`, mostly alternating. No rules, page rails or `+` marks between sections. Each starts with a small caption label on the left (`01 · Agents`) and the headline beside it; image tiles keep the label bottom-left and `↗` bottom-right. Black bands carry trust, calls to action and product moments, each with its own moving background: a live ASCII scene (caustics, contour, ripple; one character wide, lit by a lantern under the cursor), still contour lines, a dot wave or a particle flow.
+- **Pinned split sections** (website, after Vivodyne): for a set of 4–8 things to walk through (agents, industries). Live media on the left over an ASCII scene, a black panel on the right with a label, a headline that changes per step and a numbered step list (active number in neon, a neon progress line under it). The section pins under the nav while the page scrolls about 72vh per step; clicking a step scrolls to it. Below 900px it stops pinning: media on top, steps switch it when tapped.
 
 ---
 

@@ -202,6 +202,174 @@ function asciiField(o){
   if(reduce) draw(performance.now()); else requestAnimationFrame(loop);
 }
 
+/* Agent terrain (after Vivodyne's landscape of disease states; our own code): a wireframe landscape in
+   perspective with one peak per specialist agent, each a cloud of particles in the agent's colour under
+   a label, and a line from every summit down into the valley under Titan, where pulses travel both
+   ways. The peaks breathe and the land sways; the cursor lights the nearest agent, and a surge from
+   Titan sends a pulse out along every line. Labels that would sit on the copy (avoid) are left out. */
+function terrain(o){
+  var cv = o.canvas, host = o.host, anchor = o.anchor; if(!cv || !host) return;
+  var ctx = cv.getContext('2d'), dark = !!o.dark;
+  var AG = DATA.agents.filter(function(a){ return a.id !== 'titan'; });
+  /* peaks around the valley: x, z (farther is larger), height, spread; the valley sits at 0,0 */
+  var SPOT = [[-13,6,7,2.4],[-7,13,8.4,2.6],[5,14,9,2.8],[12,7,6.8,2.4],[-20,1,5.4,2.2],[16,-1,5.6,2.2],[-8.5,-3.5,4,1.8],[7.5,-4,3.6,1.7],[-1,21,7.4,3]];
+  var P = AG.slice(0, SPOT.length).map(function(a, i){
+    var c = a.c, rgb = [parseInt(c.slice(1,3),16), parseInt(c.slice(3,5),16), parseInt(c.slice(5,7),16)];
+    if(dark && rgb[0] + rgb[1] + rgb[2] < 160) rgb = [232,232,234];
+    return {name:a.name, rgb:rgb, x:SPOT[i][0], z:SPOT[i][1], h:SPOT[i][2], s:SPOT[i][3], hb:SPOT[i][2], f:0, sx:0, sy:0};
+  });
+  var VALLEY = dark ? [196,240,18] : [20,20,20], GRID = dark ? '150,140,255' : '20,20,20', INK = dark ? '232,232,234' : '20,20,20';
+  var W, H, dpr, F, CAM = 9, ZV = 10, Z0 = 14, cx, hy, quiet = [], avoid = [], dots = [], ptr = null, theta = 0, tilt = 0, surge = -1e9, t0 = performance.now(), vis = true;
+  function rnd(seed){ var x = Math.sin(seed*127.1)*43758.5453; return x - Math.floor(x); }
+  function height(x, z){
+    var y = -0.8*Math.exp(-(x*x + z*z)/(2*2.2*2.2));
+    for(var i=0; i<P.length; i++){ var p = P[i], dx = x - p.x, dz = z - p.z; y += p.h*Math.exp(-(dx*dx + dz*dz)/(2*p.s*p.s)); }
+    return y;
+  }
+  /* local (x, y, z) to screen; returns false behind the camera */
+  var out = {x:0, y:0, d:0};
+  function proj(x, y, z){
+    var c = Math.cos(theta), s = Math.sin(theta), xr = x*c - z*s, zr = x*s + z*c, d = zr + ZV + Z0;
+    if(d < 1.2) return false;
+    out.x = cx + xr*F/d; out.y = hy + (CAM - y + tilt)*F/d; out.d = d; return true;
+  }
+  function calm(x, y){
+    var q = 1;
+    for(var i=0; i<quiet.length; i++){
+      var r = quiet[i], dx = Math.max(r.x0 - x, 0, x - r.x1), dy = Math.max(r.y0 - y, 0, y - r.y1);
+      q = Math.min(q, 0.1 + 0.9*Math.min(1, Math.sqrt(dx*dx + dy*dy)/180));
+    }
+    return q;
+  }
+  function size(){
+    var f = fit(cv, host); W = f.W; H = f.H; dpr = f.dpr;
+    F = Math.max(260, Math.min(H*1.25, W*0.75));
+    var ax = W*0.68, ay = H*0.62;
+    if(anchor){ var b = anchor.getBoundingClientRect(); if(b.width){ ax = b.left - f.r.left + b.width/2; ay = b.top - f.r.top + b.height*0.9; } }
+    cx = ax; hy = ay - (CAM + 0.8)*F/(ZV + Z0);
+    function box(el){ var c = el.getBoundingClientRect(); return {x0:c.left - f.r.left - 24, x1:c.right - f.r.left + 24, y0:c.top - f.r.top - 24, y1:c.bottom - f.r.top + 24}; }
+    quiet = (o.quiet || []).map(box); avoid = (o.avoid || []).map(box);
+    /* particles: a cloud on every peak, densest at the summit, and a little dust across the land */
+    dots = []; var k = 1;
+    P.forEach(function(p, i){
+      for(var j=0; j<380; j++, k++){
+        var r = p.s*Math.min(3, Math.sqrt(-2*Math.log(1e-4 + rnd(k)*0.9999)))*0.8, a = rnd(k + 0.5)*Math.PI*2;
+        dots.push({p:i, x:p.x + Math.cos(a)*r, z:p.z + Math.sin(a)*r, lift:Math.abs(rnd(k + 0.25) - 0.5)*0.5, top:Math.exp(-r*r/(p.s*p.s)), tw:rnd(k + 0.75)*6.28});
+      }
+    });
+    for(var j=0; j<420; j++, k++) dots.push({p:-1, x:(rnd(k) - 0.5)*60, z:rnd(k + 0.5)*34 - 8, lift:0.05, top:0, tw:rnd(k + 0.75)*6.28});
+  }
+  host.addEventListener('pointermove', function(e){ var r = host.getBoundingClientRect(); ptr = {x:e.clientX - r.left, y:e.clientY - r.top}; });
+  host.addEventListener('pointerleave', function(){ ptr = null; });
+  document.addEventListener('titan:surge', function(e){ if(host.contains(e.target)) surge = performance.now(); });
+  visible(host, function(on){ vis = on; });
+
+  function grid(t){
+    /* lines along x and along z, faded with distance and behind the copy, batched by strength */
+    var B = 6, paths = []; for(var b=0; b<B; b++) paths.push(new Path2D());
+    function line(ax, az, bx, bz, n){
+      var prev = false, px = 0, py = 0;
+      for(var i=0; i<=n; i++){
+        var x = ax + (bx - ax)*i/n, z = az + (bz - az)*i/n;
+        if(!proj(x, height(x, z), z)){ prev = false; continue; }
+        var a = Math.max(0, 1 - (out.d - 14)/38)*Math.min(1, Math.abs(x)/34 < 0.75 ? 1 : (1 - Math.abs(x)/34)*4)*calm(out.x, out.y), bi = Math.min(B - 1, Math.floor(a*B));
+        if(prev && a > 0.02){ paths[bi].moveTo(px, py); paths[bi].lineTo(out.x, out.y); }
+        prev = true; px = out.x; py = out.y;
+      }
+    }
+    for(var x=-34; x<=34.01; x+=1.6) line(x, -15, x, 27, 70);
+    for(var z=-15; z<=27.01; z+=1.6) line(-34, z, 34, z, 90);
+    ctx.lineWidth = 1;
+    for(var b=1; b<B; b++){ ctx.strokeStyle = 'rgba('+GRID+','+((dark ? 0.26 : 0.11)*(b + 0.5)/B).toFixed(3)+')'; ctx.stroke(paths[b]); }
+  }
+  function curve(p, i){
+    /* from the summit down into the valley, bowed a little to one side, riding just above the land */
+    var mx = p.x/2 + (i % 2 ? 1 : -1)*p.z*0.18, mz = p.z/2 - (i % 2 ? 1 : -1)*p.x*0.18, pts = [];
+    for(var j=0; j<=36; j++){
+      var u = j/36, x = (1-u)*(1-u)*p.x + 2*(1-u)*u*mx, z = (1-u)*(1-u)*p.z + 2*(1-u)*u*mz;
+      if(proj(x, height(x, z) + 0.06, z)) pts.push([out.x, out.y]);
+    }
+    return pts;
+  }
+  function at(pts, u){ var k = Math.min(pts.length - 1, Math.max(0, u*(pts.length - 1))), i = Math.floor(k), f = k - i, b = pts[Math.min(pts.length - 1, i + 1)]; return [pts[i][0] + (b[0] - pts[i][0])*f, pts[i][1] + (b[1] - pts[i][1])*f]; }
+
+  function draw(now){
+    var t = reduce ? 6 : (now - t0)/1000;
+    theta += ((ptr && !reduce ? (ptr.x/W - 0.5)*0.22 : 0) + (reduce ? 0 : 0.1*Math.sin(t*0.07)) - theta)*0.04;
+    tilt += ((ptr && !reduce ? (ptr.y/H - 0.5)*0.8 : 0) - tilt)*0.04;
+    P.forEach(function(p, i){ p.h = p.hb*(1 + (reduce ? 0 : 0.07*Math.sin(t*0.45 + i*1.7))); });
+    ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    grid(t);
+    /* summits on screen, and which agent the cursor is nearest */
+    var near = -1, best = 150;
+    P.forEach(function(p, i){
+      if(proj(p.x, height(p.x, p.z), p.z)){ p.sx = out.x; p.sy = out.y; p.d = out.d; } else p.d = 0;
+      if(ptr && p.d){ var dd = Math.hypot(ptr.x - p.sx, ptr.y - p.sy); if(dd < best){ best = dd; near = i; } }
+    });
+    P.forEach(function(p, i){ p.f += ((i === near ? 1 : 0) - p.f)*0.1; });
+    proj(0, height(0, 0), 0); var vx = out.x, vy = out.y;
+    /* lines into the valley, with pulses: one in towards Titan, one out; a surge sends one more out */
+    var se = (now - surge)/1000;
+    P.forEach(function(p, i){
+      if(!p.d) return;
+      var pts = curve(p, i); if(pts.length < 2) return;
+      var q = calm(p.sx, p.sy), g = ctx.createLinearGradient(p.sx, p.sy, vx, vy), al = (0.32 + 0.55*p.f)*q;
+      g.addColorStop(0, 'rgba('+p.rgb+','+al.toFixed(3)+')'); g.addColorStop(1, 'rgba('+VALLEY+','+(al*0.8).toFixed(3)+')');
+      ctx.strokeStyle = g; ctx.lineWidth = 1 + p.f*0.6; ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      for(var j=1; j<pts.length; j++) ctx.lineTo(pts[j][0], pts[j][1]);
+      ctx.stroke();
+      if(reduce) return;
+      var pulses = [(t*0.11 + i*0.37) % 1, 1 - ((t*0.09 + i*0.53) % 1)];
+      if(se >= 0 && se < 1.6) pulses.push(1 - Math.min(1, se/1.1));
+      pulses.forEach(function(u, k){
+        var c = at(pts, u), hot = k === 2, r = hot ? 3.2 : 2;
+        ctx.fillStyle = 'rgba('+(hot ? (dark ? '196,240,18' : '120,170,0') : p.rgb)+','+((hot ? 0.95 : 0.75)*q).toFixed(3)+')';
+        ctx.beginPath(); ctx.arc(c[0], c[1], r, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = 'rgba('+(hot ? '196,240,18' : p.rgb)+','+(0.16*q).toFixed(3)+')';
+        ctx.beginPath(); ctx.arc(c[0], c[1], r*3, 0, 6.2832); ctx.fill();
+      });
+    });
+    /* particles, batched by agent and strength */
+    var buckets = {};
+    for(var j=0; j<dots.length; j++){
+      var d = dots[j], p = d.p >= 0 ? P[d.p] : null;
+      if(!proj(d.x, height(d.x, d.z) + d.lift, d.z)) continue;
+      var fog = Math.max(0, 1 - (out.d - 14)/38), tw = reduce ? 1 : 0.75 + 0.25*Math.sin(t*1.6 + d.tw);
+      var a = (p ? (0.42 + 0.58*d.top + 0.3*p.f) : 0.24)*fog*tw*calm(out.x, out.y);
+      if(a < 0.03) continue;
+      var key = (p ? d.p : 'x') + ':' + Math.min(4, Math.floor(a*5)), sz = Math.min(2.6, Math.max(0.9, (p ? 1 + 1.3*d.top : 0.7)*F/out.d*0.045));
+      (buckets[key] = buckets[key] || []).push(out.x - sz/2, out.y - sz/2, sz);
+    }
+    Object.keys(buckets).forEach(function(key){
+      var parts = key.split(':'), p = parts[0] === 'x' ? null : P[+parts[0]], list = buckets[key];
+      ctx.fillStyle = 'rgba('+(p ? p.rgb : INK)+','+((+parts[1] + 0.5)/5).toFixed(3)+')';
+      for(var q=0; q<list.length; q+=3) ctx.fillRect(list[q], list[q+1], list[q+2], list[q+2]);
+    });
+    /* labels over the summits; narrow screens have no room for them */
+    if(W < 700) return;
+    ctx.font = '500 11px "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace'; ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
+    P.forEach(function(p){
+      if(!p.d) return;
+      var q = calm(p.sx, p.sy - 22); if(q < 0.6) return;
+      var w = ctx.measureText(p.name).width + 14, x = p.sx, y = p.sy - 22 - p.f*4;
+      if(avoid.some(function(r){ return x + w/2 > r.x0 && x - w/2 < r.x1 && y + 10 > r.y0 && y - 10 < r.y1; })) return;
+      ctx.globalAlpha = Math.min(1, (q - 0.6)/0.3)*(0.8 + 0.2*p.f);
+      ctx.fillStyle = p.f > 0.5 ? (dark ? '#c4f012' : '#141414') : (dark ? 'rgba(20,20,22,.88)' : 'rgba(255,255,255,.94)');
+      ctx.fillRect(x - w/2, y - 10, w, 20);
+      if(!dark && p.f <= 0.5){ ctx.strokeStyle = 'rgba(0,0,0,.12)'; ctx.lineWidth = 1; ctx.strokeRect(x - w/2 + 0.5, y - 9.5, w - 1, 19); }
+      ctx.fillStyle = p.f > 0.5 ? (dark ? '#0b0b0c' : '#fff') : (dark ? '#e8e8ea' : '#3a3a3c');
+      ctx.fillText(p.name, x, y + 0.5);
+      ctx.globalAlpha = 1;
+    });
+  }
+  function loop(now){ requestAnimationFrame(loop); if(vis) draw(now); }
+  size();
+  onResize(function(){ size(); if(reduce) draw(performance.now()); }, host);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ size(); if(reduce) draw(performance.now()); });
+  if(reduce) draw(performance.now()); else requestAnimationFrame(loop);
+}
+
 /* Still contour lines: the level sets of a smooth height field, traced with marching squares and
    drawn once (again on resize). fade: 'center' clears the middle, 'left' clears behind left-hand copy. */
 function contours(o){
@@ -341,7 +509,7 @@ function asciiWord(o){
   var host = cv, ctx = cv.getContext('2d'), W, H, dpr, cw, ch, cols, rows, cov, vis = true, ptr = null, lamp = 0, t0 = performance.now(), font;
   var RAMP = ' .:-=+*#%@', WORD = o.text || 'TITAN117';
   function size(){
-    var f = fit(cv, host); W = f.W; H = f.H; dpr = f.dpr;
+    var f = fit(cv, host); W = f.W; H = f.H; dpr = f.dpr; cov = null; if(!W || !H) return; /* not laid out yet */
     ch = W < 700 ? 7 : 9; cw = ch*0.62;
     cols = Math.ceil(W/cw); rows = Math.ceil(H/ch);
     font = '500 '+(ch*0.95)+'px "Geist Mono", ui-monospace, monospace';
@@ -362,6 +530,7 @@ function asciiWord(o){
   visible(cv, function(on){ vis = on; });
   var last = {x:-1e4, y:-1e4}, frame = 0;
   function draw(now){
+    if(!cov) return;
     var t = reduce ? 2 : (now - t0)/1000;
     ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height);
     ctx.setTransform(dpr,0,0,dpr,0,0); ctx.font = font; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -421,6 +590,7 @@ $$('canvas[data-bg]').forEach(function(cv){
   var kind = cv.dataset.bg, host = cv.parentNode, q = cv.dataset.quiet ? $$(cv.dataset.quiet, host) : null;
   if(kind === 'caustics' || kind === 'ascii') asciiField({canvas:cv, host:host, scene:cv.dataset.scene, dark:cv.dataset.dark === '1', quiet:q, seed:+(cv.dataset.seed||0), navFade:cv.dataset.navfade !== '0', dim:+(cv.dataset.dim||1)});
   else if(kind === 'contours') contours({canvas:cv, host:host, ink:cv.dataset.ink, alpha:cv.dataset.alpha ? cv.dataset.alpha.split(',').map(Number) : null, fade:cv.dataset.fade, seed:+(cv.dataset.seed||0), navFade:cv.dataset.navfade === '1'});
+  else if(kind === 'terrain') terrain({canvas:cv, host:host, dark:cv.dataset.dark === '1', quiet:q, avoid:cv.dataset.avoid ? $$(cv.dataset.avoid, host) : null, anchor:cv.dataset.anchor ? $(cv.dataset.anchor, host) : null});
   else if(kind === 'flow') flow({canvas:cv, host:host});
   else if(kind === 'dotwave') dotwave({canvas:cv, host:host, ink:cv.dataset.ink, base:cv.dataset.base ? +cv.dataset.base : null});
   else if(kind === 'word') asciiWord({canvas:cv});

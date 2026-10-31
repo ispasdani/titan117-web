@@ -32,6 +32,39 @@ Where the build stands against the phases in the [roadmap](01-launch-roadmap-v1.
 
 Each entry: date, phase, what was done, and anything left open. One entry per piece of work, not per commit.
 
+### 31 Oct 2026 · Mockups: one moving line, mono, with borders
+- The ticker under the home hero keeps only the promises line, now in the small mono style with square markers: runs on your laptop, asks before every action, cost shown before it runs, works offline for 14 days, keeps working from the tray, resumes after a crash, local-only folders never leave. The stack line and the eyes are gone (`TICKER_STACK` removed from `content.py`).
+- Each pass holds the list twice, so the loop has no gap even on a 3,000px-wide screen; screen readers still hear it once. It has a hairline border above and below; the edge fade sits on the moving row, so the borders run the full width.
+- Checked in the browser at 1920px (borders, running, no gap).
+
+### 31 Oct 2026 · Mockups: moving lines instead of "Works with"
+- The "Works with" logo row under the home hero is replaced by two endless lines moving in opposite directions (`ticker()` in `mockup/src/build.py`, copy in `content.py`). The top line has Titan's promises in large type between his eyes: runs on your laptop, asks before every action, cost shown before it runs, works offline for 14 days, keeps working from the tray, resumes after a crash, local-only folders never leave. The bottom line, in small mono, has what it runs on and connects to: llama.cpp built in, OpenRouter, your own Anthropic, OpenAI or Google key, OpenCode for code, Playwright for tests, MCP tools (Gmail, Calendar, Slack, Notion), Telegram, the marketplace on GitHub, Windows and macOS. Every item is from the roadmap, the feature map or the site's own copy.
+- Hover pauses both lines; reduced motion stops them. Screen readers get each list once. Checked in the browser at 1440px and 375px (no sideways scroll).
+
+### 31 Oct 2026 · Mockups: home hero back to its earlier layout
+- The home hero is back to its earlier layout: copy on the left, centred, Titan's eyes on the right, the "Works with" strip right under it. The full-screen, low-headline version is gone; the agent terrain stays behind it, with the valley still under Titan.
+- The terrain's camera scale is tuned for the shorter hero (1.25 × its height, at most 0.75 × its width), so the peaks clear the nav. Checked in the browser at 1440px and 375px (no sideways scroll).
+- No fade behind the copy any more: the landscape runs under the headline at full strength. Only the agent labels that would sit on the copy are left out, so no white chip covers the text.
+
+### 31 Oct 2026 · Mockups: agent terrain behind the home hero
+- The home hero's background is now an agent landscape (after Vivodyne's landscape of disease states; `terrain()` in `mockup/src/js/10-bg.js`, our own code): a wireframe grid in perspective with one peak per specialist agent, each a particle cloud in the agent's colour under a mono label, and a line from every summit down into the valley under Titan. Pulses run along the lines both ways, the peaks breathe and the land sways and leans with the cursor; hovering near a peak lights that agent (label in ink, stronger line, brighter cloud), and clicking Titan sends a neon pulse out along every line. The headline area stays quiet.
+- The valley is placed under Titan wherever the layout puts him, and the camera scales with the screen; below 700px the labels hide. Reduced motion draws one still frame. About 2 ms of maths per frame at 1440×900.
+- The ASCII caustics renderer stays for the industry heroes and the black ASCII bands.
+- Checked in the browser at 1440px (hero, hover on a peak) and 375px (fits, no labels, no sideways scroll).
+
+### 31 Oct 2026 · Mockups: industry use cases as a pinned section
+- Each industry page's "Use cases" section is now a pinned split section like the home page's: four steps over ASCII ripples. Each step's headline is the request typed to Titan, the left side runs that use case's live demo, and the step text links to the agent. The hero's "See it work" button still lands on it.
+- The accordion component is gone (its build helper, script and styles); nothing used it any more. The agent chip it shared stays.
+- Checked in the browser at 1440px (retail, every step) and at 375px (law firms and home: tapping steps, demos running, no sideways scroll).
+
+### 31 Oct 2026 · Mockups: home page redesigned after Vivodyne
+- The home hero fills the screen: headline set low on the left, Titan centred on the right, the ASCII caustics unchanged.
+- New pinned split sections (`scrolly()` in `mockup/src/build.py`, styles in `v2.css`, script in `40-pages.js`). The section pins under the nav and the scroll position walks through its steps. Left: live media over an ASCII scene, crossfading per step, with a label tag. Right: a black panel with a headline that changes per step and a numbered list (active number in neon, a progress line under it). Clicking a step scrolls to it; below 900px nothing pins and tapping a step switches it.
+- "The agents" (6 steps over ASCII caustics, each with its live demo) replaces the accordion. "Industries" (8 steps over ASCII contour) replaces the card grid: each industry's example workflow is a white cut-corner card whose three steps light up in neon in turn, with its highlights, and the right panel has its headline, summary and an Explore link. The app demo's sidebar now opens an agent's step.
+- Section order: hero, the desktop app (black), why (white), the agents (black, pinned), Titan's states (white), industries (black, pinned), everything around it (white), local-first (black), pricing (white), FAQ, call to action. States and pricing are white again.
+- Fixed the footer wordmark's `getImageData` error when its canvas has no width yet (it now waits for a size).
+- Checked in the browser at 1440px (hero, every step range of both pinned sections, the hand-off to the next section) and at 375px (stacked layout, tapping steps, no sideways scroll).
+
 ### 31 Oct 2026 · Mockups: black ASCII bands instead of bone
 - The bone colour is gone. Sections are white or black; the former bone sections are either white again or black bands with a live ASCII scene behind them. The ASCII renderer (`asciiField()` in `mockup/src/js/10-bg.js`, was `caustics()`) now takes a scene, with two more ported from asciify-engine (MIT): `contour` (survey lines, every fifth stronger) and `ripple` (drops whose rings widen and fade, one character wide). Each band has the lantern hover.
 - Black ASCII bands: home (Titan's states: contour; pricing: ripple), industry pages (use cases: caustics; FAQ: contour), every other agent row on the agents page (cycling caustics, contour, ripple) and the pricing page (credit calculator: contour; top-ups: ripple). Security's approval section is white again.

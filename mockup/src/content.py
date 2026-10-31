@@ -52,6 +52,10 @@ AGENTS = [
    'bullets':['Telegram and the web app','End-to-end encrypted commands','Approvals wherever you are']},
 ]
 HOME_AGENTS = ['titan', 'folder', 'code', 'builder', 'auto', 'remote']
+
+# the moving line under the home hero: what Titan promises (the site's own copy and the 14-day offline licence)
+TICKER_PROMISES = ['Runs on your laptop', 'Asks before every action', 'Cost shown before it runs', 'Works offline for 14 days',
+                   'Keeps working from the tray', 'Resumes after a crash', 'Local-only folders never leave']
 MENU_AGENTS = ['titan', 'code', 'builder', 'folder', 'qa', 'marketing', 'auto']
 
 IND_ICON = {

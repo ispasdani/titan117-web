@@ -203,10 +203,44 @@ def app_window():
       </div>
     </div>'''
 
-def acc_item(i, iid, label, inner, pane_id):
-    return (f'<div class="acc__item" id="acc-{iid}"><button class="acc__btn" type="button" aria-expanded="false" aria-controls="{pane_id}">'
-            f'<span class="n">{i+1:02d}</span>{T("span", E(label), size="md", weight="500")}<span class="pm" aria-hidden="true"></span></button>'
-            f'<div class="acc__body"><div><div class="acc__inner">{inner}</div></div></div><span class="acc__bar" aria-hidden="true"></span></div>')
+def scrolly(sid, n, label, title, steps, scene, seed):
+    """A pinned split section (after Vivodyne): live media on the left, a black panel on the right with a
+    headline and numbered steps. Scrolling walks through the steps; each one swaps the headline and the media.
+    steps: [(label, headline, body_html, pane_html, tag)]"""
+    heads = ''.join(T('p', E(st[1]), 'heading', size='2xl', leading='snug', wrap='balance', cls='scrolly__h' + (' is-on' if i == 0 else ''))
+                    for i, st in enumerate(steps))
+    items = ''.join(f'<li class="scrolly__step{" is-on" if i == 0 else ""}" id="step-{sid}-{i}"><button class="scrolly__btn" type="button" aria-expanded="{"true" if i == 0 else "false"}" aria-controls="pane-{sid}-{i}">'
+                    f'<span class="scrolly__n">{i+1:02d}</span><span class="scrolly__l">{E(st[0])}</span></button>'
+                    f'<div class="scrolly__body"><div><div class="scrolly__inner">{st[2]}</div></div></div><i class="scrolly__bar" aria-hidden="true"></i></li>'
+                    for i, st in enumerate(steps))
+    panes = ''.join(f'<div class="scrolly__pane{" is-on" if i == 0 else ""}" id="pane-{sid}-{i}">{st[3]}<span class="scrolly__tag">{E(st[4])}</span></div>'
+                    for i, st in enumerate(steps))
+    return f'''<section class="scrolly dark" id="{sid}" aria-labelledby="{sid}-h" style="--n:{len(steps)}">
+  <div class="scrolly__pin">
+    <div class="scrolly__media">{ascii_bg(scene, seed)}{panes}</div>
+    <div class="scrolly__panel">
+      <h2 class="scrolly__k" id="{sid}-h">{k(label, n)}<span class="sr">{E(title)}</span></h2>
+      <div class="scrolly__hs" aria-live="polite">{heads}</div>
+      <ol class="scrolly__steps">{items}</ol>
+    </div>
+  </div>
+</section>'''
+
+def wcard(n):
+    """An industry's example workflow as a white card: its three steps light up in turn, then its highlights."""
+    flow = ''.join(f'<li style="--i:{i}"><span class="wcard__n">{i+1:02d}</span><span>{T("b", E(f[0]), size="md", weight="600")}{T("span", E(f[1]), size="sm", tone="muted")}</span></li>'
+                   for i, f in enumerate(n['flow']))
+    hl = ''.join(f'<li style="--i:{i + 3}">{CHECK_L}{T("span", E(h[0]), size="sm")}</li>' for i, h in enumerate(n['hl']))
+    return (f'<div class="wcard"><div class="wcard__top"><span class="menu__icon">{lineicon(n["id"])}</span>{T("b", E(n["name"]), size="md", weight="600")}'
+            f'<span class="chip mono">approval on</span></div><ol class="wcard__flow">{flow}</ol><ul class="wcard__hl">{hl}</ul></div>')
+
+def ticker():
+    """An endless line under the hero with Titan's promises. The track is drawn twice so the loop has
+    no seam; the copy is hidden from screen readers."""
+    once = ''.join(f'<span class="ticker__s">{E(t)}</span>' for t in TICKER_PROMISES)
+    items = once + f'<span class="ticker__more" aria-hidden="true">{once}</span>'  # one pass wider than a wide screen
+    return (f'<section class="ticker" aria-label="What TITAN117 promises"><div class="ticker__row">'
+            f'<div class="ticker__track">{items}</div><div class="ticker__track" aria-hidden="true">{items}</div></div></section>')
 
 def icard(n, p, sm=False):
     return (f'<a class="icard" href="{p}industries/{n["id"]}.html"{" style=min-height:190px" if sm else ""}>'
@@ -227,15 +261,16 @@ def cols(items, numbered=False):
 # ───────── home ─────────
 def home():
     p = ''
-    acc_list = ''; panes = ''
-    for i, aid in enumerate(HOME_AGENTS):
-        a = AGM[aid]
-        inner = (T('p', E(a['title']), size='lg', weight='500', leading='snug', wrap='balance') + T('p', E(a['text']), size='sm', tone='muted', wrap='pretty') +
-                 link(p + 'agents.html#' + aid, 'More about ' + E(a['name'])))
-        acc_list += acc_item(i, aid, a['label'], inner, 'pane-' + aid)
-        panes += f'<div class="acc__pane" id="pane-{aid}">{stage_for(a)}</div>'
+    agent_steps = [(a['label'], a['title'],
+                    T('p', E(a['text']), size='sm', tone='muted', wrap='pretty') + link(p + 'agents.html#' + a['id'], 'More about ' + E(a['name'])),
+                    stage_for(a), 'Live demo · ' + a['name'])
+                   for a in (AGM[aid] for aid in HOME_AGENTS)]
+    industry_steps = [(n['name'], n['h'],
+                       T('p', E(n['s']), size='sm', tone='muted', wrap='pretty') + link(p + 'industries/%s.html' % n['id'], 'Explore ' + E(n['name'].lower())),
+                       wcard(n), 'Example workflow · ' + n['name'])
+                      for n in INDUSTRIES]
     body = f'''<header class="hero sec sec--flush" id="top">
-  <canvas class="glyphs" data-bg="caustics" aria-hidden="true"></canvas>
+  <canvas class="glyphs" data-bg="terrain" data-avoid=".hero__copy" data-anchor=".hero__bot" aria-hidden="true"></canvas>
   <div class="wrap hero__inner">
     <div class="hero__copy">
       <h1 id="headline" data-text="display" data-leading="tight" data-wrap="balance" data-decode>Intelligence Designed to Evolve</h1>
@@ -251,7 +286,7 @@ def home():
   </div>
 </header>
 
-<div class="strip"><div class="wrap strip__in">{k('Works with')}<div class="strip__row">{''.join('<span>%s</span>' % s for s in ['llama.cpp','OpenRouter','Anthropic','OpenAI','Google','GitHub','Telegram'])}</div></div></div>
+{ticker()}
 
 <section class="band band--dark sec dark" id="product" aria-labelledby="product-h">
   <canvas class="band__waves" data-bg="contours" data-fade="center" aria-hidden="true"></canvas>
@@ -273,28 +308,23 @@ def home():
   </div>
 </section>
 
-<section class="sec pad" id="agents" aria-labelledby="agents-h">
-  <div class="wrap">
-    {sh('03', 'The agents', 'One memory. Many specialists. Every one of them asks first.', T('p', 'Titan plans the work and hands parts of it to specialists. Open one to watch it work, and approve or deny its actions yourself.', tone='muted', wrap='pretty') + link('agents.html', 'See all ten agents'), 'agents-h')}
-    <div class="acc" data-reveal>
-      <div class="acc__list">{acc_list}</div>
-      <div class="acc__view">{panes}</div>
-    </div>
-  </div>
-</section>
+{scrolly('agents', '03', 'The agents', 'One memory. Many specialists. Every one of them asks first.', agent_steps, 'caustics', 6)}
 
-<section class="sec dark sec--ascii pad" aria-labelledby="states-h">
-  {ascii_bg("contour", 1)}
+
+<section class="sec pad" aria-labelledby="states-h">
   <div class="wrap">
     {sh('04', 'Titan\'s face is its status', 'You can tell what Titan is doing from across the room.', T('p', 'The eyes change shape for every state, and a label always comes with them. Click one to see it.', tone='muted', wrap='pretty'), 'states-h')}
     <div class="srail" id="statesRow" data-reveal></div>
   </div>
 </section>
 
-<section class="sec pad" id="industries" aria-labelledby="industries-h">
+{scrolly('industries', '05', 'Industries', 'Built for the work small companies actually do.', industry_steps, 'contour', 3)}
+
+
+<section class="sec pad" aria-labelledby="more-h">
   <div class="wrap">
-    {sh('05', 'Industries', 'Built for the work small companies actually do.', T('p', 'Pick your industry to see the tasks Titan takes off your plate, each one running on your own laptop.', tone='muted', wrap='pretty'), 'industries-h')}
-    <div class="igrid" data-reveal>{''.join(icard(n, p) for n in INDUSTRIES)}</div>
+    {sh('06', 'And everything around it', 'Built for a small company that wants to trust its tools.', '', 'more-h')}
+    <div class="bento" id="cards" data-reveal></div>
   </div>
 </section>
 
@@ -302,7 +332,7 @@ def home():
   <canvas class="bg" data-bg="dotwave" aria-hidden="true"></canvas>
   <div class="wrap trust__grid">
     <div class="sh__l" data-reveal>
-      {k('Local-first', '06')}
+      {k('Local-first', '07')}
       {T('h2', 'The work happens on your laptop. Our cloud only keeps your account.', 'heading', wrap='balance', id='local-h')}
       {T('p', 'Agents, memory, documents and app data live on your machine. Company data leaves it only when you share something or send a task to a cloud model you picked.', tone='muted', wrap='pretty')}
       {checks(['Closing the window doesn\'t stop agents; they keep running from the tray','Works offline for 14 days on a signed licence','Checkpoints resume a task after sleep or a crash','Folders marked local-only never reach a cloud model'])}
@@ -312,15 +342,7 @@ def home():
   </div>
 </section>
 
-<section class="sec pad" aria-labelledby="more-h">
-  <div class="wrap">
-    {sh('07', 'And everything around it', 'Built for a small company that wants to trust its tools.', '', 'more-h')}
-    <div class="bento" id="cards" data-reveal></div>
-  </div>
-</section>
-
-<section class="sec dark sec--ascii pad" id="pricing" aria-labelledby="pricing-h">
-  {ascii_bg("ripple", 2)}
+<section class="sec pad" id="pricing" aria-labelledby="pricing-h">
   <div class="wrap">
     {sh('08', 'Pricing', 'Every agent on every plan. Local models are always free.', '<div class="toggle" id="billing2" role="group" aria-label="Billing period"><button type="button" class="is-on" data-b="m" aria-pressed="true">Monthly</button><button type="button" data-b="y" aria-pressed="false">Yearly<em>2 months free</em></button></div>' + link('pricing.html', 'Compare every plan'), 'pricing-h')}
     <div class="plans2" id="plans2" data-reveal></div>
@@ -341,13 +363,12 @@ def industry(n, idx):
     for i, f in enumerate(fl):
         if i: fsteps += '<div class="fwire" aria-hidden="true"></div>'
         fsteps += f'<div class="fstep"><span class="fstep__n">{i+1:02d}</span><div>{T("div", E(f[0]), size="sm", weight="500", style="color:#fff")}<div class="fstep__s">{E(f[1])}</div></div><span></span></div>'
-    acc_list = ''; panes = ''
-    for i, u in enumerate(n['uses']):
-        a = AGM[u['agent']]
-        inner = (T('p', E(u['d']), size='sm', tone='muted', wrap='pretty') +
-                 f'<a class="acc__chip" href="{p}agents.html#{a["id"]}">{eyes(a["c"])}{E(a["name"])}</a>')
-        acc_list += acc_item(i, 'u%d' % i, u['t'], inner, 'pane-u%d' % i)
-        panes += f'<div class="acc__pane" id="pane-u{i}"><div class="stage mock" data-mock="{n["id"]}:{i}"></div></div>'
+    # each use case is a step: the request as the headline, its live demo on the left
+    use_steps = [(u['t'], '“' + u['m']['p'] + '”',
+                  T('p', E(u['d']), size='sm', tone='muted', wrap='pretty') +
+                  f'<a class="acc__chip" href="{p}agents.html#{AGM[u["agent"]]["id"]}">{eyes(AGM[u["agent"]]["c"])}{E(AGM[u["agent"]]["name"])}</a>',
+                  f'<div class="stage mock" data-mock="{n["id"]}:{i}"></div>', 'Live demo · ' + AGM[u['agent']]['name'])
+                 for i, u in enumerate(n['uses'])]
     agent_cards = ''
     for aid in used:
         a = AGM[aid]
@@ -395,16 +416,7 @@ def industry(n, idx):
   </div>
 </section>
 
-<section class="sec dark sec--ascii pad" id="uses" aria-labelledby="uses-h">
-  {ascii_bg("caustics", idx)}
-  <div class="wrap">
-    {sh('02', 'Use cases', 'How ' + WHO[n['id']] + ' put Titan to work', T('p', 'Pick a task to watch it run: the request, the steps, the approval and the result. Approve or deny it yourself when it asks.', tone='muted', wrap='pretty'), 'uses-h')}
-    <div class="acc" data-reveal>
-      <div class="acc__list">{acc_list}</div>
-      <div class="acc__view">{panes}</div>
-    </div>
-  </div>
-</section>
+{scrolly('uses', '02', 'Use cases', 'How ' + WHO[n['id']] + ' put Titan to work', use_steps, 'ripple', idx)}
 
 <section class="sec pad" aria-labelledby="flow-h">
   <div class="wrap">
@@ -612,7 +624,7 @@ css = open(os.path.join(HERE, 'css/base.css')).read() + open(os.path.join(HERE, 
 write('assets/site.css', css)
 js = ''.join(open(os.path.join(HERE, 'js', f)).read() for f in sorted(os.listdir(os.path.join(HERE, 'js'))) if f.endswith('.js'))
 write('assets/site.js', '(function(){\n' + js + '\n})();\n')
-data = {'agents': AGENTS, 'menuAgents': MENU_AGENTS, 'industries': INDUSTRIES, 'icons': IND_ICON, 'plans': PLANS}
+data = {'agents': AGENTS, 'menuAgents': MENU_AGENTS, 'homeAgents': HOME_AGENTS, 'industries': INDUSTRIES, 'icons': IND_ICON, 'plans': PLANS}
 write('assets/data.js', '/* generated from content.py by build.py */\nwindow.TITAN_DATA = ' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';\n')
 shutil.copy(BOT_JS, os.path.join(OUT, 'assets/bot.js'))
 print('built', MODE, '->', OUT)
